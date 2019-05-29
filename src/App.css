@@ -1,0 +1,93 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.NO__welcome {
+  height: 100vH;
+  width: 100vW;
+  z-index: 10;
+}
+
+.NO__welcome_img {
+  position: auto;
+  height: 100%;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.NO__welcome_img-show {
+  opacity: 1;
+}
+
+.NO__welcome_img-hide {
+  transition: opacity .15s ease-in-out;
+  opacity: 0;
+}
+
+@media only screen and (max-width: 768px) {
+.NO__welcome_img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+  }
+}
+
+.NO__welcome_login-title {
+  position: fixed;
+  font-size: 16pt;
+  font-weight: bold;
+  margin: 20px;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.NO__text {
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-stretch: semi-condensed;
+}
+
+.NO__text:hover {
+  color: #d3d3d3;
+  cursor: pointer;
+}
+
+.NO__image img {
+  max-height: 100vH;
+  z-index: 10000;
+}
+
+.NO__feed {
+  position: absolute;
+  width: 100vW;
+  height: 100vH;
+  top: 0;
+  z-index: 1;
+}
