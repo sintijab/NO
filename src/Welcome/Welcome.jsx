@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
-import LazyImage from '../images/LazyImage';
 import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import LazyImage from '../images/LazyImage.js';
-import { replaceAll } from '../functions.js';
 
 class Posts extends React.Component{
 
@@ -75,7 +74,6 @@ class Posts extends React.Component{
     const categories = item.metafields.filter(item => item.key === 'category').map(cat => cat.value);
     var re = /\s*(?:,|$)\s*/;
     var catList = categories[0].split(re);
-    debugger;
     this.setState({
       activePost: item,
       activePostContent: item.content,
