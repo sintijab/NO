@@ -91,3 +91,67 @@
   top: 0;
   z-index: 1;
 }
+
+.NO_login {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  height: 50px;
+  right: 20px;
+  font-weight: bolder;
+}
+
+.NO__signForm {
+  position: absolute;
+  width: 100vW;
+  overflow: hidden;
+  height: 50px;
+  bottom: 0;
+  text-align: left;
+  padding: 10px;
+  background: rgba(245, 245, 245, 0.7);
+  border-radius: 30px;
+}
+
+.NO__form-control {
+  width: 200px;
+  height: 30px;
+  margin: 2px;
+  font-size: 0.9rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.NO__form-group {
+  display: inline;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  width: 100vW;
+  padding: 10px;
+}
+
+.btn.btn-info {
+  height: 35px;
+  width: 120px;
+  padding: 10px;
+  background: white;
+  font-size: 0.8rem;
+  font-family: 'Montserrat', sans-serif;
+  border: .5px solid rgb(216, 216, 216);
+  cursor: pointer;
+}
+
+.NO__warning {
+  color: red;
+}
+
+.NO__welcome-text {
+  text-align: left;
+  position: absolute;
+  left: 0;
+  margin: 10px;
+  font-weight: bolder;
+}

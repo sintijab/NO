@@ -43,7 +43,6 @@ class Posts extends React.Component{
   showSimilarPost() {
     const { cosmic, catList, activePost } = this.state;
     let newArr = [];
-    let nI = [];
     for(let i=0; i < catList.length; i++) {
       let nI = cosmic.posts.filter(item => item.metadata.category.indexOf(catList[i]) !== -1);
       let intersection = newArr.filter(element => nI.includes(element));
@@ -63,7 +62,6 @@ class Posts extends React.Component{
     }
     const nextPost = newItemIndex < newArr.length ? newArr[newItemIndex] : newArr[0];
     const nextPostContent = nextPost ? nextPost.content : '';
-    debugger;
     this.setState({
       activePost: nextPost,
       activePostContent: nextPostContent,

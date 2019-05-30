@@ -1,7 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Welcome from './Welcome/Welcome';
+import { connect } from 'react-redux';
 
 function App() {
 
@@ -12,4 +12,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect()(App);
