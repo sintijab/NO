@@ -83,9 +83,12 @@
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
   font-stretch: semi-condensed;
+  padding: 10px;
+}
+
+.NO__text-title {
   width: 200px;
   height: 20px;
-  padding: 10px;
 }
 
 .NO__text:hover {
@@ -186,7 +189,7 @@
   height: 35px;
   width: 120px;
   padding: 10px;
-  background: #ffffff;;
+  background: #ffffff;
   font-size: 0.8rem;
   font-family: 'Montserrat', sans-serif;
   border: .5px solid #3c3c3c;;
@@ -195,7 +198,7 @@
 }
 
 .NO__warning {
-  color: red;
+  color: #ff0000;
 }
 
 .NO__welcome-text {
@@ -216,4 +219,42 @@
 
 .lazy-image--loaded {
     opacity: 1;
+}
+
+.NO__paragraph {
+  right: 0;
+  top: 0;
+  position: absolute;
+  width: 40%;
+  line-height: 2;
+  text-align: justify;
+  margin: 40px 30px;
+  color: #ff0000;
+}
+
+.NO__overlay-img {
+  max-width: 59vW;
+}
+
+.NO__h3 {
+  height: 20px;
+  position: absolute;
+  margin-top: 0;
+}
+
+.NO__dot {
+  position: fixed;
+  height: 25px;
+  width: 25px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  right: 0;
+  top: 0;
+  margin: 20px;
+}
+
+.NO__dot:hover {
+  background-color: #bbbbbb;
+  cursor: not-allowed;
 }

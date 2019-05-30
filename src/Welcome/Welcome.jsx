@@ -5,6 +5,7 @@ import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
 import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
+import { chgBodyColor } from '../functions.js';
 
 class Welcome extends React.Component{
 
@@ -13,12 +14,14 @@ class Welcome extends React.Component{
     this.state = {
       postFeedOpened: false,
       showOverlay: false,
+      bodyVisible: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
     this.signForm = this.signForm.bind(this);
     this.signOut = this.signOut.bind(this);
     this.closeOverlay = this.closeOverlay.bind(this);
+    this.viewMode = this.viewMode.bind(this);
   }
 
   componentDidMount() {
@@ -64,12 +67,23 @@ class Welcome extends React.Component{
     })
   }
 
+  viewMode() {
+    const { bodyVisible } = this.state;
+    this.setState({ bodyVisible: !bodyVisible });
+    if (bodyVisible) {
+      chgBodyColor('#000000');
+    } else {
+      chgBodyColor('#ffffff');
+    }
+  }
+
   render() {
     const { postFeedOpened, showOverlay, loggedIn } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'}`;
 
     const postView = (
       <div className='NO__feed'>
+        <span className='NO__dot' onClick={this.viewMode}></span>
         <Posts />
       </div>
     );

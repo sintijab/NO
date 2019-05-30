@@ -12,7 +12,7 @@ class Posts extends React.Component{
       modalOpened: false,
       activePost: [],
       activePostContent: '',
-      activePostImg: '',
+      activePostImg: false,
       catList: [],
     }
     this.displayModal = this.displayModal.bind(this);
@@ -58,10 +58,10 @@ class Posts extends React.Component{
         const activePostIndex = newArr.indexOf(activePost);
         const newItemIndex = activePostIndex + 1;
         const nextPost = newItemIndex < newArr.length ? newArr[newItemIndex] : newArr[0];
-        const nextPostImg = nextPost ? nextPost.metadata.NO_img : '';
         this.setState({
           activePost: nextPost,
-          activePostImg: nextPostImg,
+          activePostImg: nextPost.metadata.NO_img,
+          activePostContent: nextPost.metadata.NO_article,
         });
         i = catList.length;
       }
@@ -74,7 +74,7 @@ class Posts extends React.Component{
     var catList = categories[0].split(re);
     this.setState({
       activePost: item,
-      activePostContent: item.content,
+      activePostContent: item.metadata.NO_article,
       activePostImg: item.metadata.NO_img,
       catList: catList,
       modalOpened: true,
@@ -82,7 +82,7 @@ class Posts extends React.Component{
   }
 
   render() {
-    const { cosmic, activePost, activePostImg = '', modalOpened } = this.state;
+    const { cosmic, activePost, activePostImg = false, activePostContent = '', modalOpened } = this.state;
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
     if (posts.length) {
@@ -94,18 +94,19 @@ class Posts extends React.Component{
           top: `${Math.floor((Math.random() * range) + 1)}px`,
           bottom: `${Math.floor((Math.random() * range) + 1)}px`,
         }
-        return (<p key={item._id} onClick={() => this.displayModal(item)} className='NO__text' style={style}>{item.title}</p>);
+        return (<p key={item._id} onClick={() => this.displayModal(item)} className='NO__text NO__text-title' style={style}>{item.title}</p>);
       });
     }
 
       return (
         <div>
-          {!activePost._id && post}
-          {!!activePost._id &&
-            <div key={activePost._id} className='NO__text NO__image'>
-              <LazyImage src={activePostImg}/>
+          {!modalOpened && !activePost._id && post}
+          {!!activePost._id && modalOpened &&
+             <div key={activePost._id} onClick={this.showSimilarPost}>
+              {activePostImg && <LazyImage src={activePostImg} className='NO__overlay-img' />}
+              <h3 className='NO__text NO__paragraph NO__h3'>{activePost.title}</h3><br/>
+              <p className='NO__text NO__paragraph'>{activePostContent}</p>
             </div>}
-            {modalOpened && <div className='NO__feed' onClick={this.showSimilarPost}/>}
         </div>
       );
     }

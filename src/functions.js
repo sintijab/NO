@@ -30,3 +30,7 @@ function escapeRegExp(str) {
 export function replaceAll(str, find, replace) {
     return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+
+export function chgBodyColor(color) {
+   document.body.style.background = color;
+}
