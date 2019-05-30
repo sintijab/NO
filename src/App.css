@@ -1,3 +1,7 @@
+* {
+  cursor: none;
+}
+
 .App {
   text-align: center;
 }
@@ -37,7 +41,7 @@
   bottom: 0;
   margin: auto;
   height: 85%;
-  cursor: pointer;
+  cursor: not-allowed;
   z-index: 10;
 }
 
@@ -71,18 +75,26 @@
   margin: 20px;
   right: 0;
   bottom: 0;
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
 .NO__text {
+  position: absolute;
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
   font-stretch: semi-condensed;
+  width: 200px;
+  height: 20px;
+  padding: 10px;
+}
+
+.NO__text:hover {
+  background: #000000;
 }
 
 .NO__text:hover {
   color: #d3d3d3;
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
 .NO__image img {
@@ -102,25 +114,28 @@
 }
 
 .NO_login {
-  position: absolute;
+  position: fixed;
   right: 0;
   bottom: 0;
-  margin: auto;
+  margin: 0 0 -10px 0;
   height: 50px;
   right: 20px;
   font-weight: bolder;
 }
 
+.NO_login:hover {
+  background: transparent;
+}
+
 .NO__signForm {
-  position: absolute;
+  position: fixed;
   width: 100vW;
   overflow: hidden;
   height: 50px;
   bottom: 0;
   text-align: left;
   padding: 10px;
-  background: rgba(245, 245, 245, 0.7);
-  border-radius: 30px;
+  background: rgba(214, 214, 214, 0.1);
 }
 
 .NO__form-control {
@@ -128,8 +143,18 @@
   height: 30px;
   margin: 2px;
   font-size: 0.9rem;
+  border: 0px solid #00000099;
+  border-radius: 30px;
   font-family: 'Montserrat', sans-serif;
+  background: #36363c;
+  color: #ffffff;
 }
+
+::placeholder {
+  color: #a9a9a9;
+  opacity: 1; /* Firefox */
+}
+
 
 .NO__form-group {
   display: inline;
@@ -146,11 +171,12 @@
   height: 35px;
   width: 120px;
   padding: 10px;
-  background: white;
+  background: #ffffff;;
   font-size: 0.8rem;
   font-family: 'Montserrat', sans-serif;
-  border: .5px solid rgb(216, 216, 216);
-  cursor: pointer;
+  border: .5px solid #3c3c3c;;
+  border-radius: 5px;
+  cursor: not-allowed;
 }
 
 .NO__warning {

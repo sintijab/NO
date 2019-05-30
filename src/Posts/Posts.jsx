@@ -91,7 +91,14 @@ class Posts extends React.Component{
     let post = null;
     if (posts.length) {
       post = posts.map(item => {
-        return (<p key={item._id} onClick={() => this.displayModal(item)} className='NO__text'>{item.title}</p>);
+        const range = Math.floor((Math.random() * 20000) + 1);
+        const style = {
+          left: `${Math.floor((Math.random() * range) + 1)}px`,
+          right: `${Math.floor((Math.random() * range) + 1)}px`,
+          top: `${Math.floor((Math.random() * range) + 1)}px`,
+          bottom: `${Math.floor((Math.random() * range) + 1)}px`,
+        }
+        return (<p key={item._id} onClick={() => this.displayModal(item)} className='NO__text' style={style}>{item.title}</p>);
       });
     }
 
