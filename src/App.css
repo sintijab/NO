@@ -26,14 +26,14 @@
 .NO__welcome {
   height: 100vH;
   width: 100vW;
-  z-index: 10;
+  z-index: 1;
 }
 
 .NO__welcome_img {
   position: auto;
   height: 100%;
   cursor: pointer;
-  z-index: 100;
+  z-index: 10;
 }
 
 .NO__welcome_img-show {
@@ -41,8 +41,9 @@
 }
 
 .NO__welcome_img-hide {
-  transition: opacity .15s ease-in-out;
   opacity: 0;
+  transition: opacity .15s ease-in-out;
+  z-index: 0;
 }
 
 @media only screen and (max-width: 768px) {
@@ -82,6 +83,9 @@
 .NO__image img {
   max-height: 100vH;
   z-index: 10000;
+  right: 0;
+  left: 0;
+  margin: auto;
 }
 
 .NO__feed {
@@ -154,4 +158,16 @@
   left: 0;
   margin: 10px;
   font-weight: bolder;
+}
+
+.lazy-image {
+    display: block;
+    min-height: 1px;
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+}
+
+.lazy-image--loaded {
+    opacity: 1;
 }

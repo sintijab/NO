@@ -5,6 +5,8 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@12.0.0/dist/lazyload.min.js"></script>
+
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -22,6 +24,7 @@
     <title>NO App</title>
   </head>
   <body>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@12.0.0/dist/lazyload.min.js"></script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
@@ -34,5 +37,24 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+    (function(w, d) {
+      const b = d.getElementsByTagName('body')[0];
+      const s = d.createElement('script');
+      const v = !('IntersectionObserver' in w) ? '8.17.0' : '10.19.0';
+      s.async = true; /* This includes the script as async. See the "recipes" section for
+    more information about async loading of LazyLoad. */
+      s.src = 'https://cdn.jsdelivr.net/npm/vanilla-lazyload@' + v + '/dist/lazyload.min.js';
+      w.addEventListener('LazyLoad::Initialized', function (e) { w.lazyLoadInstance = e.detail.instance; }, false);
+      w.lazyLoadOptions = {
+        element_selector: '.lazy-image',
+        class_loading: 'lazy-image--loading',
+        class_loaded: 'lazy-image--loaded',
+        threshold: 0,
+        data_src: 'src',
+      };
+      b.appendChild(s);
+    }(window, document));
+  </script>
   </body>
 </html>

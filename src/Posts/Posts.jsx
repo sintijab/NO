@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import LazyImage from '../images/LazyImage.js';
+import { replaceAll } from '../functions.js';
 
 class Posts extends React.Component{
 
@@ -11,6 +13,7 @@ class Posts extends React.Component{
       modalOpened: false,
       activePost: [],
       activePostContent: '',
+      activePostImg: '',
       catList: [],
     }
     this.displayModal = this.displayModal.bind(this);
@@ -61,10 +64,10 @@ class Posts extends React.Component{
       newArr.splice(activePostIndex, 1);
     }
     const nextPost = newItemIndex < newArr.length ? newArr[newItemIndex] : newArr[0];
-    const nextPostContent = nextPost ? nextPost.content : '';
+    const nextPostImg = nextPost ? nextPost.metadata.NO_img : '';
     this.setState({
       activePost: nextPost,
-      activePostContent: nextPostContent,
+      activePostImg: nextPostImg,
     })
   }
 
@@ -72,16 +75,18 @@ class Posts extends React.Component{
     const categories = item.metafields.filter(item => item.key === 'category').map(cat => cat.value);
     var re = /\s*(?:,|$)\s*/;
     var catList = categories[0].split(re);
+    debugger;
     this.setState({
       activePost: item,
       activePostContent: item.content,
+      activePostImg: item.metadata.NO_img,
       catList: catList,
       modalOpened: true,
     });
   }
 
   render() {
-    const { cosmic, activePost, activePostContent = '', modalOpened } = this.state;
+    const { cosmic, activePost, activePostImg = '', modalOpened } = this.state;
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
     if (posts.length) {
@@ -93,8 +98,10 @@ class Posts extends React.Component{
       return (
         <div>
           {!activePost._id && post}
-          {!!activePost._id && !!activePostContent && <div key={activePost._id} className='NO__text NO__image'
-            dangerouslySetInnerHTML={{__html: activePostContent}} />}
+          {!!activePost._id &&
+            <div key={activePost._id} className='NO__text NO__image'>
+              <LazyImage src={activePostImg}/>
+            </div>}
             {modalOpened && <div className='NO__feed' onClick={this.showSimilarPost}/>}
         </div>
       );
