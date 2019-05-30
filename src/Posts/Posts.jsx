@@ -49,25 +49,23 @@ class Posts extends React.Component{
       let nI = cosmic.posts.filter(item => item.metadata.category.indexOf(catList[i]) !== -1);
       let intersection = newArr.filter(element => nI.includes(element));
       if (intersection.length) {
-        const indx = nI.indexOf(intersection[0]);
+        const indx = nI.indexOf(intersection[0]) - 1;
         nI.splice(indx, 1);
         intersection = 0;
       }
       if (!intersection.length) {
         Array.prototype.push.apply(newArr,nI);
+        const activePostIndex = newArr.indexOf(activePost);
+        const newItemIndex = activePostIndex + 1;
+        const nextPost = newItemIndex < newArr.length ? newArr[newItemIndex] : newArr[0];
+        const nextPostImg = nextPost ? nextPost.metadata.NO_img : '';
+        this.setState({
+          activePost: nextPost,
+          activePostImg: nextPostImg,
+        });
+        i = catList.length;
       }
     }
-    const activePostIndex = newArr.indexOf(activePost);
-    const newItemIndex = activePostIndex !== -1 ? activePostIndex : 0;
-    if (activePostIndex !== -1) {
-      newArr.splice(activePostIndex, 1);
-    }
-    const nextPost = newItemIndex < newArr.length ? newArr[newItemIndex] : newArr[0];
-    const nextPostImg = nextPost ? nextPost.metadata.NO_img : '';
-    this.setState({
-      activePost: nextPost,
-      activePostImg: nextPostImg,
-    })
   }
 
   displayModal(item) {
