@@ -45,34 +45,167 @@ class PostForm extends React.Component{
       status: 'draft',
       metafields: [
         {
+          helptext: 'The video link of the new post, e.g\nhttps://scontent.cdninstagram.com/vp/dc2bcf178319ea60d84072cd64de5499/5CF3C6F8/t50.2886-16/57129574_2575110255897656_719230172506619904_n.mp4?_nc_ht=scontent.cdninstagram.com',
+          value: vidurl,
           key: 'NO_vid',
+          title: 'Video link',
           type: 'text',
-          value: vidurl
+          children: null
         },
         {
+          value: article,
           key: 'NO_article',
-          type: 'text',
-          value: article
+          title: 'Description',
+          type: 'textarea',
+          children: null
         },
         {
+          helptext: 'The link of the new post image e.g. \nhttps://scontent.ftxl2-1.fna.fbcdn.net/v/t1.0-9/59888899_546009472589513_1027294389803679744_o.jpg?_nc_cat=111&_nc_ht=scontent.ftxl2-1.fna&oh=339177f7bdaf98887421c83a21eac584&oe=5D580DD3',
+          value: url,
           key: 'NO_img',
+          title: 'Image link',
           type: 'text',
-          value: url
+          children: null
         },
         {
+          required: true,
+          helptext: 'one or multiple categories possible separated by commas e.g. testcategory, nocategory, newcategory, blablabla',
+          value: categories,
           key: 'NO_category',
+          title: 'Category',
           type: 'text',
-          value: categories
+          children: null
         },
         {
-          key: 'NO_font_family',
-          type: 'text',
-          value: font
+         options: [
+            {
+               key:"default",
+               value:"default"
+            },
+            {
+               key:"permanent-marker",
+               value:"permanent-marker"
+            },
+            {
+               key:"archivo-black",
+               value:"archivo-black"
+            },
+            {
+               key:"megrim",
+               value:"megrim"
+            },
+            {
+               key:"vidaloka",
+               value:"vidaloka"
+            },
+            {
+               key:"allerta-stencil",
+               value:"allerta-stencil"
+            },
+            {
+               key:"press-start-2p",
+               value:"press-start-2p"
+            },
+            {
+               key:"cutive-mono",
+               value:"cutive-mono"
+            },
+            {
+               key:"major-mono-display",
+               value:"major-mono-display"
+            },
+            {
+               key:"cormorant-sc",
+               value:"cormorant-sc"
+            },
+            {
+               key:"zcool-kuaiLe",
+               value:"zcool-kuaiLe"
+            },
+            {
+               key:"montserrat-subrayada",
+               value:"montserrat-subrayada"
+            },
+            {
+               key:"anton",
+               value:"anton"
+            },
+            {
+               key:"share-tech-mono",
+               value:"share-tech-mono"
+            },
+            {
+               key:"libre-barcode-39",
+               value:"libre-barcode-39"
+            },
+            {
+               key:"monsieur-la-doulaise",
+               value:"monsieur-la-doulaise"
+            },
+            {
+               key:"zilla-slab-highlight",
+               value:"zilla-slab-highlight"
+            },
+            {
+               key:"monofett",
+               value:"monofett"
+            },
+            {
+               key:"times-new-roman",
+               value:"times-new-roman"
+            }
+           ],
+           value: font,
+           key:"NO_font_family",
+           title:"Font family of hidden title",
+           type:"select-dropdown",
+           children: null
         },
         {
-          key: 'NO_font_size',
-          type: 'text',
-          value: font_size
+           options: [
+              {
+                key:"1",
+                value:"1"
+              },
+              {
+                key:"1-2",
+                value:"1-2"
+              },
+              {
+                key:"1-5",
+                value:"1-5"
+              },
+              {
+                key:"1-7",
+                value:"1-7"
+              },
+              {
+                key:"2",
+                value:"2"
+              },
+              {
+                key:"2-2",
+                value:"2-2"
+              },
+              {
+                key:"2-5",
+                value:"2-5"
+              },
+              {
+                key:"2-7",
+                value:"2-7"
+              },
+              {
+                key:"3",
+                value:"3"
+              }
+           ],
+           helptext:"font size by em, eg. 1-2 for 1.2em, 1-7 for 1.7em etc",
+           value: font_size,
+           key: "NO_font_size",
+           title: "Font size of hidden title",
+           type: "select-dropdown",
+           children: null
         }
       ],
       options: {
