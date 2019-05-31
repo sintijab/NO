@@ -168,6 +168,10 @@
   color: #ffffff;
 }
 
+.NO__form-control:focus {
+  outline: none;
+}
+
 ::placeholder {
   color: #a9a9a9;
   opacity: 1; /* Firefox */
@@ -195,6 +199,11 @@
   border: .5px solid #3c3c3c;;
   border-radius: 5px;
   cursor: not-allowed;
+}
+
+.btn.btn-info:active,
+.btn.btn-info:focus  {
+  outline: 1px solid #000000;
 }
 
 .NO__warning {
@@ -257,4 +266,210 @@
 .NO__dot:hover {
   background-color: #bbbbbb;
   cursor: not-allowed;
+}
+
+.NO__post_form {
+  position: absolute;
+  right: 30px;
+  bottom: 0;
+  top: 30px;
+  width: 50%;
+  height: 100%;
+  background: transparent;
+  border: .5px solid #000000d6;
+  border-radius: 20px;
+  margin: auto;
+  z-index: 1000;
+}
+
+@media only screen and (max-width: 768px) {
+  .NO__post_form {
+    right: 0;
+    left: 0;
+    width: 90%;
+  }
+}
+
+.NO__post_form-control {
+  width: 95%;
+  height: 20px;
+  margin: 3px;
+  padding: 10px;
+  font-size: 0.9rem;
+  border: .5px solid #00000099;
+  border-radius: 30px;
+  font-family: 'Montserrat', sans-serif;
+  background: #ffffff;
+  color: #000000;
+  cursor: not-allowed;
+}
+
+.NO__form-text-area {
+  height: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .NO__post_form-control {
+    width: 80%;
+    height: 10px;
+    margin: auto;
+    padding: 10px;
+    font-size: 0.9rem;
+    border: .5px solid #00000099;
+    border-radius: 30px;
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #000000;
+    cursor: not-allowed;
+    left: 0;
+  }
+
+  .NO__form-text-area {
+    height: 60%;
+  }
+}
+
+.NO__post_form-control:focus {
+  outline: 1px solid #000000;
+}
+
+.NO__post_form-group {
+  width: 90%;
+  margin: 30px auto;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  position: absolute;
+  left: 0;
+}
+
+.NO__add_post-text {
+  position: fixed;
+  font-size: 16pt;
+  font-weight: bold;
+  margin: 20px;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  cursor: not-allowed;
+}
+
+.NO__post_form-control--submit {
+  margin: 10px 0 0 0;
+}
+
+.NO__font--good-vibes {
+  font-family: 'Great Vibes', cursive;
+}
+
+.NO__font--permanent-marker {
+  font-family: 'Permanent Marker', cursive;
+}
+
+.NO__font--archivo-black {
+  font-family: 'Archivo Black', cursive;
+}
+
+.NO__font--megrim {
+  font-family: 'Megrim', cursive;
+}
+
+.NO__font--vidaloka {
+  font-family: 'Vidaloka', serif;
+}
+
+.NO__font--allerta-stencil {
+  font-family: 'Allerta Stencil', sans-serif;
+}
+
+.NO__font--press-start-2p {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.NO__font--cutive-mono {
+  font-family: 'Cutive Mono', monospace;
+}
+
+.NO__font--major-mono-display {
+  font-family: 'Major Mono Display', monospace;
+}
+
+.NO__font--cormorant-sc {
+  font-family: 'Cormorant SC', serif;
+}
+
+.NO__font--zcool-kuaiLe {
+  font-family: 'ZCOOL KuaiLe', cursive;
+}
+
+.NO__font--montserrat-subrayada {
+  font-family: 'Montserrat Subrayada', sans-serif;
+}
+
+.NO__font--anton {
+  font-family: 'Anton', sans-serif;
+}
+
+.NO__font--share-tech-mono {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.NO__font--libre-barcode-39 {
+  font-family: 'Libre Barcode 39', cursive;
+}
+
+.NO__font--monsieur-la-doulaise {
+  font-family: 'Monsieur La Doulaise', cursive;
+}
+
+.NO__font--zilla-slab-highlight {
+  font-family: 'Zilla Slab Highlight', cursive;
+}
+
+.NO__font--monofett {
+  font-family: 'Monofett', cursive;
+}
+
+.NO__font--default {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.NO__font--times-new-roman {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.NO__font-size--1 {
+  font-size: 1rem;
+}
+
+.NO__font-size--1-2 {
+  font-size: 1.2rem;
+}
+
+.NO__font-size--1-5 {
+  font-size: 1.5rem;
+}
+
+.NO__font-size--1-7 {
+  font-size: 1.7rem;
+}
+
+.NO__font-size--2 {
+  font-size: 2rem;
+}
+
+.NO__font-size--2-2 {
+  font-size: 2.2rem;
+}
+
+.NO__font-size--2-5 {
+  font-size: 2.5rem;
+}
+
+.NO__font-size--2-7 {
+  font-size: 2.7rem;
+}
+
+.NO__font-size--3 {
+  font-size: 3rem;
 }

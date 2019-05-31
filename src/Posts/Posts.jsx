@@ -46,7 +46,7 @@ class Posts extends React.Component{
     const { cosmic, catList, activePost } = this.state;
     let newArr = [];
     for(let i=0; i < catList.length; i++) {
-      let nI = cosmic.posts.filter(item => item.metadata.category.indexOf(catList[i]) !== -1);
+      let nI = cosmic.posts.filter(item => item.metadata.NO_category.indexOf(catList[i]) !== -1);
       let intersection = newArr.filter(element => nI.includes(element));
       if (intersection.length) {
         const indx = nI.indexOf(intersection[0]) - 1;
@@ -69,7 +69,7 @@ class Posts extends React.Component{
   }
 
   displayModal(item) {
-    const categories = item.metafields.filter(item => item.key === 'category').map(cat => cat.value);
+    const categories = item.metafields.filter(item => item.key === 'NO_category').map(cat => cat.value);
     var re = /\s*(?:,|$)\s*/;
     var catList = categories[0].split(re);
     this.setState({
@@ -94,7 +94,8 @@ class Posts extends React.Component{
           top: `${Math.floor((Math.random() * range) + 1)}px`,
           bottom: `${Math.floor((Math.random() * range) + 1)}px`,
         }
-        return (<p key={item._id} onClick={() => this.displayModal(item)} className='NO__text NO__text-title' style={style}>{item.title}</p>);
+        const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`
+        return (<p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>);
       });
     }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
+import PostForm from '../PostForm/PostForm';
 import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
 import { chgBodyColor } from '../functions.js';
@@ -15,13 +16,16 @@ class Welcome extends React.Component{
       postFeedOpened: false,
       showOverlay: false,
       bodyVisible: false,
+      postOverlayVisible: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
+    this.addPostOverlay = this.addPostOverlay.bind(this);
     this.signForm = this.signForm.bind(this);
     this.signOut = this.signOut.bind(this);
     this.closeOverlay = this.closeOverlay.bind(this);
     this.viewMode = this.viewMode.bind(this);
+    this.no_submit = this.no_submit.bind(this);
   }
 
   componentDidMount() {
@@ -46,11 +50,14 @@ class Welcome extends React.Component{
     this.setState({postFeedOpened: !postFeedOpened});
   }
 
+  addPostOverlay() {
+    const { postOverlayVisible } = this.state;
+    this.setState({postOverlayVisible: !postOverlayVisible});
+  }
+
   signForm() {
-    const { showOverlay } = this.state;
-      this.setState({
-        showOverlay: !showOverlay,
-      })
+    const { showLoginOverlay } = this.state;
+      this.setState({showLoginOverlay: !showLoginOverlay})
   }
 
   signOut() {
@@ -61,9 +68,9 @@ class Welcome extends React.Component{
   }
 
   closeOverlay() {
-    const { showOverlay } = this.state;
+    const { showLoginOverlay } = this.state;
       this.setState({
-        showOverlay: !showOverlay,
+        showLoginOverlay: !showLoginOverlay,
     })
   }
 
@@ -77,8 +84,13 @@ class Welcome extends React.Component{
     }
   }
 
+  no_submit(formSubmitted = false) {
+    this.addPostOverlay();
+    alert("Thank you! Your post has been submitted succesfully.");
+  }
+
   render() {
-    const { postFeedOpened, showOverlay, loggedIn } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'}`;
 
     const postView = (
@@ -91,8 +103,12 @@ class Welcome extends React.Component{
       return (
         <div>
           <div className='NO__welcome'>
-            {loggedIn && <span className="NO__welcome-text NO__text">Welcome @admin</span>}
-            {showOverlay && <SignForm closeOverlay={this.closeOverlay}/>}
+            {loggedIn &&
+              <div className="NO__welcome-text NO__text">
+                <span>Welcome @admin  | </span><span onClick={this.addPostOverlay}>ADD POST</span>
+              </div>}
+            {showLoginOverlay && !postFeedOpened && <SignForm closeOverlay={this.closeOverlay}/>}
+            {postOverlayVisible && !postFeedOpened && loggedIn && <PostForm submit={this.no_submit}/>}
             <img alt='NOIMAGE' src={imgSrc} className={imgClassName} onClick={this.openPostFeed} />
             {!loggedIn && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
             {loggedIn && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}

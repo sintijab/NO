@@ -34,3 +34,20 @@ export function replaceAll(str, find, replace) {
 export function chgBodyColor(color) {
    document.body.style.background = color;
 }
+
+export function generateToken() {
+  var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var token = '';
+    for (var i = 16; i > 0; --i) {
+      token += chars[Math.round(Math.random() * (chars.length - 1))];
+    }
+
+  // create expiration date
+  var expires = new Date();
+  expires.setHours(expires.getHours() + 6);
+
+  return {
+    token: token,
+    expires: expires
+  };
+}
