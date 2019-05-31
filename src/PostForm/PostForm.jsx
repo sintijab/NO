@@ -165,7 +165,7 @@ class PostForm extends React.Component{
             <textarea id="article" rows="30" type="text" name="article" className="NO__post_form-control NO__form-text-area" placeholder="Description" value={article} onChange={this.handleChange}/>
             <input id="url" type="url" name="url" className="NO__post_form-control" placeholder="ImgLink" value={url} onChange={this.handleChange}/><br/>
             <input id="vidurl" type="url" name="vidurl" className="NO__post_form-control" placeholder="VideoLink" value={vidurl} onChange={this.handleChange}/><br/>
-            <input id="categories" type="text" name="categories" className="NO__post_form-control" placeholder="categories" value={categories} onChange={this.handleChange}/>
+            <input id="categories" required type="text" name="categories" className="NO__post_form-control" placeholder="categories" value={categories} onChange={this.handleChange}/>
             <button className="btn btn-info NO__post_form-control--submit">Submit</button>
           </div>
         </form>
