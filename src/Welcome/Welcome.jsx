@@ -86,7 +86,7 @@ class Welcome extends React.Component{
 
   no_submit(formSubmitted = false) {
     this.addPostOverlay();
-    alert("Thank you! Your post has been submitted succesfully.");
+    alert("Thank you! Your post has been submitted succesfully. It will be reviewed and published soon!");
   }
 
   render() {
