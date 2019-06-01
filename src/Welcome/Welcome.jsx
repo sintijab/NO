@@ -101,7 +101,6 @@ class Welcome extends React.Component{
       </div>
     );
 
-    if (!stopTimeout) {
       setTimeout(
         function() {
             this.setState({showPreview: false});
@@ -109,7 +108,6 @@ class Welcome extends React.Component{
         .bind(this),
         8500
       );
-    }
 
       return (
         <div>
