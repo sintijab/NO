@@ -18,6 +18,7 @@ class Welcome extends React.Component{
       bodyVisible: false,
       postOverlayVisible: false,
       showPreview: true,
+      stopTimeout: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -27,6 +28,7 @@ class Welcome extends React.Component{
     this.closeOverlay = this.closeOverlay.bind(this);
     this.viewMode = this.viewMode.bind(this);
     this.no_submit = this.no_submit.bind(this);
+    this.stopTimeout = this.stopTimeout.bind(this);
   }
 
   componentDidMount() {
@@ -90,6 +92,11 @@ class Welcome extends React.Component{
     alert("Thank you! Your post has been submitted succesfully. It will be reviewed and published soon!");
   }
 
+  stopTimeout() {
+    const { stopTimeout } = this.state;
+    this.setState({stopTimeout: !stopTimeout})
+  }
+
   render() {
     const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, stopTimeout } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'}`;
@@ -100,7 +107,7 @@ class Welcome extends React.Component{
         <Posts />
       </div>
     );
-
+    if (!stopTimeout) {
       setTimeout(
         function() {
             this.setState({showPreview: false});
@@ -108,18 +115,20 @@ class Welcome extends React.Component{
         .bind(this),
         8500
       );
+    }
 
       return (
         <div>
-          <div className='NO__welcome' onClick={this.stopTimeout}>
+          <div className='NO__welcome'>
           {showPreview &&
             <div>
               <div className='NO__welcome-preview'/>
-                <div class="fb-video"
+                <div className="fb-video"
                   data-href="https://www.facebook.com/NOprojekt/videos/1127787447404230/"
                   data-height="1000"
                   data-autoplay
                   data-allowfullscreen="true">
+                  onClick={this.stopTimeout}
                 </div>
             </div>}
             {loggedIn &&
