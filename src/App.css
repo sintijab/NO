@@ -473,3 +473,15 @@
 .NO__font-size--3 {
   font-size: 3rem;
 }
+
+.fb-video {
+  z-index: 100;
+  cursor: none;
+}
+
+.NO__welcome-preview {
+  z-index: 10000;
+  width: 100vW;
+  height: 100vH;
+  position: absolute;
+}

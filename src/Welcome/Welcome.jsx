@@ -17,6 +17,7 @@ class Welcome extends React.Component{
       showOverlay: false,
       bodyVisible: false,
       postOverlayVisible: false,
+      showPreview: true,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -90,7 +91,7 @@ class Welcome extends React.Component{
   }
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, stopTimeout } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'}`;
 
     const postView = (
@@ -100,9 +101,29 @@ class Welcome extends React.Component{
       </div>
     );
 
+    if (!stopTimeout) {
+      setTimeout(
+        function() {
+            this.setState({showPreview: false});
+        }
+        .bind(this),
+        10000
+      );
+    }
+
       return (
         <div>
-          <div className='NO__welcome'>
+          <div className='NO__welcome' onClick={this.stopTimeout}>
+          {showPreview &&
+            <div>
+              <div className='NO__welcome-preview'/>
+                <div class="fb-video"
+                  data-href="https://www.facebook.com/NOprojekt/videos/1127787447404230/"
+                  data-height="1000"
+                  data-autoplay
+                  data-allowfullscreen="true">
+                </div>
+            </div>}
             {loggedIn &&
               <div className="NO__welcome-text NO__text">
                 <span>Welcome @admin  | </span><span onClick={this.addPostOverlay}>ADD POST</span>
