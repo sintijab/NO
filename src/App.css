@@ -479,9 +479,26 @@
   cursor: none;
 }
 
+@media only screen and (max-width: 768px) {
+  .fb-video {
+    position: absolute!important;
+    bottom: 0;
+    top: 22%;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+
 .NO__welcome-preview {
   z-index: 10000;
   width: 100vW;
   height: 100vH;
   position: absolute;
+}
+
+@media only screen and (max-width: 768px) {
+  .NO__welcome-preview {
+    z-index: 0;
+  }
 }

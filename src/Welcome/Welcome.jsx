@@ -107,7 +107,7 @@ class Welcome extends React.Component{
             this.setState({showPreview: false});
         }
         .bind(this),
-        10000
+        8500
       );
     }
 
