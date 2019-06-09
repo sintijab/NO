@@ -239,6 +239,7 @@
   text-align: justify;
   margin: 40px 30px;
   color: #ff0000;
+  word-break: break-word;
 }
 
 .NO__overlay-img {
@@ -501,4 +502,13 @@
   .NO__welcome-preview {
     z-index: 0;
   }
+}
+
+.NO__post {
+  height: 100%;
+}
+
+.NO__overlay-vid {
+  max-width: 59vW;
+  float: left;
 }

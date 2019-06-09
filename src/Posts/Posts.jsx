@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import LazyImage from '../images/LazyImage.js';
+import Post from './Post';
+
 
 class Posts extends React.Component{
 
@@ -13,10 +14,12 @@ class Posts extends React.Component{
       activePost: [],
       activePostContent: '',
       activePostImg: false,
+      activePostVideo: false,
       catList: [],
     }
     this.displayModal = this.displayModal.bind(this);
     this.showSimilarPost = this.showSimilarPost.bind(this);
+
     const _this = this;
     axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
       params: {
@@ -61,6 +64,7 @@ class Posts extends React.Component{
         this.setState({
           activePost: nextPost,
           activePostImg: nextPost.metadata.NO_img,
+          activePostVideo: nextPost.metadata.NO_vid,
           activePostContent: nextPost.metadata.NO_article,
         });
         i = catList.length;
@@ -76,38 +80,48 @@ class Posts extends React.Component{
       activePost: item,
       activePostContent: item.metadata.NO_article,
       activePostImg: item.metadata.NO_img,
+      activePostVideo: item.metadata.NO_vid,
       catList: catList,
       modalOpened: true,
     });
   }
 
   render() {
-    const { cosmic, activePost, activePostImg = false, activePostContent = '', modalOpened } = this.state;
+    const {
+      activePost,
+      activePostImg = false,
+      activePostVideo = false,
+      activePostContent = '',
+      modalOpened,
+      cosmic,
+    } = this.state;
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
-    if (posts.length) {
       post = posts.map(item => {
-        const range = Math.floor((Math.random() * 20000) + 1);
+        const itemIndex = posts.indexOf(item) * 100;
         const style = {
-          left: `${Math.floor((Math.random() * range) + 1)}px`,
-          right: `${Math.floor((Math.random() * range) + 1)}px`,
-          top: `${Math.floor((Math.random() * range) + 1)}px`,
-          bottom: `${Math.floor((Math.random() * range) + 1)}px`,
+          left: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
+          right: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
+          top: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
+          bottom: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
         }
         const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`
-        return (<p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>);
+        return (
+            <p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>);
       });
-    }
+
 
       return (
-        <div>
+        <div className="NO__post">
           {!modalOpened && !activePost._id && post}
           {!!activePost._id && modalOpened &&
-             <div key={activePost._id} onClick={this.showSimilarPost}>
-              {activePostImg && <LazyImage src={activePostImg} className='NO__overlay-img' />}
-              <h3 className='NO__text NO__paragraph NO__h3'>{activePost.title}</h3><br/>
-              <p className='NO__text NO__paragraph'>{activePostContent}</p>
-            </div>}
+            <Post
+              activePost={activePost}
+              activePostImg={activePostImg}
+              activePostVideo={activePostVideo}
+              activePostContent={activePostContent}
+              showSimilarPost={this.showSimilarPost}/>
+          }
         </div>
       );
     }

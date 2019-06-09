@@ -8,6 +8,7 @@ import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
 import { chgBodyColor } from '../functions.js';
 
+
 class Welcome extends React.Component{
 
   constructor(props) {
@@ -18,7 +19,6 @@ class Welcome extends React.Component{
       bodyVisible: false,
       postOverlayVisible: false,
       showPreview: true,
-      stopTimeout: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -28,7 +28,6 @@ class Welcome extends React.Component{
     this.closeOverlay = this.closeOverlay.bind(this);
     this.viewMode = this.viewMode.bind(this);
     this.no_submit = this.no_submit.bind(this);
-    this.stopTimeout = this.stopTimeout.bind(this);
   }
 
   componentDidMount() {
@@ -49,8 +48,7 @@ class Welcome extends React.Component{
   }
 
   openPostFeed() {
-    const { postFeedOpened } = this.state;
-    this.setState({postFeedOpened: !postFeedOpened});
+    this.setState({postFeedOpened: true });
   }
 
   addPostOverlay() {
@@ -92,30 +90,30 @@ class Welcome extends React.Component{
     alert("Thank you! Your post has been submitted succesfully. It will be reviewed and published soon!");
   }
 
-  stopTimeout() {
-    const { stopTimeout } = this.state;
-    this.setState({stopTimeout: !stopTimeout})
-  }
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, stopTimeout } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'}`;
 
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode}></span>
-        <Posts />
+          <Posts />
       </div>
     );
-    if (!stopTimeout) {
-      setTimeout(
-        function() {
-            this.setState({showPreview: false});
-        }
-        .bind(this),
-        8500
-      );
-    }
+    const prewiewShown = !!sessionStorage.getItem('preview');
+    if(!prewiewShown) {
+        setTimeout(
+          function() {
+              this.setState({showPreview: false});
+              sessionStorage.setItem('preview', 'true');
+          }
+          .bind(this),
+          8500
+        );
+      } else if (showPreview) {
+        this.setState({showPreview: false});
+      }
 
       return (
         <div>
@@ -128,7 +126,6 @@ class Welcome extends React.Component{
                   data-height="1000"
                   data-autoplay
                   data-allowfullscreen="true">
-                  onClick={this.stopTimeout}
                 </div>
             </div>}
             {loggedIn &&
