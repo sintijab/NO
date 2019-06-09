@@ -68,6 +68,16 @@ class Posts extends React.Component{
           activePostContent: nextPost.metadata.NO_article,
         });
         i = catList.length;
+        if (newItemIndex >= newArr.length) {
+          this.setState({
+            modalOpened: false,
+            activePost: [],
+            activePostContent: '',
+            activePostImg: false,
+            activePostVideo: false,
+            catList: [],
+          })
+        }
       }
     }
   }
