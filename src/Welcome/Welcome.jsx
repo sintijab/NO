@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
+import * as imgSrcMobile from '../images/47571265_200436654226310_2774485183145967616_n3.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
 import PostForm from '../PostForm/PostForm';
@@ -19,6 +20,8 @@ class Welcome extends React.Component{
       bodyVisible: false,
       postOverlayVisible: false,
       showPreview: true,
+      isMobile: null,
+      videoSrc: null
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -28,10 +31,42 @@ class Welcome extends React.Component{
     this.closeOverlay = this.closeOverlay.bind(this);
     this.viewMode = this.viewMode.bind(this);
     this.no_submit = this.no_submit.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.handleVideo = this.handleVideo.bind(this);
+    this.videoError = this.videoError.bind(this);
   }
 
   componentDidMount() {
-    this.props.signStatusAction()
+    this.props.signStatusAction();
+    window.addEventListener("resize", this.updateWindowDimensions());
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
+    }
+  }
+
+  handleVideo(stream) {
+    if (this.refs.video) {
+     try {
+        this.refs.video.srcObject = stream;
+      } catch (error) {
+        this.refs.video.src = URL.createObjectURL(stream);
+      }
+      this.refs.video.play();
+    }
+  }
+
+  videoError(){
+    console.log('The video is not supported by your device');
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    const isMobile = window.innerWidth < 1400;
+     this.setState({ isMobile: isMobile });
   }
 
   componentDidUpdate() {
@@ -92,8 +127,8 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview } = this.state;
-    const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'}`;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile } = this.state;
+    const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'} ${isMobile && 'NO__welcome_img-mobile'}`;
 
     const postView = (
       <div className='NO__feed'>
@@ -115,9 +150,18 @@ class Welcome extends React.Component{
         this.setState({showPreview: false});
       }
 
+      if (isMobile) {
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+      if (navigator.getUserMedia) {
+              navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
+        }
+      }
+      const welcomeImgSrc = isMobile ? imgSrcMobile : imgSrc;
+
       return (
         <div>
           <div className='NO__welcome'>
+          {isMobile && <video autoPlay={true} ref="video" className="NO_vid"/>}
           {showPreview &&
             <div>
               <div className='NO__welcome-preview'/>
@@ -134,9 +178,9 @@ class Welcome extends React.Component{
               </div>}
             {showLoginOverlay && !postFeedOpened && <SignForm closeOverlay={this.closeOverlay}/>}
             {postOverlayVisible && !postFeedOpened && loggedIn && <PostForm submit={this.no_submit}/>}
-            <img alt='NOIMAGE' src={imgSrc} className={imgClassName} onClick={this.openPostFeed} />
-            {!loggedIn && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
-            {loggedIn && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
+            <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.openPostFeed} />
+            {!loggedIn && !isMobile && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
+            {loggedIn && !isMobile && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
           </div>
           {postFeedOpened && postView}
         </div>

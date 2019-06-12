@@ -252,6 +252,21 @@
   margin-top: 0;
 }
 
+@media only screen and (max-width: 1400px) {
+  .NO__overlay-img{
+    position: fixed;
+    max-width: 60%;
+  }
+
+  .NO__h3 {
+    position: fixed;
+  }
+
+  .NO__paragraph {
+    position: fixed;
+  }
+}
+
 .NO__dot {
   position: fixed;
   height: 25px;
@@ -508,7 +523,25 @@
   height: 100%;
 }
 
+@media only screen and (max-width: 1400px) {
+  .NO__post {
+    height: auto;
+  }
+}
+
 .NO__overlay-vid {
   max-width: 59vW;
   float: left;
+}
+
+.NO_vid {
+  height: 100%;
+  position: fixed;
+  left: -80%;
+}
+
+.NO__welcome_img-mobile {
+  width: 100%;
+  height: auto;
+  position: fixed;
 }
