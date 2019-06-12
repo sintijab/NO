@@ -537,7 +537,7 @@
 .NO_vid {
   height: 100%;
   position: fixed;
-  left: -80%;
+  left: 0;
 }
 
 .NO__welcome_img-mobile {
