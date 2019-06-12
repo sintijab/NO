@@ -162,7 +162,7 @@ class Welcome extends React.Component{
         <div>
           <div className='NO__welcome'>
           {isMobile && <video autoPlay={true} ref="video" className="NO_vid"/>}
-          {showPreview &&
+          {showPreview && !isMobile &&
             <div>
               <div className='NO__welcome-preview'/>
                 <div className="fb-video"
@@ -172,7 +172,7 @@ class Welcome extends React.Component{
                   data-allowfullscreen="true">
                 </div>
             </div>}
-            {loggedIn &&
+            {loggedIn && !isMobile &&
               <div className="NO__welcome-text NO__text">
                 <span>Welcome @admin  | </span><span onClick={this.addPostOverlay}>ADD POST</span>
               </div>}
