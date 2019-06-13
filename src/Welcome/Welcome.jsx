@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
+import * as brokenWhite from '../images/broken_white.png';
+import * as brokenBlack from '../images/broken_black.png';
 import * as imgSrcMobile from '../images/47571265_200436654226310_2774485183145967616_n3.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
@@ -156,11 +158,20 @@ class Welcome extends React.Component{
               navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
         }
       }
-      const welcomeImgSrc = isMobile ? imgSrcMobile : imgSrc;
+      let welcomeImgSrc = imgSrc;
+      if (isMobile) {
+        if (this.refs.video && this.refs.video.srcObject) {
+          welcomeImgSrc = brokenBlack;
+        } else {
+          welcomeImgSrc = brokenWhite;
+        }
+      }
+
+      const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome';
 
       return (
         <div>
-          <div className='NO__welcome'>
+          <div className={noWelcomeClass}>
           {isMobile && <video autoPlay={true} ref="video" className="NO_vid"/>}
           {showPreview && !isMobile &&
             <div>
