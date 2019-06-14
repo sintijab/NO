@@ -39,7 +39,7 @@ class Welcome extends React.Component{
     window.addEventListener("resize", this.updateWindowDimensions());
     var facingMode = "user";
     var constraints = {
-      audio: true,
+      audio: false,
       video: {
        facingMode: facingMode
       }
@@ -51,6 +51,9 @@ class Welcome extends React.Component{
         .then(function(mediaStream) {
           var video = document.querySelector('video');
           video.srcObject = mediaStream;
+          video.onloadedmetadata = function(e) {
+            video.play();
+          };
         })
         .catch(function(err) { console.log(err.name + ": " + err.message); });
       }
@@ -150,7 +153,7 @@ class Welcome extends React.Component{
       if (isMobile) {
       var facingMode = "user";
       var constraints = {
-        audio: true,
+        audio: false,
         video: {
          facingMode: facingMode
         }
@@ -182,7 +185,7 @@ class Welcome extends React.Component{
       return (
         <div>
           <div className={noWelcomeClass}>
-          {isMobile && <video autoPlay={true} ref="video" className="NO_vid"/>}
+          {isMobile && <video autoPlay={true} ref="video" className="NO_vid" muted playsinline/>}
           {showPreview && !isMobile &&
             <div>
               <div className='NO__welcome-preview'/>
