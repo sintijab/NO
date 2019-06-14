@@ -554,7 +554,6 @@
   width: 100vW;
   max-width: 100%;
   position: fixed;
-  left: -20%;
   overflow: scroll;
   margin: 0;
 }
