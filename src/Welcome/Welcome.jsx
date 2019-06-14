@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
 import * as brokenWhite from '../images/broken_white.png';
 import * as brokenBlack from '../images/broken_black.png';
-import * as noImgSrc from '../images/welcome.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
 import PostForm from '../PostForm/PostForm';
@@ -40,24 +39,6 @@ class Welcome extends React.Component{
   componentDidMount() {
     this.props.signStatusAction();
     window.addEventListener("resize", this.updateWindowDimensions());
-    var facingMode = "user";
-    var constraints = {
-      audio: false,
-      video: {
-       facingMode: facingMode
-      }
-    }
-    const isMobile = window.innerWidth < 1400;
-    if (isMobile) {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(mediaStream) {
-          var video = document.querySelector('video');
-          video.srcObject = mediaStream;
-        })
-        .catch(function(err) { console.log(err.name + ": " + err.message); });
-      }
-    }
   }
 
   componentWillUnmount() {
@@ -127,8 +108,6 @@ class Welcome extends React.Component{
 
   hideVideo() {
       this.setState({showPreviewImg: false});
-      var video = document.querySelector('video');
-      video.play();
   }
 
 
@@ -164,16 +143,6 @@ class Welcome extends React.Component{
          facingMode: facingMode
         }
       }
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(mediaStream) {
-          var video = document.querySelector('video');
-          video.srcObject = mediaStream;
-          video.onloadedmetadata = function(e) {
-          }
-        })
-        .catch(function(err) { console.log(err.name + ": " + err.message); });
-      }
     }
       let welcomeImgSrc = imgSrc;
       if (isMobile) {
@@ -190,7 +159,7 @@ class Welcome extends React.Component{
       return (
         <div>
           <div className={noWelcomeClass}>
-          {isMobile && <video autoPlay={true} ref="video" className="NO_vid" muted playsinline/>}
+          {isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/>}
           {showPreview && !isMobile &&
             <div>
               <div className='NO__welcome-preview'/>
@@ -199,13 +168,12 @@ class Welcome extends React.Component{
                   data-height="1000"
                   data-autoplay
                   data-allowfullscreen="true"
-                  ref="wVideo"
-                  onended={this.hideVideo}>
+                  ref="wVideo">
                 </div>
             </div>}
             {isMobile && showPreviewImg &&
-              <div className='NO__welcome-preview'>
-                <img alt='NOIMAGE' src={noImgSrc} className={imgClassName} onClick={this.hideVideo} />
+              <div className='NO__welcome-preview' onClick={document.init}>
+                <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.hideVideo} />
               </div>}
             {loggedIn && !isMobile &&
               <div className="NO__welcome-text NO__text">
