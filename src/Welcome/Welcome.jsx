@@ -45,14 +45,15 @@ class Welcome extends React.Component{
       }
     }
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia(constraints, this.handleVideo).then(function(stream) {
-        const video = document.querySelector('video');
-        const videoTracks = stream.getVideoTracks();
-        console.log(`Using video device: ${videoTracks[0].label}`);
-        if (video) {
-          video.srcObject = stream;
-        }
+      navigator.mediaDevices.getUserMedia(constraints)
+      .then(function(mediaStream) {
+        var video = document.querySelector('video');
+        video.srcObject = mediaStream;
+        video.onloadedmetadata = function(e) {
+          video.play();
+        };
       })
+      .catch(function(err) { console.log(err.name + ": " + err.message); });
     }
   }
 
@@ -155,13 +156,15 @@ class Welcome extends React.Component{
         }
       }
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-            const video = document.querySelector('video');
-            if (video) {
-              video.srcObject = stream;
-            }
-            video.srcObject = stream;
-        });
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(mediaStream) {
+          var video = document.querySelector('video');
+          video.srcObject = mediaStream;
+          video.onloadedmetadata = function(e) {
+            video.play();
+          };
+        })
+        .catch(function(err) { console.log(err.name + ": " + err.message); });
       }
     }
       let welcomeImgSrc = imgSrc;
