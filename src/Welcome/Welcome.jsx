@@ -51,9 +51,11 @@ class Welcome extends React.Component{
         .then(function(mediaStream) {
           var video = document.querySelector('video');
           video.srcObject = mediaStream;
-          video.onloadedmetadata = function(e) {
-            video.play();
-          };
+          navigator.permissions.query({name:'camera'}).then(function(result) {
+            if (result.state === 'granted') {
+              video.play();
+            }
+          });
         })
         .catch(function(err) { console.log(err.name + ": " + err.message); });
       }
@@ -164,8 +166,12 @@ class Welcome extends React.Component{
           var video = document.querySelector('video');
           video.srcObject = mediaStream;
           video.onloadedmetadata = function(e) {
-            video.play();
-          };
+            navigator.permissions.query({name:'camera'}).then(function(result) {
+              if (result.state === 'granted') {
+                video.play();
+              }
+            });
+          }
         })
         .catch(function(err) { console.log(err.name + ": " + err.message); });
       }
