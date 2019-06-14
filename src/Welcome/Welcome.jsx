@@ -161,6 +161,8 @@ class Welcome extends React.Component{
          facingMode: facingMode
         }
       }
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
       if (navigator.getUserMedia) {
               navigator.mediaDevices.getUserMedia(constraints, this.handleVideo, this.videoError);
         }
@@ -173,6 +175,7 @@ class Welcome extends React.Component{
           welcomeImgSrc = brokenWhite;
         }
       }
+
 
       const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome';
       if (this.refs.video) {
