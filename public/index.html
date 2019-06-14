@@ -91,6 +91,7 @@ function errorMsg(msg, error) {
 }
 
 async function init(e) {
+  if (window.innerWidth < 1400) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleSuccess(stream);
@@ -99,8 +100,10 @@ async function init(e) {
     handleError(e);
   }
 }
-
-document.querySelector('#root').addEventListener('click', e => init(e));
+}
+  if (window.innerWidth < 1400) {
+    document.querySelector('#root').addEventListener('click', e => init(e));
+  }
   </script>
   </body>
 </html>
