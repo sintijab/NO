@@ -44,14 +44,16 @@ class Welcome extends React.Component{
        facingMode: facingMode
       }
     }
-    navigator.mediaDevices.getUserMedia(constraints, this.handleVideo).then(function(stream) {
-      const video = document.querySelector('video');
-      // const videoTracks = stream.getVideoTracks();
-      // console.log(`Using video device: ${videoTracks[0].label}`);
-      if (video) {
-        video.srcObject = stream;
-      }
-  });
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia(constraints, this.handleVideo).then(function(stream) {
+        const video = document.querySelector('video');
+        const videoTracks = stream.getVideoTracks();
+        console.log(`Using video device: ${videoTracks[0].label}`);
+        if (video) {
+          video.srcObject = stream;
+        }
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -152,14 +154,16 @@ class Welcome extends React.Component{
          facingMode: facingMode
         }
       }
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-      const video = document.querySelector('video');
-      if (video) {
-        video.srcObject = stream;
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+            const video = document.querySelector('video');
+            if (video) {
+              video.srcObject = stream;
+            }
+            video.srcObject = stream;
+        });
       }
-      video.srcObject = stream;
-  });
-      }
+    }
       let welcomeImgSrc = imgSrc;
       if (isMobile) {
         if (this.refs.video && this.refs.video.srcObject) {
