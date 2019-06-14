@@ -549,9 +549,10 @@
 }
 
 .NO__welcome_img-mobile {
-  height: 100%;
+  height: 100vH;
   width: auto;
   position: fixed;
-  left: -25%;
+  left: -20%;
   overflow: scroll;
+  margin: 0;
 }
