@@ -46,9 +46,11 @@ class Welcome extends React.Component{
     }
     navigator.mediaDevices.getUserMedia(constraints, this.handleVideo).then(function(stream) {
       const video = document.querySelector('video');
-      const videoTracks = stream.getVideoTracks();
-      console.log(`Using video device: ${videoTracks[0].label}`);
-      video.srcObject = stream;
+      // const videoTracks = stream.getVideoTracks();
+      // console.log(`Using video device: ${videoTracks[0].label}`);
+      if (video) {
+        video.srcObject = stream;
+      }
   });
   }
 
@@ -152,8 +154,9 @@ class Welcome extends React.Component{
       }
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
       const video = document.querySelector('video');
-      const videoTracks = stream.getVideoTracks();
-      console.log(`Using video device: ${videoTracks[0].label}`);
+      if (video) {
+        video.srcObject = stream;
+      }
       video.srcObject = stream;
   });
       }
