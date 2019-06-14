@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
 import * as brokenWhite from '../images/broken_white.png';
 import * as brokenBlack from '../images/broken_black.png';
-import * as imgSrcMobile from '../images/47571265_200436654226310_2774485183145967616_n3.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
 import PostForm from '../PostForm/PostForm';
 import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
 import { chgBodyColor } from '../functions.js';
-
 
 class Welcome extends React.Component{
 
@@ -34,32 +32,24 @@ class Welcome extends React.Component{
     this.viewMode = this.viewMode.bind(this);
     this.no_submit = this.no_submit.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.handleVideo = this.handleVideo.bind(this);
-    this.videoError = this.videoError.bind(this);
   }
 
   componentDidMount() {
     this.props.signStatusAction();
     window.addEventListener("resize", this.updateWindowDimensions());
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-    if (navigator.getUserMedia) {
-        navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
-    }
-  }
-
-  handleVideo(stream) {
-    if (this.refs.video) {
-     try {
-        this.refs.video.srcObject = stream;
-      } catch (error) {
-        this.refs.video.src = URL.createObjectURL(stream);
+    var facingMode = "user";
+    var constraints = {
+      audio: true,
+      video: {
+       facingMode: facingMode
       }
-      this.refs.video.play();
     }
-  }
-
-  videoError(){
-    console.log('The video is not supported by your device');
+    navigator.mediaDevices.getUserMedia(constraints, this.handleVideo).then(function(stream) {
+      const video = document.querySelector('video');
+      const videoTracks = stream.getVideoTracks();
+      console.log(`Using video device: ${videoTracks[0].label}`);
+      video.srcObject = stream;
+  });
   }
 
   componentWillUnmount() {
@@ -153,19 +143,19 @@ class Welcome extends React.Component{
       }
 
       if (isMobile) {
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
       var facingMode = "user";
       var constraints = {
-        audio: false,
+        audio: true,
         video: {
          facingMode: facingMode
         }
       }
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-      if (navigator.getUserMedia) {
-              navigator.mediaDevices.getUserMedia(constraints, this.handleVideo, this.videoError);
-        }
+    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+      const video = document.querySelector('video');
+      const videoTracks = stream.getVideoTracks();
+      console.log(`Using video device: ${videoTracks[0].label}`);
+      video.srcObject = stream;
+  });
       }
       let welcomeImgSrc = imgSrc;
       if (isMobile) {
@@ -178,13 +168,6 @@ class Welcome extends React.Component{
 
 
       const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome';
-      if (this.refs.video) {
-        this.refs.video.style.width = document.width + 'px';
-        this.refs.video.style.height = document.height + 'px';
-        this.refs.video.setAttribute('autoplay', '');
-        this.refs.video.setAttribute('muted', '');
-        this.refs.video.setAttribute('playsinline', '');
-      }
 
       return (
         <div>
