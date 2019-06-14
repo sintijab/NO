@@ -154,8 +154,15 @@ class Welcome extends React.Component{
 
       if (isMobile) {
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+      var facingMode = "user";
+      var constraints = {
+        audio: false,
+        video: {
+         facingMode: facingMode
+        }
+      }
       if (navigator.getUserMedia) {
-              navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
+              navigator.mediaDevices.getUserMedia(constraints, this.handleVideo, this.videoError);
         }
       }
       let welcomeImgSrc = imgSrc;
@@ -168,6 +175,13 @@ class Welcome extends React.Component{
       }
 
       const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome';
+      if (this.refs.video) {
+        this.refs.video.style.width = document.width + 'px';
+        this.refs.video.style.height = document.height + 'px';
+        this.refs.video.setAttribute('autoplay', '');
+        this.refs.video.setAttribute('muted', '');
+        this.refs.video.setAttribute('playsinline', '');
+      }
 
       return (
         <div>
