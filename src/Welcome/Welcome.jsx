@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
 import * as brokenWhite from '../images/broken_white.png';
 import * as brokenBlack from '../images/broken_black.png';
+import * as noImgSrc from '../images/welcome.png';
 import Posts from '../Posts/Posts';
 import SignForm from '../SignForm/SignForm';
 import PostForm from '../PostForm/PostForm';
@@ -21,7 +22,8 @@ class Welcome extends React.Component{
       postOverlayVisible: false,
       showPreview: true,
       isMobile: null,
-      videoSrc: null
+      videoSrc: null,
+      showPreviewImg: true
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -32,6 +34,7 @@ class Welcome extends React.Component{
     this.viewMode = this.viewMode.bind(this);
     this.no_submit = this.no_submit.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.hideVideo = this.hideVideo.bind(this);
   }
 
   componentDidMount() {
@@ -122,9 +125,15 @@ class Welcome extends React.Component{
     alert("Thank you! Your post has been submitted succesfully. It will be reviewed and published soon!");
   }
 
+  hideVideo() {
+      this.setState({showPreviewImg: false});
+      var video = document.querySelector('video');
+      video.play();
+  }
+
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'} ${isMobile && 'NO__welcome_img-mobile'}`;
 
     const postView = (
@@ -134,7 +143,7 @@ class Welcome extends React.Component{
       </div>
     );
     const prewiewShown = !!sessionStorage.getItem('preview');
-    if(!prewiewShown) {
+    if(!prewiewShown && !isMobile) {
         setTimeout(
           function() {
               this.setState({showPreview: false});
@@ -189,9 +198,15 @@ class Welcome extends React.Component{
                   data-href="https://www.facebook.com/NOprojekt/videos/1127787447404230/"
                   data-height="1000"
                   data-autoplay
-                  data-allowfullscreen="true">
+                  data-allowfullscreen="true"
+                  ref="wVideo"
+                  onended={this.hideVideo}>
                 </div>
             </div>}
+            {isMobile && showPreviewImg &&
+              <div className='NO__welcome-preview'>
+                <img alt='NOIMAGE' src={noImgSrc} className={imgClassName} onClick={this.hideVideo} />
+              </div>}
             {loggedIn && !isMobile &&
               <div className="NO__welcome-text NO__text">
                 <span>Welcome @admin  | </span><span onClick={this.addPostOverlay}>ADD POST</span>
