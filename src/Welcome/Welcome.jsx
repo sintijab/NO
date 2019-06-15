@@ -156,10 +156,11 @@ class Welcome extends React.Component{
   }
 
   getRandomRoomNumber() {
-    const { rooms = [] } = this.state;
-    for (var i=0; i<= rooms.roomNr.length; i++) {
+    const { rooms } = this.state;
+    const { roomNr = [] } = rooms;
+    for (var i=0; i<= roomNr.length; i++) {
       let randomNum = Math.floor(Math.random() * 400000000) + 1;
-      if(rooms.roomNr[i] !== randomNum) {
+      if(!roomNr.length || roomNr[i] !== randomNum) {
         return randomNum;
       }
       i++;
@@ -169,6 +170,7 @@ class Welcome extends React.Component{
 
   viewMode() {
     const { bodyVisible, isMobile, rooms } = this.state;
+    const { roomNr = [] } = rooms;
     if (!isMobile) {
       this.setState({ bodyVisible: !bodyVisible });
       if (bodyVisible) {
@@ -182,9 +184,9 @@ class Welcome extends React.Component{
         localStorage.removeItem('room');
       }
       let randomRoomNumber = this.getRandomRoomNumber();
-      if (rooms.roomNr.length) {
-        const randNr = Math.floor(Math.random() * rooms.roomNr.length) + 1;
-        randomRoomNumber = rooms.roomNr[randNr];
+      if (roomNr.length) {
+        const randNr = Math.floor(Math.random() * roomNr.length) + 1;
+        randomRoomNumber = roomNr[randNr];
       }
       if (randomRoomNumber) {
       localStorage.setItem('room', randomRoomNumber);
