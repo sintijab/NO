@@ -191,6 +191,7 @@ class Welcome extends React.Component{
           localStorage.removeItem('room');
         }
         }
+        }
       }
       localStorage.setItem('room', randomRoomNumber);
       this.setState({ roomNumber: randomRoomNumber });
@@ -243,7 +244,6 @@ class Welcome extends React.Component{
         })
         window.loadSimpleWebRTC();
       }
-    }
     }
   }
 
@@ -318,7 +318,7 @@ class Welcome extends React.Component{
                 </div>
             </div>}
             {isMobile && showPreviewImg &&
-              <div className='NO__welcome-preview' onClick={document.init}>
+              <div className='NO__welcome-preview'>
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.hideVideo} />
               </div>}
             {isMobile && <div id="remotes" className="row">
