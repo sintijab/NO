@@ -156,7 +156,7 @@ class Welcome extends React.Component{
   }
 
   getRandomRoomNumber() {
-    const { rooms } = this.state;
+    const { rooms = [] } = this.state;
     for (var i=0; i<= rooms.roomNr.length; i++) {
       let randomNum = Math.floor(Math.random() * 400000000) + 1;
       if(rooms.roomNr[i] !== randomNum) {
