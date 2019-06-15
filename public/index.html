@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="viewport" content="minimum-scale=1">
     <meta name="theme-color" content="#000000" />
-    <script src="https://webrtc.github.io/adapter/adapter-4.2.2.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Allerta+Stencil|Anton|Archivo+Black|Cormorant+SC|Cutive+Mono|Vidaloka|Major+Mono+Display|Monofett|Libre+Barcode+39|Megrim|Monsieur+La+Doulaise|Permanent+Marker|Share+Tech+Mono|Press+Start+2P|Montserrat+Subrayada|Tangerine|ZCOOL+KuaiLe|Zilla+Slab+Highlight&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@12.0.0/dist/lazyload.min.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-4.2.2.js"></script>
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>NO App</title>
   </head>
@@ -48,13 +48,9 @@
         return false;
     }
 
-  if (window.innerWidth < 1400) {
-    document.querySelector('#root').addEventListener('click', e => loadSimpleWebRTC(e));
-  }
   // Dynamically load the simplewebrtc script so that we can
 // kickstart the video call.
 function loadSimpleWebRTC() {
-  document.getElementById("remotes").style.visibility = "visible";
   var script = document.createElement("script");
   script.src = "./latest-v3.js";
   document.head.appendChild(script);
@@ -70,13 +66,14 @@ function loadSimpleWebRTC() {
       autoAdjustMic: false
     });
 
-    // Set the publicly available room URL.
-
     // Immediately join room when loaded.
     webrtc.on("readyToCall", function() {
-      const randNr = Math.floor(Math.random() * 30000) + 1;
-      const room = localStorage.getItem('room') || randNr;
-      webrtc.joinRoom(room);
+      if (localStorage.getItem('room')) {
+      webrtc.joinRoom(localStorage.getItem('room'));
+    } else {
+      let randomNum = Math.floor(Math.random() * 400000000) + 1;
+      webrtc.joinRoom(randomNum);
+    }
     });
 
     function showVolume(el, volume) {
@@ -95,14 +92,15 @@ function loadSimpleWebRTC() {
 
     // If we didn't get access to the camera, raise an error.
     webrtc.on("localMediaError", function (err) {
-      console.log("This service only works if you allow camera access.Please grant access and refresh the page.");
+      conosole.log("This service only works if you allow camera access.Please grant access and refresh the page.");
     });
 
     // When another person joins the chat room, we'll display their video.
     webrtc.on("videoAdded", function(video, peer) {
       console.log("user added to chat", peer);
       var remotes = document.getElementById("remotes");
-      if (remotes && childElementCount < 1) {
+
+      if (remotes) {
         var outerContainer = document.createElement("div");
         outerContainer.className = "col-md-6";
 

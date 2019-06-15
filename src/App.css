@@ -569,7 +569,7 @@
 
 
 #remotes {
-  visibility: hidden;
+  visibility: visible;
 }
 
 #url {
