@@ -114,6 +114,7 @@ class Welcome extends React.Component{
           let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1;
 
           localStorage.setItem('room', randomRoomNumber);
+          window.loadSimpleWebRTC();
           const Cosmic = require('cosmicjs')({
             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
           })
@@ -164,7 +165,7 @@ class Welcome extends React.Component{
             let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
             let randomRoomNumber = roomNr[randNr];
           localStorage.setItem('room', randomRoomNumber);
-          window.loadSimpleWebRTC(randomRoomNumber);
+          window.loadSimpleWebRTC();
           Cosmic.getBuckets()
           .then(data => {
             const bucket = Cosmic.bucket({
