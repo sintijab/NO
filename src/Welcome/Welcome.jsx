@@ -221,8 +221,9 @@ class Welcome extends React.Component{
           <Posts />
       </div>
     );
-    const prewiewShown = !!sessionStorage.getItem('preview');
-    if(!prewiewShown && !isMobile) {
+    const previewShown = sessionStorage.getItem('preview');
+    debugger;
+    if(previewShown !== 'true' && !isMobile) {
         setTimeout(
           function() {
               this.setState({showPreview: false});
