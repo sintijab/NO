@@ -146,6 +146,8 @@ class Welcome extends React.Component{
             bucket.addObject(params)
             .then(data => {
               console.log(data)
+              const roomNrText = document.getElementById("roomNr");
+              roomNrText.innerHTML = randomRoomNumber;
             })
             .catch(err => {
               console.log(err)
@@ -177,6 +179,8 @@ class Welcome extends React.Component{
             })
             .then(data => {
               console.log(data)
+              const roomNrText = document.getElementById("roomNr");
+              roomNrText.innerHTML = randomRoomNumber;
             })
             .catch(err => {
               console.log(err)
@@ -205,10 +209,10 @@ class Welcome extends React.Component{
   render() {
     const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'} ${isMobile && 'NO__welcome_img-mobile'}`;
-
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
+        {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts />
       </div>
     );

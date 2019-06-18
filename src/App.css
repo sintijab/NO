@@ -619,3 +619,8 @@
 .col-md-6 {
   margin-bottom: 1em;
 }
+
+.NO_roomId {
+  position: fixed;
+  display: block;
+}
