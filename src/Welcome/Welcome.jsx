@@ -95,7 +95,6 @@ class Welcome extends React.Component{
 
   viewMode() {
     const { bodyVisible, isMobile } = this.state;
-    debugger;
     if (!isMobile) {
       this.setState({ bodyVisible: !bodyVisible });
       if (bodyVisible) {
@@ -112,11 +111,9 @@ class Welcome extends React.Component{
         } })
       .then(function (response) {
         if (!response.data.objects) {
-            debugger;
           let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1;
 
           localStorage.setItem('room', randomRoomNumber);
-                    debugger;
           const Cosmic = require('cosmicjs')({
             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
           })
