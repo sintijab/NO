@@ -50,7 +50,7 @@
 
   // Dynamically load the simplewebrtc script so that we can
 // kickstart the video call.
-function loadSimpleWebRTC() {
+function loadSimpleWebRTC(randomRoomNumber) {
   var script = document.createElement("script");
   script.src = "./latest-v3.js";
   document.head.appendChild(script);
@@ -68,12 +68,7 @@ function loadSimpleWebRTC() {
 
     // Immediately join room when loaded.
     webrtc.on("readyToCall", function() {
-      if (localStorage.getItem('room')) {
-      webrtc.joinRoom(localStorage.getItem('room'));
-    } else {
-      let randomNum = Math.floor(Math.random() * 400000000) + 1;
-      webrtc.joinRoom(randomNum);
-    }
+      webrtc.joinRoom(randomRoomNumber);
     });
 
     function showVolume(el, volume) {

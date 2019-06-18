@@ -145,7 +145,7 @@ class Welcome extends React.Component{
             bucket.addObject(params)
             .then(data => {
               console.log(data)
-              window.loadSimpleWebRTC();
+              window.loadSimpleWebRTC(randomRoomNumber);
             })
             .catch(err => {
               console.log(err)
@@ -156,7 +156,6 @@ class Welcome extends React.Component{
             })
         } else {
           const objects = response.data.objects;
-          debugger
           const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null;
           const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null;
           const Cosmic = require('cosmicjs')({
@@ -177,7 +176,7 @@ class Welcome extends React.Component{
             })
             .then(data => {
               console.log(data)
-              window.loadSimpleWebRTC();
+              window.loadSimpleWebRTC(randomRoomNumber);
             })
             .catch(err => {
               console.log(err)
