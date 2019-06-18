@@ -25,8 +25,6 @@ class Welcome extends React.Component{
       isMobile: null,
       videoSrc: null,
       showPreviewImg: true,
-      roomNumber: null,
-      rooms: [{roomNr: null, roomId: null}],
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -38,32 +36,6 @@ class Welcome extends React.Component{
     this.no_submit = this.no_submit.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.hideVideo = this.hideVideo.bind(this);
-    this.getRandomRoomNumber = this.getRandomRoomNumber.bind(this);
-
-    const _this = this;
-    axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
-      params: {
-        type: 'rooms'
-      } })
-    .then(function (response) {
-      if (!response.data.objects) {
-        _this.setState({
-          error: true,
-          loading: false
-        })
-      } else {
-        const objects = response.data.objects;
-        const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null;
-        const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null;
-        _this.setState({
-          rooms: {roomNr: roomNr, roomId: roomId},
-          loading: false
-        })
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
   }
 
   componentDidMount() {
@@ -121,22 +93,9 @@ class Welcome extends React.Component{
     })
   }
 
-  getRandomRoomNumber() {
-    const { rooms } = this.state;
-    const { roomNr = [] } = rooms;
-    for (var i=0; i<= roomNr.length; i++) {
-      let randomNum = Math.floor(Math.random() * 400000000) + 1;
-      if(!roomNr.length || roomNr[i] !== randomNum) {
-        return randomNum;
-      }
-      i++;
-    }
-    return;
-  }
-
   viewMode() {
-    const { bodyVisible, isMobile, rooms } = this.state;
-    const { roomNr = [], roomId = [] } = rooms;
+    const { bodyVisible, isMobile } = this.state;
+    debugger;
     if (!isMobile) {
       this.setState({ bodyVisible: !bodyVisible });
       if (bodyVisible) {
@@ -144,27 +103,40 @@ class Welcome extends React.Component{
       } else {
         chgBodyColor('#ffffff');
       }
-    } else {
-      const existingNr = localStorage.getItem('room');
-      let randomRoomNumber = this.getRandomRoomNumber().toString();
-      if (roomNr.length) {
-        let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
-        if ((roomNr[randNr]).toString() !== existingNr) {
-          randomRoomNumber = roomNr[randNr];
-      }
-      }
-      if (randomRoomNumber) {
-      if (existingNr) {
-        if (rooms && rooms.roomNr && rooms.roomNr.length) {
-        const existingRoomIndex = existingNr ? rooms.roomNr.map(room => (room.toString()) === existingNr).indexOf(true) : null;
-        if (existingRoomIndex !== -1) {
-            const existingRoomId = rooms.roomId[existingRoomIndex];
-            const newRoomNr = roomNr.splice(existingRoomIndex, 1);
-            const newRoomId = roomId.splice(existingRoomIndex, 1);
-            if (existingRoomId) {
-            const Cosmic = require('cosmicjs')({
-              token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
-            })
+    }
+    if (isMobile) {
+      localStorage.removeItem('room');
+      axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
+        params: {
+          type: 'rooms'
+        } })
+      .then(function (response) {
+        if (!response.data.objects) {
+            debugger;
+          let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1;
+
+          localStorage.setItem('room', randomRoomNumber);
+                    debugger;
+          const Cosmic = require('cosmicjs')({
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
+          })
+            const params = {
+              title: 'room_id',
+              type_slug: 'rooms',
+              slug: randomRoomNumber,
+              content: '',
+              status: 'published',
+              metafields: [
+                {
+                  required: true,
+                  value: randomRoomNumber,
+                  key: 'room_id',
+                  title: 'room_id',
+                  type: 'text',
+                  children: null
+                },
+              ],
+            }
             Cosmic.getBuckets()
             .then(data => {
               console.log(data)
@@ -172,78 +144,54 @@ class Welcome extends React.Component{
                 slug: data.buckets[0].slug,
                 write_key: ''
               })
-          bucket.deleteObject({
-            slug: existingRoomId,
-          })
-          .then(data => {
-            console.log(data)
-          })
-          .catch(err => {
-            console.log(err)
-          })
-        });
-          this.setState({
-            rooms: {
-              roomNr: newRoomNr,
-              roomId: newRoomId
-            }
-          })
-          localStorage.removeItem('room');
-        }
-        }
-        }
-      }
-      localStorage.setItem('room', randomRoomNumber);
-      this.setState({ roomNumber: randomRoomNumber });
-        const params = {
-          title: 'room_id',
-          type_slug: 'rooms',
-          slug: randomRoomNumber,
-          content: '',
-          status: 'published',
-          metafields: [
-            {
-              required: true,
-              value: randomRoomNumber,
-              key: 'room_id',
-              title: 'room_id',
-              type: 'text',
-              children: null
-            },
-          ],
-        }
-        const Cosmic = require('cosmicjs')({
-          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
-        })
-        Cosmic.getBuckets()
-        .then(data => {
-          console.log(data)
-          const bucket = Cosmic.bucket({
-            slug: data.buckets[0].slug,
-            write_key: ''
-          })
 
-        bucket.addObject(params)
-        .then(data => {
-          console.log(data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        const updatedRoomNr = roomNr.concat(randomRoomNumber);
-        const updatedRoomId = roomId.concat(randomRoomNumber);
-        this.setState({
-          rooms: {
-            roomNr: updatedRoomNr,
-            roomId: updatedRoomId
-          }
-        })
-        window.loadSimpleWebRTC();
-      }
+            bucket.addObject(params)
+            .then(data => {
+              console.log(data)
+              window.loadSimpleWebRTC();
+            })
+            .catch(err => {
+              console.log(err)
+            })
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        } else {
+          const objects = response.data.objects;
+          const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null;
+          const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null;
+          let randomRoomNumber = this.getRandomRoomNumber().toString();
+          const Cosmic = require('cosmicjs')({
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
+          })
+          if (roomNr.length) {
+            let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
+            randomRoomNumber = roomNr[randNr];
+          localStorage.setItem('room', randomRoomNumber);
+          Cosmic.getBuckets()
+          .then(data => {
+            const bucket = Cosmic.bucket({
+              slug: data.buckets[0].slug,
+              write_key: ''
+            })
+            bucket.deleteObject({
+              slug: roomId[randNr],
+            })
+            .then(data => {
+              console.log(data)
+              window.loadSimpleWebRTC();
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          });
+        }
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     }
   }
 
@@ -259,7 +207,7 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile, roomNumber } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'} ${isMobile && 'NO__welcome_img-mobile'}`;
 
     const postView = (
