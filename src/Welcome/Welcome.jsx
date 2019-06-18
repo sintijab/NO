@@ -145,7 +145,6 @@ class Welcome extends React.Component{
             bucket.addObject(params)
             .then(data => {
               console.log(data)
-              window.loadSimpleWebRTC(randomRoomNumber);
             })
             .catch(err => {
               console.log(err)
@@ -165,6 +164,7 @@ class Welcome extends React.Component{
             let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
             let randomRoomNumber = roomNr[randNr];
           localStorage.setItem('room', randomRoomNumber);
+          window.loadSimpleWebRTC(randomRoomNumber);
           Cosmic.getBuckets()
           .then(data => {
             const bucket = Cosmic.bucket({
@@ -176,7 +176,6 @@ class Welcome extends React.Component{
             })
             .then(data => {
               console.log(data)
-              window.loadSimpleWebRTC(randomRoomNumber);
             })
             .catch(err => {
               console.log(err)
