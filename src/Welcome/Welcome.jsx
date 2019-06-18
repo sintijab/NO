@@ -277,7 +277,7 @@ class Welcome extends React.Component{
             {isMobile && <div id="remotes" className="row">
               {<div className="col-md-6 ">
                 <div className="videoContainer" id="videoContainer">
-                  <video id="selfVideo" onContextMenu={()=> {return false} }></video>
+                  <video id="selfVideo" onContextMenu={()=> {return false} } playsInline controls="true"></video>
                   <meter id="localVolume" className="volume" min="-45" max="-20" high="-25" low="-40"></meter>
                 </div>
               </div>}
