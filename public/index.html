@@ -69,7 +69,6 @@ function loadSimpleWebRTC() {
     // Immediately join room when loaded.
     webrtc.on("readyToCall", function() {
       let room = localStorage.getItem('room');
-      room = parseInt(room, 10);
       webrtc.joinRoom(room);
     });
 
