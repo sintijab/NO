@@ -201,7 +201,12 @@ class Welcome extends React.Component{
   }
 
   hideVideo() {
-      this.setState({showPreviewImg: false});
+      this.setState({showPreviewImg: false, postFeedOpened: true});
+      let room = localStorage.getItem('room');
+      if(!room) {
+        room = Math.floor(Math.random() * 400000000) + 1;
+      }
+      localStorage.setItem('room', room);
       window.loadSimpleWebRTC();
   }
 
@@ -266,8 +271,8 @@ class Welcome extends React.Component{
                 </div>
             </div>}
             {isMobile && showPreviewImg &&
-              <div className='NO__welcome-preview'>
-                <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.hideVideo} />
+              <div className='NO__welcome-preview' onClick={this.hideVideo} >
+                <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
               </div>}
             {isMobile && <div id="remotes" className="row">
               {<div className="col-md-6 ">
@@ -283,7 +288,7 @@ class Welcome extends React.Component{
               </div>}
             {showLoginOverlay && !postFeedOpened && <SignForm closeOverlay={this.closeOverlay}/>}
             {postOverlayVisible && !postFeedOpened && loggedIn && <PostForm submit={this.no_submit}/>}
-            <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.openPostFeed} />
+            {!isMobile && <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.openPostFeed} />}
             {!loggedIn && !isMobile && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
             {loggedIn && !isMobile && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
           </div>

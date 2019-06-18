@@ -69,12 +69,7 @@ function loadSimpleWebRTC() {
     // Immediately join room when loaded.
     webrtc.on("readyToCall", function() {
       const room = localStorage.getItem('room');
-      if (room) {
-        webrtc.joinRoom(room);
-      } else {
-        rand = Math.floor(Math.random() * 400000000) + 1;
-        webrtc.joinRoom(rand);
-      }
+      webrtc.joinRoom(room);
     });
 
     function showVolume(el, volume) {
@@ -128,7 +123,6 @@ function loadSimpleWebRTC() {
           var connstate = document.createElement("div");
           connstate.className = "connectionstate";
           container.appendChild(connstate);
-
           peer.pc.on("iceConnectionStateChange", function(event) {
             switch (peer.pc.iceConnectionState) {
               case "checking":

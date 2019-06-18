@@ -532,7 +532,7 @@
 
 @media only screen and (max-width: 768px) {
   .NO__welcome-preview {
-    z-index: 0;
+    z-index: 100;
   }
 }
 
