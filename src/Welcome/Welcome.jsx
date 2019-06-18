@@ -156,15 +156,15 @@ class Welcome extends React.Component{
             })
         } else {
           const objects = response.data.objects;
+          debugger
           const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null;
           const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null;
-          let randomRoomNumber = this.getRandomRoomNumber().toString();
           const Cosmic = require('cosmicjs')({
             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
           })
           if (roomNr.length) {
             let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
-            randomRoomNumber = roomNr[randNr];
+            let randomRoomNumber = roomNr[randNr];
           localStorage.setItem('room', randomRoomNumber);
           Cosmic.getBuckets()
           .then(data => {
