@@ -222,7 +222,6 @@ class Welcome extends React.Component{
       </div>
     );
     const previewShown = sessionStorage.getItem('preview');
-    debugger;
     if(previewShown !== 'true' && !isMobile) {
         setTimeout(
           function() {
