@@ -103,16 +103,18 @@ class Welcome extends React.Component{
         chgBodyColor('#ffffff');
       }
     }
-    if (isMobile) {
       localStorage.removeItem('room');
       axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
         params: {
           type: 'rooms'
         } })
       .then(function (response) {
+        var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+             navigator.userAgent &&
+             navigator.userAgent.indexOf('CriOS') === -1 &&
+             navigator.userAgent.indexOf('FxiOS') === -1;
         if (!response.data.objects) {
           let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1;
-
           localStorage.setItem('room', randomRoomNumber);
           window.loadSimpleWebRTC();
           const Cosmic = require('cosmicjs')({
@@ -130,6 +132,22 @@ class Welcome extends React.Component{
                   value: randomRoomNumber,
                   key: 'room_id',
                   title: 'room_id',
+                  type: 'text',
+                  children: null
+                },
+                {
+                  required: true,
+                  value: isSafari,
+                  key: 'isSafari',
+                  title: 'isSafari',
+                  type: 'text',
+                  children: null
+                },
+                {
+                  required: true,
+                  value: isMobile,
+                  key: 'isMobile',
+                  title: 'isMobile',
                   type: 'text',
                   children: null
                 },
@@ -166,6 +184,17 @@ class Welcome extends React.Component{
           if (roomNr.length) {
             let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
             let randomRoomNumber = roomNr[randNr];
+            if (isSafari && isMobile) {
+              for(let i=0; i <= roomNr.length; i++) {
+                const iPhone = objects[randNr].metadata.isSafari && objects[randNr].metadata.isMobile;
+                if (iPhone) {
+                  randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
+                  randomRoomNumber = roomNr[randNr];
+                  i++;
+                }
+                i = roomNr.length;
+              }
+            }
           localStorage.setItem('room', randomRoomNumber);
           window.loadSimpleWebRTC();
           Cosmic.getBuckets()
@@ -192,7 +221,6 @@ class Welcome extends React.Component{
       .catch(function (error) {
         console.log(error)
       })
-    }
   }
 
   no_submit(formSubmitted = false) {
@@ -217,7 +245,7 @@ class Welcome extends React.Component{
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
-        {isMobile && <span id="roomNr" className="NO_roomId"></span>}
+        <span id="roomNr" className="NO_roomId"></span>
           <Posts />
       </div>
     );
@@ -274,10 +302,10 @@ class Welcome extends React.Component{
               <div className='NO__welcome-preview' onClick={this.hideVideo} >
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
               </div>}
-            {isMobile && <div id="remotes" className="row">
+            {postFeedOpened && <div id="remotes" className="row">
               {<div className="col-md-6 ">
                 <div className="videoContainer" id="videoContainer">
-                  <video id="selfVideo" onContextMenu={()=> {return false} } muted playsInline controls={true}></video>
+                  <video id="selfVideo" onContextMenu={()=> {return false} } muted playsInline controls={false}></video>
                   <meter id="localVolume" className="volume" min="-45" max="-20" high="-25" low="-40"></meter>
                 </div>
               </div>}
