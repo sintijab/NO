@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
+import * as bgSrc from '../images/final_5d.gif';
 import * as brokenWhite from '../images/broken_white.png';
 import * as brokenBlack from '../images/broken_black.png';
 import Posts from '../Posts/Posts';
@@ -25,6 +26,7 @@ class Welcome extends React.Component{
       isMobile: null,
       videoSrc: null,
       showPreviewImg: true,
+      noControl: true,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -94,7 +96,7 @@ class Welcome extends React.Component{
   }
 
   viewMode() {
-    const { bodyVisible, isMobile } = this.state;
+    const { bodyVisible, isMobile, noControl } = this.state;
     if (!isMobile) {
       this.setState({ bodyVisible: !bodyVisible });
       if (bodyVisible) {
@@ -192,6 +194,7 @@ class Welcome extends React.Component{
       .catch(function (error) {
         console.log(error)
       })
+      this.setState({noControl: !noControl});
     }
   }
 
@@ -212,13 +215,14 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile, noControl } = this.state;
     const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'} ${isMobile && 'NO__welcome_img-mobile'}`;
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts />
+          {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
     );
     const previewShown = sessionStorage.getItem('preview');
@@ -289,8 +293,8 @@ class Welcome extends React.Component{
             {showLoginOverlay && !postFeedOpened && <SignForm closeOverlay={this.closeOverlay}/>}
             {postOverlayVisible && !postFeedOpened && loggedIn && <PostForm submit={this.no_submit}/>}
             {!isMobile && <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.openPostFeed} />}
-            {!loggedIn && !isMobile && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
-            {loggedIn && !isMobile && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
+            {!loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
+            {loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
           </div>
           {postFeedOpened && postView}
         </div>

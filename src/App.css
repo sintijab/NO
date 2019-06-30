@@ -91,6 +91,7 @@
   font-family: 'Montserrat', sans-serif;
   font-stretch: semi-condensed;
   padding: 10px;
+  z-index: 1000;
 }
 
 .NO__text-title {
@@ -284,6 +285,7 @@
   right: 0;
   top: 0;
   margin: 20px;
+  z-index: 1000000;
 }
 
 .NO__dot:hover {
@@ -610,7 +612,7 @@
   top: 10px;
   width: 100%;
   text-align: center;
-  color: #fff
+  color: #fff;
 }
 
 .col-md-6 {
@@ -620,4 +622,13 @@
 .NO_roomId {
   position: fixed;
   display: block;
+}
+
+.NO__control {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
 }

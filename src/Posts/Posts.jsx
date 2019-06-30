@@ -108,6 +108,7 @@ class Posts extends React.Component{
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
       post = posts.map(item => {
+        const dynamicNum = Math.floor((Math.random() * posts.indexOf(item)) + 1)
         const itemIndex = posts.indexOf(item) * 100;
         const style = {
           left: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
