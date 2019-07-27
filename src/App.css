@@ -232,6 +232,7 @@
     position: relative;
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
+    z-index: 1000;
 }
 
 .lazy-image--loaded {

@@ -47,6 +47,7 @@ class Posts extends React.Component{
 
   showSimilarPost() {
     const { cosmic, catList, activePost } = this.state;
+    const { displayGlitch } = this.props;
     let newArr = [];
     for(let i=0; i < catList.length; i++) {
       let nI = cosmic.posts.filter(item => item.metadata.NO_category.indexOf(catList[i]) !== -1);
@@ -77,12 +78,14 @@ class Posts extends React.Component{
             activePostVideo: false,
             catList: [],
           })
+          displayGlitch(false);
         }
       }
     }
   }
 
   displayModal(item) {
+    const { displayGlitch } = this.props;
     const categories = item.metafields.filter(item => item.key === 'NO_category').map(cat => cat.value);
     var re = /\s*(?:,|$)\s*/;
     var catList = categories[0].split(re);
@@ -94,6 +97,7 @@ class Posts extends React.Component{
       catList: catList,
       modalOpened: true,
     });
+    displayGlitch(true);
   }
 
   render() {
@@ -105,7 +109,6 @@ class Posts extends React.Component{
       modalOpened,
       cosmic,
     } = this.state;
-    const { displayGlitch } = this.props;
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
       post = posts.map(item => {
@@ -119,9 +122,8 @@ class Posts extends React.Component{
         }
         const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`;
         return (
-            <p key={item._id} onClick={() => this.displayModal(item)} onMouseEnter={() => displayGlitch(true)} onMouseOver={() => displayGlitch(true)} onMouseLeave={() => displayGlitch(false)} className={titleClassNames} style={style}>{item.title}</p>);
+            <p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>);
       });
-
 
       return (
         <div className="NO__post">
