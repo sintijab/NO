@@ -88,7 +88,7 @@
 .NO__text {
   position: absolute;
   color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
   font-stretch: semi-condensed;
   padding: 10px;
   z-index: 1000;
@@ -171,7 +171,7 @@
   font-size: 0.9rem;
   border: 0px solid #00000099;
   border-radius: 30px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
   background: #36363c;
   color: #ffffff;
 }
@@ -203,7 +203,7 @@
   padding: 10px;
   background: #ffffff;
   font-size: 0.8rem;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
   border: .5px solid #3c3c3c;;
   border-radius: 5px;
   cursor: not-allowed;
@@ -333,7 +333,7 @@
   font-size: 0.9rem;
   border: .5px solid #00000099;
   border-radius: 30px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
   background: #ffffff;
   color: #000000;
   cursor: not-allowed;
@@ -352,7 +352,7 @@
     font-size: 0.9rem;
     border: .5px solid #00000099;
     border-radius: 30px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'PT Mono',Tahoma,Arial,sans-serif;
     background: #ffffff;
     color: #000000;
     cursor: not-allowed;
@@ -466,7 +466,7 @@
 }
 
 .NO__font--default {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
 }
 
 .NO__font--times-new-roman {
