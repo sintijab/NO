@@ -56,12 +56,11 @@ class Welcome extends React.Component{
       } else {
         const postCategories = response.data.objects.map(item => item.metadata.NO_category);
         let uniquePostCategories = [];
-        for (let i = 0; i <= postCategories.length; i++) {
-          console.log(uniquePostCategories.indexOf(postCategories[i]) === -1)
+        for (let i = 0; i < postCategories.length; i++) {
           if (uniquePostCategories.indexOf(postCategories[i]) === -1) {
             uniquePostCategories.push(postCategories[i]);
-            ++i;
           }
+          ++i;
         }
         _this.setState({
           cosmic: {
