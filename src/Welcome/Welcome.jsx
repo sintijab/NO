@@ -221,7 +221,7 @@ class Welcome extends React.Component{
 
   render() {
     const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile, noControl } = this.state;
-    const imgClassName = `NO__welcome_img ${!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'} ${isMobile && 'NO__welcome_img-mobile'}`;
+    const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`;
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
@@ -268,6 +268,7 @@ class Welcome extends React.Component{
         <div>
           <div className={noWelcomeClass}>
           {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/>}
+          {postFeedOpened && postView}
           {showPreview && !isMobile &&
             <div>
               <div className='NO__welcome-preview'/>
@@ -279,7 +280,7 @@ class Welcome extends React.Component{
                   ref="wVideo">
                 </div>
             </div>}
-            {isMobile && showPreviewImg &&
+            {isMobile &&
               <div className='NO__welcome-preview' onClick={this.hideVideo} >
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
               </div>}
@@ -301,7 +302,6 @@ class Welcome extends React.Component{
             {!loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
             {loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
           </div>
-          {postFeedOpened && postView}
         </div>
       );
     }
