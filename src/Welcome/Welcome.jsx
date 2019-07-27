@@ -27,6 +27,8 @@ class Welcome extends React.Component{
       videoSrc: null,
       showPreviewImg: true,
       noControl: false,
+      cosmic: null,
+      uniquePostCategories: [],
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -39,6 +41,41 @@ class Welcome extends React.Component{
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.hideVideo = this.hideVideo.bind(this);
     this.displayGlitch = this.displayGlitch.bind(this);
+
+    const _this = this;
+    axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
+      params: {
+        type: 'posts'
+      } })
+    .then(function (response) {
+      if (!response.data.objects) {
+        _this.setState({
+          error: true,
+          loading: false
+        })
+      } else {
+        const postCategories = response.data.objects.map(item => item.metadata.NO_category);
+        const uniquePostCategories = [];
+        for (let i = 0; i < postCategories.length; i++) {
+          if (uniquePostCategories.indexOf(postCategories[i]) === -1) {
+            uniquePostCategories.push(postCategories[i]);
+            ++i;
+          } else {
+            i = postCategories.length;
+          }
+        }
+        _this.setState({
+          cosmic: {
+            posts: response.data.objects,
+          },
+          uniquePostCategories: uniquePostCategories,
+          loading: false
+        })
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
   }
 
   componentDidMount() {
@@ -220,13 +257,13 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile, noControl } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, cosmic, uniquePostCategories } = this.state;
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`;
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
-          <Posts displayGlitch={this.displayGlitch}/>
+          <Posts displayGlitch={this.displayGlitch} cosmic={cosmic} />
           {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
     );
@@ -297,7 +334,7 @@ class Welcome extends React.Component{
                 <span>Welcome @admin  | </span><span onClick={this.addPostOverlay}>ADD POST</span>
               </div>}
             {showLoginOverlay && !postFeedOpened && <SignForm closeOverlay={this.closeOverlay}/>}
-            {postOverlayVisible && !postFeedOpened && loggedIn && <PostForm submit={this.no_submit}/>}
+            {postOverlayVisible && !postFeedOpened && loggedIn && <PostForm submit={this.no_submit} uniquePostCategories={uniquePostCategories}/>}
             {!isMobile && <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} onClick={this.openPostFeed} />}
             {!loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signForm}>Login</p>}
             {loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}

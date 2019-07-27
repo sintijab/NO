@@ -8,7 +8,6 @@ class Posts extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-      cosmic: null,
       loading: true,
       modalOpened: false,
       activePost: [],
@@ -19,35 +18,11 @@ class Posts extends React.Component{
     }
     this.displayModal = this.displayModal.bind(this);
     this.showSimilarPost = this.showSimilarPost.bind(this);
-
-    const _this = this;
-    axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
-      params: {
-        type: 'posts'
-      } })
-    .then(function (response) {
-      if (!response.data.objects) {
-        _this.setState({
-          error: true,
-          loading: false
-        })
-      } else {
-        _this.setState({
-          cosmic: {
-            posts: response.data.objects,
-          },
-          loading: false
-        })
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
   }
 
   showSimilarPost() {
-    const { cosmic, catList, activePost } = this.state;
-    const { displayGlitch } = this.props;
+    const { catList, activePost } = this.state;
+    const { displayGlitch, cosmic } = this.props;
     let newArr = [];
     for(let i=0; i < catList.length; i++) {
       let nI = cosmic.posts.filter(item => item.metadata.NO_category.indexOf(catList[i]) !== -1);
@@ -106,9 +81,9 @@ class Posts extends React.Component{
       activePostImg = false,
       activePostVideo = false,
       activePostContent = '',
-      modalOpened,
-      cosmic,
+      modalOpened
     } = this.state;
+    const { cosmic } = this.props;
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
       post = posts.map(item => {

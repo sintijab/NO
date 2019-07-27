@@ -208,7 +208,6 @@ class PostForm extends React.Component{
     })
     Cosmic.getBuckets()
     .then(data => {
-      console.log(data)
       const bucket = Cosmic.bucket({
         slug: data.buckets[0].slug,
         write_key: ''
@@ -242,8 +241,12 @@ class PostForm extends React.Component{
 
   render() {
     const { title = '', article, imgurl, font, font_size, categories } = this.state;
+    const { uniquePostCategories } = this.props;
     const fontName = `NO__font--${font} NO__font-size--${font_size}`;
     const fontPreviewText = <span className={fontName}>{title}</span>;
+    const categoryFlows = uniquePostCategories.map(item => {
+      return (<li>{item}</li>);
+    });
 
       return (
         <div>
@@ -286,6 +289,8 @@ class PostForm extends React.Component{
             <textarea id="article" rows="30" type="text" name="article" className="NO__post_form-control NO__form-text-area" placeholder="Description" value={article} onChange={this.handleChange}/>
             <input id="imgurl" value={imgurl} type="url" name="imgurl" className="NO__post_form-control" placeholder="ImgLink" onChange={this.handleChange}/><br/>
             <input id="categories" required type="text" name="categories" className="NO__post_form-control" placeholder="categories" value={categories} onChange={this.handleChange}/>
+            <div className="cat-flows cat-flows-title">Existing category flows: </div>
+            <ul className="cat-flows">{categoryFlows}</ul>
             <button className="btn btn-info NO__post_form-control--submit">Submit</button>
           </div>
         </form>
