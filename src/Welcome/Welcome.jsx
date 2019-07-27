@@ -26,7 +26,7 @@ class Welcome extends React.Component{
       isMobile: null,
       videoSrc: null,
       showPreviewImg: true,
-      noControl: true,
+      noControl: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -38,6 +38,7 @@ class Welcome extends React.Component{
     this.no_submit = this.no_submit.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.hideVideo = this.hideVideo.bind(this);
+    this.displayGlitch = this.displayGlitch.bind(this);
   }
 
   componentDidMount() {
@@ -213,6 +214,10 @@ class Welcome extends React.Component{
       window.loadSimpleWebRTC();
   }
 
+  displayGlitch(hasGlitch) {
+    hasGlitch ? this.setState({ noControl: true }) : this.setState({ noControl: false });
+  }
+
 
   render() {
     const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, showPreviewImg, isMobile, noControl } = this.state;
@@ -221,7 +226,7 @@ class Welcome extends React.Component{
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
-          <Posts />
+          <Posts displayGlitch={this.displayGlitch}/>
           {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
     );

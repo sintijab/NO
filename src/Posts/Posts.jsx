@@ -105,10 +105,11 @@ class Posts extends React.Component{
       modalOpened,
       cosmic,
     } = this.state;
+    const { displayGlitch } = this.props;
     const posts = (cosmic && cosmic.posts) || [];
     let post = null;
       post = posts.map(item => {
-        const dynamicNum = Math.floor((Math.random() * posts.indexOf(item)) + 1)
+        const dynamicNum = Math.floor((Math.random() * posts.indexOf(item)) + 1);
         const itemIndex = posts.indexOf(item) * 100;
         const style = {
           left: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
@@ -116,9 +117,9 @@ class Posts extends React.Component{
           top: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
           bottom: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
         }
-        const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`
+        const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`;
         return (
-            <p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>);
+            <p key={item._id} onClick={() => this.displayModal(item)} onMouseEnter={() => displayGlitch(true)} onMouseLeave={() => displayGlitch(false)} className={titleClassNames} style={style}>{item.title}</p>);
       });
 
 
