@@ -55,13 +55,12 @@ class Welcome extends React.Component{
         })
       } else {
         const postCategories = response.data.objects.map(item => item.metadata.NO_category);
-        const uniquePostCategories = [];
-        for (let i = 0; i < postCategories.length; i++) {
+        let uniquePostCategories = [];
+        for (let i = 0; i <= postCategories.length; i++) {
+          console.log(uniquePostCategories.indexOf(postCategories[i]) === -1)
           if (uniquePostCategories.indexOf(postCategories[i]) === -1) {
             uniquePostCategories.push(postCategories[i]);
             ++i;
-          } else {
-            i = postCategories.length;
           }
         }
         _this.setState({
