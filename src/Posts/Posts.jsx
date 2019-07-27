@@ -110,7 +110,7 @@ class Posts extends React.Component{
     let post = null;
       post = posts.map(item => {
         const dynamicNum = Math.floor((Math.random() * posts.indexOf(item)) + 1);
-        const itemIndex = posts.indexOf(item) * 100;
+        const itemIndex = posts.indexOf(item) * 1000;
         const style = {
           left: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
           right: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
@@ -119,7 +119,7 @@ class Posts extends React.Component{
         }
         const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`;
         return (
-            <p key={item._id} onClick={() => this.displayModal(item)} onMouseEnter={() => displayGlitch(true)} onMouseLeave={() => displayGlitch(false)} className={titleClassNames} style={style}>{item.title}</p>);
+            <p key={item._id} onClick={() => this.displayModal(item)} onMouseEnter={() => displayGlitch(true)} onMouseOver={() => displayGlitch(true)} onMouseLeave={() => displayGlitch(false)} className={titleClassNames} style={style}>{item.title}</p>);
       });
 
 
