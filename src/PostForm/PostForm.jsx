@@ -10,10 +10,9 @@ class PostForm extends React.Component{
       cosmic: null,
       title: '',
       article: '',
-      url: '',
+      imgurl: '',
       font: '',
       font_size: '',
-      vidurl: '',
       categories: '',
     }
 
@@ -28,30 +27,21 @@ class PostForm extends React.Component{
     const value = target.value;
     const name = target.name;
     this.setState({
-        [name]: value
+        [name]: value,
     });
     }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const { title, article, url, font, font_size, vidurl, categories } = this.state;
+    const { title, article, font, font_size, imgurl, categories } = this.state;
     const { submit } = this.props;
-    console.log({title, article, url})
     const params = {
       title: title,
       type_slug: 'posts',
       content: '',
       status: 'draft',
       metafields: [
-        {
-          helptext: 'The video link of the new post, e.g\nhttps://scontent.cdninstagram.com/vp/dc2bcf178319ea60d84072cd64de5499/5CF3C6F8/t50.2886-16/57129574_2575110255897656_719230172506619904_n.mp4?_nc_ht=scontent.cdninstagram.com',
-          value: vidurl,
-          key: 'NO_vid',
-          title: 'Video link',
-          type: 'text',
-          children: null
-        },
         {
           value: article,
           key: 'NO_article',
@@ -61,7 +51,7 @@ class PostForm extends React.Component{
         },
         {
           helptext: 'The link of the new post image e.g. \nhttps://scontent.ftxl2-1.fna.fbcdn.net/v/t1.0-9/59888899_546009472589513_1027294389803679744_o.jpg?_nc_cat=111&_nc_ht=scontent.ftxl2-1.fna&oh=339177f7bdaf98887421c83a21eac584&oe=5D580DD3',
-          value: url,
+          value: imgurl,
           key: 'NO_img',
           title: 'Image link',
           type: 'text',
@@ -226,14 +216,12 @@ class PostForm extends React.Component{
 
     bucket.addObject(params)
     .then(data => {
-      console.log(data)
       this.setState({
         title: '',
         article: '',
-        url: '',
+        imgurl: '',
         font: '',
         font_size: '',
-        vidurl: '',
         categories: ''
       });
       submit(true)
@@ -253,7 +241,7 @@ class PostForm extends React.Component{
 
 
   render() {
-    const { title = '', article, url, font, font_size, vidurl, categories } = this.state;
+    const { title = '', article, imgurl, font, font_size, categories } = this.state;
     const fontName = `NO__font--${font} NO__font-size--${font_size}`;
     const fontPreviewText = <span className={fontName}>{title}</span>;
 
@@ -263,7 +251,7 @@ class PostForm extends React.Component{
           <div className="NO__post_form-group">
             <input id="title" type="text" name="title" className="NO__post_form-control" placeholder="Title" value={title} onChange={this.handleChange}/>
             <select className="NO__post_form-control" name="font" value={font} onChange={this.handleChange}>
-              <option value="default" label >Font style: Montserrat</option>
+              <option value="default" label >Font style: default PT Mono</option>
               <option value="permanent-marker">permanent-marker</option>
               <option value="archivo-black">archivo-black</option>
               <option value="megrim">megrim</option>
@@ -296,8 +284,7 @@ class PostForm extends React.Component{
             </select>
             <p style={{background:'white'}}>{fontPreviewText}<span style={{float:'right', padding: '3px'}}>title preview</span></p>
             <textarea id="article" rows="30" type="text" name="article" className="NO__post_form-control NO__form-text-area" placeholder="Description" value={article} onChange={this.handleChange}/>
-            <input id="url" type="url" name="url" className="NO__post_form-control" placeholder="ImgLink" value={url} onChange={this.handleChange}/><br/>
-            <input id="vidurl" type="url" name="vidurl" className="NO__post_form-control" placeholder="VideoLink" value={vidurl} onChange={this.handleChange}/><br/>
+            <input id="imgurl" value={imgurl} type="url" name="imgurl" className="NO__post_form-control" placeholder="ImgLink" onChange={this.handleChange}/><br/>
             <input id="categories" required type="text" name="categories" className="NO__post_form-control" placeholder="categories" value={categories} onChange={this.handleChange}/>
             <button className="btn btn-info NO__post_form-control--submit">Submit</button>
           </div>
