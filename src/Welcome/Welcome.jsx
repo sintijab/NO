@@ -10,7 +10,7 @@ import SignForm from '../SignForm/SignForm';
 import PostForm from '../PostForm/PostForm';
 import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
-import { chgBodyColor, hasChromeiOS } from '../functions.js';
+import { hasChromeiOS } from '../functions.js';
 
 class Welcome extends React.Component{
 
@@ -19,16 +19,16 @@ class Welcome extends React.Component{
     this.state = {
       postFeedOpened: false,
       showOverlay: false,
-      bodyVisible: false,
       postOverlayVisible: false,
       showPreview: true,
       isMobile: null,
       videoSrc: null,
       showPreviewImg: true,
       noControl: false,
+      chromeiOS: hasChromeiOS(),
       cosmic: null,
       uniquePostCategories: [],
-      chromeiOS: hasChromeiOS,
+      randNR: Math.floor((Math.random() * 4) + 1),
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -132,14 +132,9 @@ class Welcome extends React.Component{
   }
 
   viewMode() {
-    const { bodyVisible, isMobile } = this.state;
+    const { isMobile, noControl } = this.state;
     if (!isMobile) {
-      this.setState({ bodyVisible: !bodyVisible });
-      if (bodyVisible) {
-        chgBodyColor('#000000');
-      } else {
-        chgBodyColor('#ffffff');
-      }
+      this.setState({ noControl: !noControl });
     }
     if (isMobile) {
       localStorage.removeItem('room');
@@ -239,6 +234,7 @@ class Welcome extends React.Component{
   }
 
   hideVideo() {
+    const { randNR, noControl, chromeiOS } = this.state;
       this.setState({showPreviewImg: false, postFeedOpened: true});
       let room = localStorage.getItem('room');
       if(!room) {
@@ -246,6 +242,15 @@ class Welcome extends React.Component{
       }
       localStorage.setItem('room', room);
       window.loadSimpleWebRTC();
+      if (randNR === 1 || chromeiOS) {
+        this.setState({ noControl: !noControl });
+      } else if ((randNR === 2 || randNR === 3) && !chromeiOS) {
+        window.loadSimpleWebRTC();
+      } else if (!chromeiOS && randNR === 4){
+        this.viewMode();
+      } else {
+        this.setState({ noControl: !noControl });
+      }
   }
 
   displayGlitch(hasGlitch) {
@@ -255,13 +260,14 @@ class Welcome extends React.Component{
 
   render() {
     const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, chromeiOS, cosmic, uniquePostCategories } = this.state;
+
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`;
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts displayGlitch={this.displayGlitch} cosmic={cosmic} />
-          {(noControl || chromeiOS) && <img alt="gif" src={bgSrc} className="NO__control"/>}
+          {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
     );
     const previewShown = sessionStorage.getItem('preview');

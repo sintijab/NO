@@ -55,5 +55,5 @@ export function generateToken() {
 export function hasChromeiOS() {
   const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
   const hasiOS = navigator.userAgent.match(/iPhone|iPad|iPod/i);
-  return Boolean(isChrome && hasiOS);
+  return  Boolean(isChrome && hasiOS);
 }
