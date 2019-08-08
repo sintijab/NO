@@ -254,7 +254,7 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, chromeiOS,cosmic, uniquePostCategories } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, chromeiOS, cosmic, uniquePostCategories } = this.state;
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`;
     const postView = (
       <div className='NO__feed'>
