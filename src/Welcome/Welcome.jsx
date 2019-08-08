@@ -10,8 +10,7 @@ import SignForm from '../SignForm/SignForm';
 import PostForm from '../PostForm/PostForm';
 import { signOutAction, signStatusAction } from '../actions/signActions.js';
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
-import { chgBodyColor } from '../functions.js';
-import { getCookie } from '../functions.js';
+import { chgBodyColor, hasChromeiOS } from '../functions.js';
 
 class Welcome extends React.Component{
 
@@ -29,6 +28,7 @@ class Welcome extends React.Component{
       noControl: false,
       cosmic: null,
       uniquePostCategories: [],
+      chromeiOS: hasChromeiOS,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this);
@@ -132,7 +132,7 @@ class Welcome extends React.Component{
   }
 
   viewMode() {
-    const { bodyVisible, isMobile, noControl } = this.state;
+    const { bodyVisible, isMobile } = this.state;
     if (!isMobile) {
       this.setState({ bodyVisible: !bodyVisible });
       if (bodyVisible) {
@@ -230,7 +230,6 @@ class Welcome extends React.Component{
       .catch(function (error) {
         console.log(error)
       })
-      this.setState({noControl: !noControl});
     }
   }
 
@@ -255,14 +254,14 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, cosmic, uniquePostCategories } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, chromeiOS,cosmic, uniquePostCategories } = this.state;
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`;
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts displayGlitch={this.displayGlitch} cosmic={cosmic} />
-          {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
+          {(noControl || chromeiOS) && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
     );
     const previewShown = sessionStorage.getItem('preview');
