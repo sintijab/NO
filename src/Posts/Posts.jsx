@@ -15,47 +15,48 @@ class Posts extends React.Component{
       activePostImg: false,
       activePostVideo: false,
       catList: [],
+      postCount: 0,
     }
     this.displayModal = this.displayModal.bind(this);
     this.showSimilarPost = this.showSimilarPost.bind(this);
   }
 
   showSimilarPost() {
-    const { catList, activePost } = this.state;
+    const { catList, activePost, postCount } = this.state;
     const { displayGlitch, cosmic } = this.props;
-    let newArr = [];
-    for(let i=0; i < catList.length; i++) {
-      let nI = cosmic.posts.filter(item => item.metadata.NO_category.indexOf(catList[i]) !== -1);
-      let intersection = newArr.filter(element => nI.includes(element));
-      if (intersection.length) {
-        const indx = nI.indexOf(intersection[0]) - 1;
-        nI.splice(indx, 1);
-        intersection = 0;
+    const newArray = catList.map(item => cosmic.posts.filter(post => post.metadata.NO_category.indexOf(item) !== -1));
+    let mergedArr = [].concat.apply([], newArray);
+    let repeatedItems = mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length > 1);
+    let uRepeatedItems = [];
+    repeatedItems.forEach(item => {
+      if (uRepeatedItems.indexOf(item) === -1) {
+        uRepeatedItems.push(item);
       }
-      if (!intersection.length) {
-        Array.prototype.push.apply(newArr,nI);
-        const activePostIndex = newArr.indexOf(activePost);
-        const newItemIndex = activePostIndex + 1;
-        const nextPost = newItemIndex < newArr.length ? newArr[newItemIndex] : newArr[0];
-        this.setState({
-          activePost: nextPost,
-          activePostImg: nextPost.metadata.NO_img,
-          activePostVideo: nextPost.metadata.NO_vid,
-          activePostContent: nextPost.metadata.NO_article,
-        });
-        i = catList.length;
-        if (newItemIndex >= newArr.length) {
-          this.setState({
-            modalOpened: false,
-            activePost: [],
-            activePostContent: '',
-            activePostImg: false,
-            activePostVideo: false,
-            catList: [],
-          })
-          displayGlitch(false);
-        }
-      }
+    });
+    let uniqueItems =  mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length === 1);
+    let finalArr = [...uRepeatedItems, ...uniqueItems];
+    const activePostIndex = finalArr.indexOf(activePost);
+    const newItemIndex = activePostIndex + 1;
+    if (postCount < finalArr.length - 1) {
+      const nextPost = newItemIndex < finalArr.length - 1 ? finalArr[newItemIndex] : finalArr[0];
+      this.setState({
+        activePost: nextPost,
+        activePostImg: nextPost.metadata.NO_img,
+        activePostVideo: nextPost.metadata.NO_vid,
+        activePostContent: nextPost.metadata.NO_article,
+        postCount: postCount + 1,
+      });
+    } else {
+      this.setState({
+        modalOpened: false,
+        activePost: [],
+        activePostContent: '',
+        activePostImg: false,
+        activePostVideo: false,
+        catList: [],
+        postCount: 0,
+      })
+      displayGlitch(false);
     }
   }
 
