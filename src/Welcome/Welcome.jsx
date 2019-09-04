@@ -1,16 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import axios from 'axios';
-import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png';
-import * as bgSrc from '../images/final_5d.gif';
-import * as brokenWhite from '../images/broken_white.png';
-import * as brokenBlack from '../images/broken_black.png';
-import Posts from '../Posts/Posts';
-import SignForm from '../SignForm/SignForm';
-import PostForm from '../PostForm/PostForm';
-import { signOutAction, signStatusAction } from '../actions/signActions.js';
+import React from 'react'
+import { connect } from 'react-redux'
+import axios from 'axios'
+import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png'
+import * as bgSrc from '../images/final_5d.gif'
+import * as brokenWhite from '../images/broken_white.png'
+import * as brokenBlack from '../images/broken_black.png'
+import Posts from '../Posts/Posts'
+import SignForm from '../SignForm/SignForm'
+import PostForm from '../PostForm/PostForm'
+import { signOutAction, signStatusAction } from '../actions/signActions.js'
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
-import { hasChromeiOS } from '../functions.js';
+import { hasChromeiOS } from '../functions.js'
 
 class Welcome extends React.Component{
 
@@ -31,125 +31,125 @@ class Welcome extends React.Component{
       randNR: Math.floor((Math.random() * 4) + 1),
     }
 
-    this.openPostFeed = this.openPostFeed.bind(this);
-    this.addPostOverlay = this.addPostOverlay.bind(this);
-    this.signForm = this.signForm.bind(this);
-    this.signOut = this.signOut.bind(this);
-    this.closeOverlay = this.closeOverlay.bind(this);
-    this.viewMode = this.viewMode.bind(this);
-    this.no_submit = this.no_submit.bind(this);
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.hideVideo = this.hideVideo.bind(this);
-    this.displayGlitch = this.displayGlitch.bind(this);
+    this.openPostFeed = this.openPostFeed.bind(this)
+    this.addPostOverlay = this.addPostOverlay.bind(this)
+    this.signForm = this.signForm.bind(this)
+    this.signOut = this.signOut.bind(this)
+    this.closeOverlay = this.closeOverlay.bind(this)
+    this.viewMode = this.viewMode.bind(this)
+    this.no_submit = this.no_submit.bind(this)
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+    this.hideVideo = this.hideVideo.bind(this)
+    this.displayGlitch = this.displayGlitch.bind(this)
 
-    const _this = this;
+    const _this = this
     axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
       params: {
-        type: 'posts'
+        type: 'posts',
       } })
-    .then(function (response) {
+    .then(function(response) {
       if (!response.data.objects) {
         _this.setState({
           error: true,
-          loading: false
+          loading: false,
         })
       } else {
-        const postCategories = response.data.objects.map(item => item.metadata.NO_category);
-        let uniquePostCategories = [];
-        for (let i = 0; i < postCategories.length; i++) {
+        const postCategories = response.data.objects.map(item => item.metadata.NO_category)
+        let uniquePostCategories = []
+        for (let i = 0; i < postCategories.length; i += 1) {
           if (uniquePostCategories.indexOf(postCategories[i]) === -1) {
-            uniquePostCategories.push(postCategories[i]);
+            uniquePostCategories.push(postCategories[i])
           }
-          ++i;
+          i += 1
         }
         _this.setState({
           cosmic: {
             posts: response.data.objects,
           },
           uniquePostCategories: uniquePostCategories,
-          loading: false
+          loading: false,
         })
       }
     })
-    .catch(function (error) {
+    .catch(function(error) {
       console.log(error)
     })
   }
 
   componentDidMount() {
-    this.props.signStatusAction();
-    window.addEventListener("resize", this.updateWindowDimensions());
+    this.props.signStatusAction()
+    window.addEventListener("resize", this.updateWindowDimensions())
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.updateWindowDimensions);
+    window.removeEventListener("resize", this.updateWindowDimensions)
   }
 
   updateWindowDimensions() {
-    const isMobile = window.innerWidth < 1400;
-     this.setState({ isMobile: isMobile });
+    const isMobile = window.innerWidth < 1400
+     this.setState({ isMobile: isMobile })
   }
 
   componentDidUpdate() {
-    const { loggedIn } = this.state;
+    const { loggedIn } = this.state
     if (this.props.signType === LOGGED_IN && !loggedIn) {
       this.setState({
         loggedIn: true,
-      });
+      })
     } else if (this.props.signType === LOGGED_OUT && loggedIn) {
       this.setState({
         loggedIn: false,
-      });
+      })
     }
   }
 
   openPostFeed() {
-    this.setState({postFeedOpened: true });
+    this.setState({postFeedOpened: true })
   }
 
   addPostOverlay() {
-    const { postOverlayVisible } = this.state;
-    this.setState({postOverlayVisible: !postOverlayVisible});
+    const { postOverlayVisible } = this.state
+    this.setState({postOverlayVisible: !postOverlayVisible})
   }
 
   signForm() {
-    const { showLoginOverlay } = this.state;
+    const { showLoginOverlay } = this.state
       this.setState({showLoginOverlay: !showLoginOverlay})
   }
 
   signOut() {
-    this.props.signOutAction();
+    this.props.signOutAction()
     this.setState({
       loggedIn: false,
     })
   }
 
   closeOverlay() {
-    const { showLoginOverlay } = this.state;
+    const { showLoginOverlay } = this.state
       this.setState({
         showLoginOverlay: !showLoginOverlay,
     })
   }
 
   viewMode() {
-    const { isMobile, noControl } = this.state;
+    const { isMobile, noControl } = this.state
     if (!isMobile) {
-      this.setState({ noControl: !noControl });
+      this.setState({ noControl: !noControl })
     }
     if (isMobile) {
-      localStorage.removeItem('room');
+      localStorage.removeItem('room')
       axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
         params: {
-          type: 'rooms'
+          type: 'rooms',
         } })
-      .then(function (response) {
+      .then(function(response) {
         if (!response.data.objects) {
-          let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1;
+          let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1
 
-          localStorage.setItem('room', randomRoomNumber);
-          window.loadSimpleWebRTC();
+          localStorage.setItem('room', randomRoomNumber)
+          window.loadSimpleWebRTC()
           const Cosmic = require('cosmicjs')({
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o',
           })
             const params = {
               title: 'room_id',
@@ -164,7 +164,7 @@ class Welcome extends React.Component{
                   key: 'room_id',
                   title: 'room_id',
                   type: 'text',
-                  children: null
+                  children: null,
                 },
               ],
             }
@@ -173,14 +173,14 @@ class Welcome extends React.Component{
               console.log(data)
               const bucket = Cosmic.bucket({
                 slug: data.buckets[0].slug,
-                write_key: ''
+                write_key: '',
               })
 
             bucket.addObject(params)
             .then(data => {
               console.log(data)
-              const roomNrText = document.getElementById("roomNr");
-              roomNrText.innerHTML = randomRoomNumber;
+              const roomNrText = document.getElementById("roomNr")
+              roomNrText.innerHTML = randomRoomNumber
             })
             .catch(err => {
               console.log(err)
@@ -190,78 +190,78 @@ class Welcome extends React.Component{
               console.log(err)
             })
         } else {
-          const objects = response.data.objects;
-          const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null;
-          const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null;
+          const objects = response.data.objects
+          const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null
+          const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null
           const Cosmic = require('cosmicjs')({
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o'
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o',
           })
           if (roomNr.length) {
-            let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0;
-            let randomRoomNumber = roomNr[randNr];
-          localStorage.setItem('room', randomRoomNumber);
-          window.loadSimpleWebRTC();
+            let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
+            let randomRoomNumber = roomNr[randNr]
+          localStorage.setItem('room', randomRoomNumber)
+          window.loadSimpleWebRTC()
           Cosmic.getBuckets()
           .then(data => {
             const bucket = Cosmic.bucket({
               slug: data.buckets[0].slug,
-              write_key: ''
+              write_key: '',
             })
             bucket.deleteObject({
               slug: roomId[randNr],
             })
             .then(data => {
               console.log(data)
-              const roomNrText = document.getElementById("roomNr");
-              roomNrText.innerHTML = randomRoomNumber;
+              const roomNrText = document.getElementById("roomNr")
+              roomNrText.innerHTML = randomRoomNumber
             })
             .catch(err => {
               console.log(err)
             })
-          });
+          })
         }
         }
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error)
       })
     }
   }
 
-  no_submit(formSubmitted = false) {
-    this.addPostOverlay();
-    alert("Thank you! Your post has been submitted succesfully. It will be reviewed and published soon!");
+  no_submit() {
+    this.addPostOverlay()
+    alert("Thank you! Your post has been submitted succesfully. It will be reviewed and published soon!") // eslint-disable-line no-alert
   }
 
   hideVideo() {
-    const { randNR, noControl, chromeiOS } = this.state;
-      this.setState({showPreviewImg: false, postFeedOpened: true});
-      let room = localStorage.getItem('room');
+    const { randNR, noControl, chromeiOS } = this.state
+      this.setState({showPreviewImg: false, postFeedOpened: true})
+      let room = localStorage.getItem('room')
       if(!room) {
-        room = Math.floor(Math.random() * 400000000) + 1;
+        room = Math.floor(Math.random() * 400000000) + 1
       }
-      localStorage.setItem('room', room);
-      window.loadSimpleWebRTC();
+      localStorage.setItem('room', room)
+      window.loadSimpleWebRTC()
       if (randNR === 1 || chromeiOS) {
-        this.setState({ noControl: !noControl });
+        this.setState({ noControl: !noControl })
       } else if ((randNR === 2 || randNR === 3) && !chromeiOS) {
-        window.loadSimpleWebRTC();
+        window.loadSimpleWebRTC()
       } else if (!chromeiOS && randNR === 4){
-        this.viewMode();
+        this.viewMode()
       } else {
-        this.setState({ noControl: !noControl });
+        this.setState({ noControl: !noControl })
       }
   }
 
   displayGlitch(hasGlitch) {
-    hasGlitch ? this.setState({ noControl: true }) : this.setState({ noControl: false });
+    hasGlitch ? this.setState({ noControl: true }) : this.setState({ noControl: false })
   }
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, chromeiOS, cosmic, uniquePostCategories } = this.state;
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, cosmic, uniquePostCategories } = this.state
 
-    const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`;
+    const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
@@ -269,45 +269,45 @@ class Welcome extends React.Component{
           <Posts displayGlitch={this.displayGlitch} cosmic={cosmic} />
           {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
-    );
-    const previewShown = sessionStorage.getItem('preview');
+    )
+    const previewShown = sessionStorage.getItem('preview')
     if(previewShown !== 'true' && !isMobile) {
         setTimeout(
           function() {
-              this.setState({showPreview: false});
-              sessionStorage.setItem('preview', 'true');
+              this.setState({showPreview: false})
+              sessionStorage.setItem('preview', 'true')
           }
           .bind(this),
           8500
-        );
+        )
       } else if (showPreview) {
-        this.setState({showPreview: false});
+        this.setState({showPreview: false})
       }
 
       if (isMobile) {
-      var facingMode = "user";
-      var constraints = {
+      var facingMode = "user"
+      var constraints = { // eslint-disable-line no-unused-vars
         audio: false,
         video: {
-         facingMode: facingMode
-        }
-      }
+         facingMode: facingMode,
+       },
+     }
     }
-      let welcomeImgSrc = imgSrc;
+      let welcomeImgSrc = imgSrc
       if (isMobile) {
-        if (this.refs.video && this.refs.video.srcObject) {
-          welcomeImgSrc = brokenBlack;
+        if (this.refs.video && this.refs.video.srcObject) { // eslint-disable-line react/no-string-refs
+          welcomeImgSrc = brokenBlack
         } else {
-          welcomeImgSrc = brokenWhite;
+          welcomeImgSrc = brokenWhite
         }
       }
 
 
-      const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome';
+      const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome'  // eslint-disable-line react/no-string-refs
       return (
         <div>
           <div className={noWelcomeClass}>
-          {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/>}
+          {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/> /* eslint-disable-line react/no-string-refs*/ }
           {postFeedOpened && postView}
           {showPreview && !isMobile &&
             <div>
@@ -317,7 +317,8 @@ class Welcome extends React.Component{
                   data-height="1000"
                   data-autoplay
                   data-allowfullscreen="true"
-                  ref="wVideo">
+                  ref="wVideo" /* eslint-disable-line react/no-string-refs*/
+                >
                 </div>
             </div>}
             {isMobile &&
@@ -343,11 +344,11 @@ class Welcome extends React.Component{
             {loggedIn && !isMobile && !postFeedOpened && <p className='NO_login NO__text' onClick={this.signOut}>Logout</p>}
           </div>
         </div>
-      );
+      )
     }
   }
 
   const mapStateToProps = state => ({
     signType: state.signInStatus.type,
   })
-export default connect(mapStateToProps, { signOutAction, signStatusAction })(Welcome);
+export default connect(mapStateToProps, { signOutAction, signStatusAction })(Welcome)

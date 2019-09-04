@@ -1,6 +1,5 @@
-import React from 'react';
-import axios from 'axios';
-import Post from './Post';
+import React from 'react'
+import Post from './Post'
 
 
 class Posts extends React.Component{
@@ -17,35 +16,35 @@ class Posts extends React.Component{
       catList: [],
       postCount: 0,
     }
-    this.displayModal = this.displayModal.bind(this);
-    this.showSimilarPost = this.showSimilarPost.bind(this);
+    this.displayModal = this.displayModal.bind(this)
+    this.showSimilarPost = this.showSimilarPost.bind(this)
   }
 
   showSimilarPost() {
-    const { catList, activePost, postCount } = this.state;
-    const { displayGlitch, cosmic } = this.props;
-    const newArray = catList.map(item => cosmic.posts.filter(post => post.metadata.NO_category.indexOf(item) !== -1));
-    let mergedArr = [].concat.apply([], newArray);
-    let repeatedItems = mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length > 1);
-    let uRepeatedItems = [];
+    const { catList, activePost, postCount } = this.state
+    const { displayGlitch, cosmic } = this.props
+    const newArray = catList.map(item => cosmic.posts.filter(post => post.metadata.NO_category.indexOf(item) !== -1))
+    let mergedArr = [].concat.apply([], newArray)
+    let repeatedItems = mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length > 1)
+    let uRepeatedItems = []
     repeatedItems.forEach(item => {
       if (uRepeatedItems.indexOf(item) === -1) {
-        uRepeatedItems.push(item);
+        uRepeatedItems.push(item)
       }
-    });
-    let uniqueItems =  mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length === 1);
-    let finalArr = [...uRepeatedItems, ...uniqueItems];
-    const activePostIndex = finalArr.indexOf(activePost);
-    const newItemIndex = activePostIndex + 1;
+    })
+    let uniqueItems =  mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length === 1)
+    let finalArr = [...uRepeatedItems, ...uniqueItems]
+    const activePostIndex = finalArr.indexOf(activePost)
+    const newItemIndex = activePostIndex + 1
     if (postCount < finalArr.length - 1) {
-      const nextPost = newItemIndex < finalArr.length - 1 ? finalArr[newItemIndex] : finalArr[0];
+      const nextPost = newItemIndex < finalArr.length - 1 ? finalArr[newItemIndex] : finalArr[0]
       this.setState({
         activePost: nextPost,
         activePostImg: nextPost.metadata.NO_img,
         activePostVideo: nextPost.metadata.NO_vid,
         activePostContent: nextPost.metadata.NO_article,
         postCount: postCount + 1,
-      });
+      })
     } else {
       this.setState({
         modalOpened: false,
@@ -56,15 +55,15 @@ class Posts extends React.Component{
         catList: [],
         postCount: 0,
       })
-      displayGlitch(false);
+      displayGlitch(false)
     }
   }
 
   displayModal(item) {
-    const { displayGlitch } = this.props;
-    const categories = item.metafields.filter(item => item.key === 'NO_category').map(cat => cat.value);
-    var re = /\s*(?:,|$)\s*/;
-    var catList = categories[0].split(re);
+    const { displayGlitch } = this.props
+    const categories = item.metafields.filter(item => item.key === 'NO_category').map(cat => cat.value)
+    var re = /\s*(?:,|$)\s*/
+    var catList = categories[0].split(re)
     this.setState({
       activePost: item,
       activePostContent: item.metadata.NO_article,
@@ -72,8 +71,8 @@ class Posts extends React.Component{
       activePostVideo: item.metadata.NO_vid,
       catList: catList,
       modalOpened: true,
-    });
-    displayGlitch(true);
+    })
+    displayGlitch(true)
   }
 
   render() {
@@ -82,24 +81,25 @@ class Posts extends React.Component{
       activePostImg = false,
       activePostVideo = false,
       activePostContent = '',
-      modalOpened
-    } = this.state;
-    const { cosmic } = this.props;
-    const posts = (cosmic && cosmic.posts) || [];
-    let post = null;
+      modalOpened,
+    } = this.state
+    const { cosmic } = this.props
+    const posts = (cosmic && cosmic.posts) || []
+    let post = null
+    const dynamicNum = Date.now() / 10000
+    var radixPos = String(dynamicNum).indexOf('.') + 1
+    var value = String(dynamicNum).slice(radixPos) * 123
       post = posts.map(item => {
-        const dynamicNum = Math.floor((Math.random() * posts.indexOf(item)) + 1);
-        const itemIndex = posts.indexOf(item) * 1000;
         const style = {
-          left: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
-          right: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
-          top: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
-          bottom: `${Math.floor((Math.random() * itemIndex) + 1)}px`,
+          left: `${Math.floor((Math.random() * value) + 1)}px`,
+          right: `${Math.floor((Math.random() * value) + 1)}px`,
+          top: `${Math.floor((Math.random() * value) + 1)}px`,
+          bottom: `${Math.floor((Math.random() * value) + 1)}px`,
         }
-        const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`;
+        const titleClassNames = `NO__text NO__text-title NO__font--${item.metadata.NO_font_family} NO__font-size--${item.metadata.NO_font_size}`
         return (
-            <p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>);
-      });
+            <p key={item._id} onClick={() => this.displayModal(item)} className={titleClassNames} style={style}>{item.title}</p>)
+      })
 
       return (
         <div className="NO__post">
@@ -110,11 +110,12 @@ class Posts extends React.Component{
               activePostImg={activePostImg}
               activePostVideo={activePostVideo}
               activePostContent={activePostContent}
-              showSimilarPost={this.showSimilarPost}/>
+              showSimilarPost={this.showSimilarPost}
+            />
           }
         </div>
-      );
+      )
     }
   }
 
-export default Posts;
+export default Posts

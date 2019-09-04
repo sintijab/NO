@@ -1,9 +1,9 @@
-import React from 'react';
-import { getCookie } from '../functions.js';
-import { connect } from 'react-redux';
-import { signInAction } from '../actions/signActions.js';
+import React from 'react'
+import { getCookie } from '../functions.js'
+import { connect } from 'react-redux'
+import { signInAction } from '../actions/signActions.js'
 
-const Cosmic = require('cosmicjs')();
+const Cosmic = require('cosmicjs')()
 
 
 class SignForm extends React.Component{
@@ -16,37 +16,35 @@ class SignForm extends React.Component{
       message: null,
     }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const target = event.target
+    const value = target.value
+    const name = target.name
         this.setState({
-            [name]: value
-        });
+            [name]: value,
+        })
     }
 
   handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    const { email, password } = this.state;
+    const { email, password } = this.state
     Cosmic.authenticate({
       email: email,
       password: password,
     }).then(data => {
-      console.log(data)
       this.setState({
         loggedIn: true,
         password: '',
         email: '',
       })
-      this.props.signInAction(data, email);
+      this.props.signInAction(data, email)
     })
     .catch(err => {
-      console.log(err)
       this.setState({
         loggedIn: false,
         message: err.message,
@@ -55,8 +53,8 @@ class SignForm extends React.Component{
   }
 
   render() {
-    const { loggedIn, email, password, message } = this.state;
-    const signInMessageClassName = !loggedIn && !!message ? 'NO__warning' : loggedIn ? 'NO__success' : '';
+    const { loggedIn, email, password, message } = this.state
+    const signInMessageClassName = !loggedIn && !!message ? 'NO__warning' : loggedIn ? 'NO__success' : ''
       return (
         <div>
         {!loggedIn &&
@@ -76,7 +74,7 @@ class SignForm extends React.Component{
           </form>
         }
         </div>
-      );
+      )
     }
   }
 
@@ -86,4 +84,4 @@ class SignForm extends React.Component{
     userData: state.signInStatus.uData,
   })
 
-export default connect(mapStateToProps, { signInAction })(SignForm);
+export default connect(mapStateToProps, { signInAction })(SignForm)
