@@ -20,7 +20,6 @@ class Welcome extends React.Component{
       postFeedOpened: false,
       showOverlay: false,
       postOverlayVisible: false,
-      showPreview: true,
       isMobile: null,
       videoSrc: null,
       showPreviewImg: true,
@@ -259,7 +258,7 @@ class Welcome extends React.Component{
 
 
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, showPreview, isMobile, noControl, cosmic, uniquePostCategories } = this.state
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, isMobile, noControl, cosmic, uniquePostCategories } = this.state
 
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`
     const postView = (
@@ -270,19 +269,6 @@ class Welcome extends React.Component{
           {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
       </div>
     )
-    const previewShown = sessionStorage.getItem('preview')
-    if(previewShown !== 'true' && !isMobile) {
-        setTimeout(
-          function() {
-              this.setState({showPreview: false})
-              sessionStorage.setItem('preview', 'true')
-          }
-          .bind(this),
-          8500
-        )
-      } else if (showPreview) {
-        this.setState({showPreview: false})
-      }
 
       if (isMobile) {
       var facingMode = "user"
@@ -309,18 +295,6 @@ class Welcome extends React.Component{
           <div className={noWelcomeClass}>
           {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/> /* eslint-disable-line react/no-string-refs*/ }
           {postFeedOpened && postView}
-          {showPreview && !isMobile &&
-            <div>
-              <div className='NO__welcome-preview'/>
-                <div className="fb-video"
-                  data-href="https://www.facebook.com/NOprojekt/videos/1127787447404230/"
-                  data-height="1000"
-                  data-autoplay
-                  data-allowfullscreen="true"
-                  ref="wVideo" /* eslint-disable-line react/no-string-refs*/
-                >
-                </div>
-            </div>}
             {isMobile &&
               <div className='NO__welcome-preview' onClick={this.hideVideo} >
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
