@@ -1,3 +1,7 @@
+* {
+  cursor: not-allowed;
+}
+
 .App {
   text-align: center;
 }
@@ -274,8 +278,8 @@
 
 .NO__dot {
   position: fixed;
-  height: 25px;
-  width: 25px;
+  height: 2.5rem;
+  width: 2.5rem;
   background-color: #ffffff;
   border-radius: 50%;
   display: inline-block;
