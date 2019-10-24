@@ -8,7 +8,6 @@ class Posts extends React.Component{
     super(props)
     this.state = {
       loading: true,
-      modalOpened: false,
       activePost: [],
       activePostContent: '',
       activePostImg: false,
@@ -22,7 +21,7 @@ class Posts extends React.Component{
 
   showSimilarPost() {
     const { catList, activePost, postCount } = this.state
-    const { displayGlitch, cosmic } = this.props
+    const { cosmic, toggleModalOverlay } = this.props
     const newArray = catList.map(item => cosmic.posts.filter(post => post.metadata.NO_category.indexOf(item) !== -1))
     let mergedArr = [].concat.apply([], newArray)
     let repeatedItems = mergedArr.filter(obj => mergedArr.filter(item => item._id === obj._id).length > 1)
@@ -47,7 +46,6 @@ class Posts extends React.Component{
       })
     } else {
       this.setState({
-        modalOpened: false,
         activePost: [],
         activePostContent: '',
         activePostImg: false,
@@ -55,12 +53,12 @@ class Posts extends React.Component{
         catList: [],
         postCount: 0,
       })
-      displayGlitch(false)
+      toggleModalOverlay(false, true)
     }
   }
 
   displayModal(item) {
-    const { displayGlitch } = this.props
+    const { toggleModalOverlay } = this.props
     const categories = item.metafields.filter(item => item.key === 'NO_category').map(cat => cat.value)
     var re = /\s*(?:,|$)\s*/
     var catList = categories[0].split(re)
@@ -70,9 +68,16 @@ class Posts extends React.Component{
       activePostImg: item.metadata.NO_img,
       activePostVideo: item.metadata.NO_vid,
       catList: catList,
-      modalOpened: true,
     })
-    displayGlitch(true)
+    toggleModalOverlay(true)
+  }
+
+  componentDidUpdate() {
+    const { showActiveHint = null, activeHint = null, modalOpened } = this.props
+    if (showActiveHint && activeHint && !modalOpened) {
+      this.setState({activePost: activeHint})
+      this.displayModal(activeHint)
+    }
   }
 
   render() {
@@ -81,9 +86,8 @@ class Posts extends React.Component{
       activePostImg = false,
       activePostVideo = false,
       activePostContent = '',
-      modalOpened,
     } = this.state
-    const { cosmic } = this.props
+    const { cosmic, modalOpened } = this.props
     const posts = (cosmic && cosmic.posts) || []
     let post = null
     const dynamicNum = Date.now() / 10000

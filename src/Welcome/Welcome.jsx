@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png'
-import * as bgSrc from '../images/final_5d.gif'
 import * as brokenWhite from '../images/broken_white.png'
 import * as brokenBlack from '../images/broken_black.png'
 import Posts from '../Posts/Posts'
@@ -11,6 +10,10 @@ import PostForm from '../PostForm/PostForm'
 import { signOutAction, signStatusAction } from '../actions/signActions.js'
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
 import { hasChromeiOS } from '../functions.js'
+
+const Cosmic = require('cosmicjs')({
+  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NzE0MTE2NTJ9.bVld9Hp_sukxhdFWvhXysHA90-62JeuRUDPUVvVQJAg',
+})
 
 class Welcome extends React.Component{
 
@@ -23,11 +26,13 @@ class Welcome extends React.Component{
       isMobile: null,
       videoSrc: null,
       showPreviewImg: true,
-      noControl: false,
       chromeiOS: hasChromeiOS(),
       cosmic: null,
       uniquePostCategories: [],
       randNR: Math.floor((Math.random() * 4) + 1),
+      activeHint: null,
+      showActiveHint: false,
+      modalOpened: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
@@ -39,12 +44,13 @@ class Welcome extends React.Component{
     this.no_submit = this.no_submit.bind(this)
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
     this.hideVideo = this.hideVideo.bind(this)
-    this.displayGlitch = this.displayGlitch.bind(this)
+    this.toggleModalOverlay = this.toggleModalOverlay.bind(this)
 
     const _this = this
     axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
       params: {
         type: 'posts',
+        read_key: 'reQaGkJrqvDkpuyb45enU4kYd3PWhZHUihAD7CDeW7shE1rleO',
       } })
     .then(function(response) {
       if (!response.data.objects) {
@@ -90,7 +96,7 @@ class Welcome extends React.Component{
   }
 
   componentDidUpdate() {
-    const { loggedIn } = this.state
+    const { loggedIn, isMobile, cosmic, activeHint } = this.state
     if (this.props.signType === LOGGED_IN && !loggedIn) {
       this.setState({
         loggedIn: true,
@@ -99,6 +105,11 @@ class Welcome extends React.Component{
       this.setState({
         loggedIn: false,
       })
+    }
+
+    if (!isMobile && cosmic && !activeHint) {
+      const randPostNr = Math.floor(Math.random() * (cosmic.posts.length - 1))
+      this.setState({ activeHint: cosmic.posts[randPostNr] })
     }
   }
 
@@ -130,16 +141,30 @@ class Welcome extends React.Component{
     })
   }
 
+  toggleModalOverlay(state = false, hideActiveHint = false) {
+    this.setState({ modalOpened: state })
+    if (hideActiveHint) {
+      this.setState({ showActiveHint: false })
+    }
+  }
+
+
   viewMode() {
-    const { isMobile, noControl } = this.state
-    if (!isMobile) {
-      this.setState({ noControl: !noControl })
+    const { isMobile, modalOpened, cosmic } = this.state
+    if(!isMobile && !modalOpened) {
+      const randPostNr = Math.floor(Math.random() * (cosmic.posts.length - 1))
+      this.setState({ activeHint: cosmic.posts[randPostNr] })
+      this.setState({ showActiveHint: true })
+    } else if (!isMobile && modalOpened) {
+      this.setState({ showActiveHint: false })
+      this.toggleModalOverlay(false)
     }
     if (isMobile) {
       localStorage.removeItem('room')
       axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
         params: {
           type: 'rooms',
+          read_key: 'reQaGkJrqvDkpuyb45enU4kYd3PWhZHUihAD7CDeW7shE1rleO',
         } })
       .then(function(response) {
         if (!response.data.objects) {
@@ -147,9 +172,6 @@ class Welcome extends React.Component{
 
           localStorage.setItem('room', randomRoomNumber)
           window.loadSimpleWebRTC()
-          const Cosmic = require('cosmicjs')({
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o',
-          })
             const params = {
               title: 'room_id',
               type_slug: 'rooms',
@@ -192,9 +214,6 @@ class Welcome extends React.Component{
           const objects = response.data.objects
           const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null
           const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null
-          const Cosmic = require('cosmicjs')({
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NjA1NTI4MzF9.12JEhTvZyDQA3pcQYpyLruKUMao1PRyrlPFPbhaUw3o',
-          })
           if (roomNr.length) {
             let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
             let randomRoomNumber = roomNr[randNr]
@@ -233,7 +252,7 @@ class Welcome extends React.Component{
   }
 
   hideVideo() {
-    const { randNR, noControl, chromeiOS } = this.state
+    const { randNR, chromeiOS } = this.state
       this.setState({showPreviewImg: false, postFeedOpened: true})
       let room = localStorage.getItem('room')
       if(!room) {
@@ -241,32 +260,24 @@ class Welcome extends React.Component{
       }
       localStorage.setItem('room', room)
       window.loadSimpleWebRTC()
-      if (randNR === 1 || chromeiOS) {
-        this.setState({ noControl: !noControl })
-      } else if ((randNR === 2 || randNR === 3) && !chromeiOS) {
+      if ((randNR === 2 || randNR === 3) && !chromeiOS) {
         window.loadSimpleWebRTC()
       } else if (!chromeiOS && randNR === 4){
         this.viewMode()
       } else {
-        this.setState({ noControl: !noControl })
+        this.viewMode()
       }
   }
 
-  displayGlitch(hasGlitch) {
-    hasGlitch ? this.setState({ noControl: true }) : this.setState({ noControl: false })
-  }
-
-
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, isMobile, noControl, cosmic, uniquePostCategories } = this.state
+    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, isMobile, cosmic, uniquePostCategories, activeHint, showActiveHint, modalOpened } = this.state
 
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`
     const postView = (
       <div className='NO__feed'>
         <span className='NO__dot' onClick={this.viewMode} id="dot"></span>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
-          <Posts displayGlitch={this.displayGlitch} cosmic={cosmic} />
-          {noControl && <img alt="gif" src={bgSrc} className="NO__control"/>}
+          <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} />
       </div>
     )
 
