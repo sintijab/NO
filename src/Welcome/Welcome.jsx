@@ -34,6 +34,8 @@ class Welcome extends React.Component{
       activeHint: null,
       showActiveHint: false,
       modalOpened: false,
+      verticalPos: 0,
+      horizontalPos: 0,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
@@ -46,6 +48,7 @@ class Welcome extends React.Component{
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
     this.hideVideo = this.hideVideo.bind(this)
     this.toggleModalOverlay = this.toggleModalOverlay.bind(this)
+    this.handleScroll = this.handleScroll.bind(this)
 
     const _this = this
     axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
@@ -83,11 +86,13 @@ class Welcome extends React.Component{
   }
 
   componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll)
     this.props.signStatusAction()
-    window.addEventListener("resize", this.updateWindowDimensions())
+    window.addEventListener("resize", this.updateWindowDimensions)
   }
 
   componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
     window.removeEventListener("resize", this.updateWindowDimensions)
   }
 
@@ -270,6 +275,40 @@ class Welcome extends React.Component{
       }
   }
 
+  handleScroll() {
+    const srollVerticalReach = window.root.getBoundingClientRect().top < this.state.verticalPos
+    const scrollHorizontalReach = window.root.getBoundingClientRect().left < this.state.horizontalPos
+    const scrollVerticalTop = window.root.getBoundingClientRect().top === 0
+    const scrollHorizontalTop = window.root.getBoundingClientRect().left === 0
+
+    if (srollVerticalReach || scrollHorizontalReach || (scrollVerticalTop && scrollHorizontalTop)) {
+      //set the color
+      const randColorNr = Math.floor(Math.random() * 7)
+      const bgColors = [
+        "#FFFF00",
+        "#000000",
+        "#0000FF",
+        "#00E8F7",
+        "#5F00BA",
+        "#FF00E9",
+        "#FFEA84",
+      ]
+      const randColor = bgColors[randColorNr]
+      document.body.style.backgroundColor = randColor
+      //set the next frames
+      const currVerticalPos = window.root.getBoundingClientRect().top
+      const currHorizontalPos= window.root.getBoundingClientRect().left
+      const currVerticalPosMax = currVerticalPos - 3200
+      const currHorizontalPosMax = currHorizontalPos - 6632
+      const randVericalPos = Math.floor(Math.random() * (currVerticalPosMax - currVerticalPos + 1) + currVerticalPos)
+      const randHorizontalPos = Math.floor(Math.random() * (currHorizontalPosMax - currHorizontalPos + 1) + currHorizontalPos)
+      this.setState({
+        verticalPos: randVericalPos,
+        horizontalPos: randHorizontalPos,
+      })
+    }
+  }
+
   render() {
     const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, isMobile, cosmic, uniquePostCategories, activeHint, showActiveHint, modalOpened } = this.state
 
@@ -304,7 +343,7 @@ class Welcome extends React.Component{
       const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome'  // eslint-disable-line react/no-string-refs
       return (
         <div>
-          <div className={noWelcomeClass}>
+          <div className={noWelcomeClass} id="welcome">
           {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/> /* eslint-disable-line react/no-string-refs*/ }
           {postFeedOpened && postView}
             {isMobile &&
