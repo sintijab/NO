@@ -298,10 +298,12 @@ class Welcome extends React.Component{
       //set the next frames
       const currVerticalPos = window.root.getBoundingClientRect().top
       const currHorizontalPos= window.root.getBoundingClientRect().left
+      const currVerticalPosMin = currVerticalPos + 3200
+      const currHorizontalPosMin = currHorizontalPos - 6632
       const currVerticalPosMax = currVerticalPos - 3200
       const currHorizontalPosMax = currHorizontalPos - 6632
-      const randVericalPos = Math.floor(Math.random() * (currVerticalPosMax - currVerticalPos + 1) + currVerticalPos)
-      const randHorizontalPos = Math.floor(Math.random() * (currHorizontalPosMax - currHorizontalPos + 1) + currHorizontalPos)
+      const randVericalPos = Math.floor(Math.random() * (currVerticalPosMax - currVerticalPosMin + 1) + currVerticalPosMin)
+      const randHorizontalPos = Math.floor(Math.random() * (currHorizontalPosMax - currHorizontalPosMin + 1) + currHorizontalPosMin)
       this.setState({
         verticalPos: randVericalPos,
         horizontalPos: randHorizontalPos,
