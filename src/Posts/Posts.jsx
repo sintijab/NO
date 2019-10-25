@@ -92,7 +92,7 @@ class Posts extends React.Component{
     let post = null
     const dynamicNum = Date.now() / 10000
     var radixPos = String(dynamicNum).indexOf('.') + 1
-    var value = String(dynamicNum).slice(radixPos) * 123
+    var value = String(dynamicNum).slice(radixPos) * 20
       post = posts.map(item => {
         const style = {
           left: `${Math.floor((Math.random() * value) + 1)}px`,
