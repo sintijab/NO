@@ -24,7 +24,7 @@ class Welcome extends React.Component{
       postFeedOpened: false,
       showOverlay: false,
       postOverlayVisible: false,
-      isMobile: null,
+      isMobile: window.innerWidth < 1400,
       videoSrc: null,
       showPreviewImg: true,
       chromeiOS: hasChromeiOS(),
@@ -86,13 +86,17 @@ class Welcome extends React.Component{
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll)
+    if (window.innerWidth > 1400) {
+      window.addEventListener('scroll', this.handleScroll)
+    }
     this.props.signStatusAction()
     window.addEventListener("resize", this.updateWindowDimensions)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll)
+    if (window.innerWidth > 1400) {
+      window.removeEventListener('scroll', this.handleScroll)
+    }
     window.removeEventListener("resize", this.updateWindowDimensions)
   }
 
@@ -322,7 +326,7 @@ class Welcome extends React.Component{
       <div className='NO__feed'>
         <img className='NO__dot' src={logoPost} onClick={this.viewMode} id="dot"/>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
-          <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} />
+          <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} isMobile={isMobile}/>
       </div>
     )
 

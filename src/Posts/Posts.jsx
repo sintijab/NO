@@ -87,12 +87,12 @@ class Posts extends React.Component{
       activePostVideo = false,
       activePostContent = '',
     } = this.state
-    const { cosmic, modalOpened } = this.props
+    const { cosmic, modalOpened, isMobile } = this.props
     const posts = (cosmic && cosmic.posts) || []
     let post = null
     const dynamicNum = Date.now() / 10000
     var radixPos = String(dynamicNum).indexOf('.') + 1
-    var value = String(dynamicNum).slice(radixPos) * 20
+    var value = isMobile ? String(dynamicNum).slice(radixPos) * 0.5 : String(dynamicNum).slice(radixPos) * 20
       post = posts.map(item => {
         const style = {
           left: `${Math.floor((Math.random() * value) + 1)}px`,
