@@ -114,7 +114,8 @@ class Welcome extends React.Component{
     }
 
     if (!isMobile && cosmic && !activeHint) {
-      const randPostNr = Math.floor(Math.random() * (cosmic.posts.length - 1))
+      const postsIndexLength = cosmic.posts.length - 1
+      const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       this.setState({ activeHint: cosmic.posts[randPostNr] })
     }
   }
@@ -158,7 +159,8 @@ class Welcome extends React.Component{
   viewMode() {
     const { isMobile, modalOpened, cosmic } = this.state
     if(!isMobile && !modalOpened) {
-      const randPostNr = Math.floor(Math.random() * (cosmic.posts.length - 1))
+      const postsIndexLength = cosmic.posts.length - 1
+      const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       this.setState({ activeHint: cosmic.posts[randPostNr] })
       this.setState({ showActiveHint: true })
     } else if (!isMobile && modalOpened) {
@@ -283,7 +285,7 @@ class Welcome extends React.Component{
 
     if (srollVerticalReach || scrollHorizontalReach || (scrollVerticalTop && scrollHorizontalTop)) {
       //set the color
-      const randColorNr = Math.floor(Math.random() * 7)
+      const randColorNr = Math.floor(Math.random() * (6 - 0 + 1))
       const bgColors = [
         "#FFFF00",
         "#000000",
