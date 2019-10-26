@@ -291,17 +291,29 @@ class Welcome extends React.Component{
       //set the color
       const randColorNr = Math.floor(Math.random() * (7 - 0 + 1))
       const bgColors = [
-        "#FFFFFF",
-        "#FFFF00",
-        "#000000",
-        "#0000FF",
-        "#00E8F7",
-        "#5F00BA",
-        "#FF00E9",
-        "#FFEA84",
+        "hsla(0,0%,100%,1)",
+        "hsla(60,100%,50%,1)",
+        "hsla(0,0%,0%,1)",
+        "hsla(240,100%,50%,1)",
+        "hsla(184,100%,48%,1)",
+        "hsla(271,100%,36%,1)",
+        "hsla(305,100%,50%,1)",
+        "hsla(50,100%,76%,1)",
+      ]
+      const bgTextColors = [
+        "hsla(0,0%,98%,1)",
+        "hsla(60,100%,48%,1)",
+        "hsla(0,0%,10%,1)",
+        "hsla(240,100%,58%,1)",
+        "hsla(184,100%,60%,1)",
+        "hsla(271,100%,39%,1)",
+        "hsla(305,100%,59%,1)",
+        "hsla(50,100%,70%,1)",
       ]
       const randColor = bgColors[randColorNr]
+      const randTextColor = bgTextColors[randColorNr]
       document.body.style.backgroundColor = randColor
+      document.body.style.color = randTextColor
       //set the next frames
       const currVerticalPos = window.root.getBoundingClientRect().top
       const currHorizontalPos= window.root.getBoundingClientRect().left
