@@ -300,20 +300,20 @@ class Welcome extends React.Component{
         "hsla(305,100%,50%,1)",
         "hsla(50,100%,76%,1)",
       ]
-      const bgTextColors = [
-        "hsla(0,0%,98%,1)",
-        "hsla(60,100%,48%,1)",
-        "hsla(0,0%,10%,1)",
-        "hsla(240,100%,58%,1)",
-        "hsla(184,100%,60%,1)",
-        "hsla(271,100%,39%,1)",
-        "hsla(305,100%,59%,1)",
-        "hsla(50,100%,70%,1)",
-      ]
+      // const bgTextColors = [
+      //   "hsla(0,0%,98%,1)",
+      //   "hsla(60,100%,48%,1)",
+      //   "hsla(0,0%,10%,1)",
+      //   "hsla(240,100%,58%,1)",
+      //   "hsla(184,100%,60%,1)",
+      //   "hsla(271,100%,39%,1)",
+      //   "hsla(305,100%,59%,1)",
+      //   "hsla(50,100%,70%,1)",
+      // ]
       const randColor = bgColors[randColorNr]
-      const randTextColor = bgTextColors[randColorNr]
+      // const randTextColor = bgTextColors[randColorNr]
       document.body.style.backgroundColor = randColor
-      document.body.style.color = randTextColor
+      // document.body.style.color = randTextColor
       //set the next frames
       const currVerticalPos = window.root.getBoundingClientRect().top
       const currHorizontalPos= window.root.getBoundingClientRect().left
