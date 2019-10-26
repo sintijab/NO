@@ -289,16 +289,20 @@ class Welcome extends React.Component{
 
     if (srollVerticalReach || scrollHorizontalReach || (scrollVerticalTop && scrollHorizontalTop)) {
       //set the color
-      const randColorNr = Math.floor(Math.random() * (7 - 0 + 1))
+      const randColorNr = Math.floor(Math.random() * (11 - 0 + 1))
       const bgColors = [
         "hsla(0,0%,100%,1)",
         "hsla(60,100%,50%,1)",
         "hsla(0,0%,0%,1)",
+        "hsla(0,0%,100%,1)",
         "hsla(240,100%,50%,1)",
         "hsla(184,100%,48%,1)",
+        "hsla(0,0%,100%,1)",
         "hsla(271,100%,36%,1)",
         "hsla(305,100%,50%,1)",
+        "hsla(0,0%,100%,1)",
         "hsla(50,100%,76%,1)",
+        "hsla(0,0%,100%,1)",
       ]
       // const bgTextColors = [
       //   "hsla(0,0%,98%,1)",
