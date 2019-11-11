@@ -52,10 +52,13 @@ class About extends React.Component {
     let feed = <div />
     if (activeSections.length) {
       feed = activeSections.map(item => {
+        const {
+          title = '',
+        } = item
         return (
           <div className="NO__about-feed-item">
-            <span>{item.title}</span>
-            <div dangerouslySetInnerHTML={{__html: item.content}} />
+            <span>{title}</span>
+            {!!item.content && <div dangerouslySetInnerHTML={{__html: item.content}} />}
           </div>
         )
       })
