@@ -39,8 +39,9 @@ class About extends React.Component {
 
   filterSections(category) {
     const { sections } = this.state
-    const activeItems = sections.filter(section => section.metadata.navigation === category)
+    let activeItems = sections.filter(section => section.metadata.navigation === category)
     if (activeItems.length) {
+      activeItems.reverse()
       this.setState({
         activeSections: activeItems,
       })
