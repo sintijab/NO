@@ -57,7 +57,7 @@ class About extends React.Component {
         } = item
         return (
           <div className="NO__about-feed-item">
-            <span>{title}</span>
+            <span className="NO__about-feed-item-details">{title}</span>
             {!!item.content && <div dangerouslySetInnerHTML={{__html: item.content}} />}
           </div>
         )
