@@ -26,9 +26,10 @@ class About extends React.Component {
         })
       } else {
         if (response.data.objects && response.data.objects.length) {
+          const performanceObj = response.data.objects.filter(section => section.metadata.navigation === 'performance').reverse()
           _this.setState({
             sections: response.data.objects,
-            activeSections: response.data.objects.filter(section => section.metadata.navigation === 'performance'),
+            activeSections: performanceObj,
           })
         }
       }
