@@ -28,7 +28,7 @@ class About extends React.Component {
         if (response.data.objects && response.data.objects.length) {
           _this.setState({
             sections: response.data.objects,
-            activeSections: response.data.objects.filter(section => section.metadata.navigation === 'about'),
+            activeSections: response.data.objects.filter(section => section.metadata.navigation === 'performance'),
           })
         }
       }
@@ -65,6 +65,7 @@ class About extends React.Component {
         <div className="NO__about-page" >
         <img className='NO__dot NO__about' src={imgAboutSrc} onClick={() => {window.close()}}/>
           <div className="NO__about-nav">
+            <div className="NO__about-nav-title" onClick={() => this.filterSections('about')}>about</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('sculpture')}>sculpture</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('photography')}>photography</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('sound')}>sound</div>
