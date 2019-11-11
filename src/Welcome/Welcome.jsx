@@ -87,9 +87,6 @@ class Welcome extends React.Component{
   }
 
   componentDidMount() {
-    if (window.innerWidth > 1400) {
-      window.addEventListener('scroll', this.handleScroll)
-    }
     this.props.signStatusAction()
     window.addEventListener("resize", this.updateWindowDimensions)
   }
@@ -127,6 +124,9 @@ class Welcome extends React.Component{
 
   openPostFeed() {
     this.setState({postFeedOpened: true })
+    if (window.innerWidth > 1400) {
+      window.addEventListener('scroll', this.handleScroll)
+    }
   }
 
   addPostOverlay() {

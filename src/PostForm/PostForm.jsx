@@ -23,7 +23,7 @@ class PostForm extends React.Component{
 
   handleChange(event) {
     const target = event.target
-    const value = target.target
+    const value = target.value
     const name = target.name
     this.setState({
         [name]: value,
@@ -33,7 +33,7 @@ class PostForm extends React.Component{
   handleSubmit(event) {
     event.preventDefault()
 
-    const { title, article, font, font_size, imgurl, categories } = this.state
+    const { title = '', article, font, font_size, imgurl, categories } = this.state
     const { submit } = this.props
     const params = {
       title: title,
@@ -209,7 +209,7 @@ class PostForm extends React.Component{
     .then(data => {
       const bucket = Cosmic.bucket({
         slug: data.buckets[0].slug,
-        write_key: '',
+        write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
       })
 
     bucket.addObject(params)
@@ -239,7 +239,7 @@ class PostForm extends React.Component{
 
 
   render() {
-    const { title = '', article, imgurl, font, font_size, categories } = this.state
+    const { title, article, imgurl, font, font_size, categories } = this.state
     const { uniquePostCategories } = this.props
     const fontName = `NO__font--${font} NO__font-size--${font_size}`
     const fontPreviewText = <span className={fontName}>{title}</span>
@@ -253,7 +253,7 @@ class PostForm extends React.Component{
           <div className="NO__post_form-group">
             <input id="title" type="text" name="title" className="NO__post_form-control" placeholder="Title" value={title} onChange={this.handleChange}/>
             <select className="NO__post_form-control" name="font" value={font} onChange={this.handleChange}>
-              <option value="default" label >Font style: default PT Mono</option>
+              <option value="default" label>Font style: default PT Mono</option>
               <option value="permanent-marker">permanent-marker</option>
               <option value="archivo-black">archivo-black</option>
               <option value="megrim">megrim</option>
@@ -274,7 +274,7 @@ class PostForm extends React.Component{
               <option value="times-new-roman">times-new-roman</option>
             </select>
             <select className="NO__post_form-control" name="font_size" value={font_size} onChange={this.handleChange}>
-              <option value="1" label >Font size: 1rem</option>
+              <option value="1" label>Font size: 1rem</option>
               <option value="1-2">1.2rem</option>
               <option value="1-5">1.5rem</option>
               <option value="1-7">1.7rem</option>
