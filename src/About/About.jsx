@@ -65,13 +65,11 @@ class About extends React.Component {
         <div className="NO__about-page" >
         <img className='NO__dot NO__about' src={imgAboutSrc} onClick={() => {window.close()}}/>
           <div className="NO__about-nav">
-            <div className="NO__about-nav-title" onClick={() => this.filterSections('about')}>about</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('sculpture')}>sculpture</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('photography')}>photography</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('sound')}>sound</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('performance')}>performance</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('design')}>design</div>
-            <div className="NO__about-nav-title" onClick={() => this.filterSections('contact')}>contact</div>
           </div>
           <div className="NO__about-feed">
             {feed}
