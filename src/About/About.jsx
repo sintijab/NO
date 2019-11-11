@@ -28,6 +28,7 @@ class About extends React.Component {
         if (response.data.objects && response.data.objects.length) {
           _this.setState({
             sections: response.data.objects,
+            activeSections: response.data.objects.filter(section => section.metadata.navigation === 'about'),
           })
         }
       }
