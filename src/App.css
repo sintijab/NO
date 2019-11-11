@@ -698,6 +698,9 @@
   width: 80%;
   float: right;
   background: #fff;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
+  font-size: 10pt;
+  line-height: 2;
 }
 
 .NO__about-feed-item {
