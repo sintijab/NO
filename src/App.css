@@ -278,15 +278,23 @@
 
 .NO__dot {
   position: fixed;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2.2rem;
+  width: 2.2rem;
   background-color: #ffffff;
   border-radius: 50%;
   display: inline-block;
   right: 0;
   top: 0;
-  margin: 20px;
+  margin: 1.3rem 2.3rem;
   z-index: 1000000;
+}
+
+.NO__about {
+  left: 0;
+  right: auto;
+  height: 2.3rem;
+  width: 2.3rem;
+  margin: 1.2rem 2.5rem;
 }
 
 .NO__dot:hover {
@@ -638,4 +646,60 @@
 .cat-flows-title {
   font-weight: 600;
   margin: 10px 0 0 30px;
+}
+
+.NO__about-page {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+  width: 100vW;
+  height: 100vH;
+  z-index: 10;
+}
+
+.NO__about-nav {
+  position: fixed;
+  display: block;
+  width: 20%;
+  height: 100vH;
+  float: left;
+  top: 9rem;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+}
+
+.NO__about-nav-title {
+  margin: 1.5rem 0;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
+  font-stretch: semi-condensed;
+  padding: 1rem 3rem;
+  font-size: 11pt;
+  color: #ff0000;
+}
+
+.NO__about-nav-title:hover {
+  color: #fff;
+  background: #000;
+}
+
+.NO__about-nav-title:hover:before {
+  content: '://NO';
+}
+
+.NO__about-nav-title:hover:after {
+  content: '*';
+}
+
+.NO__about-feed {
+  width: 80%;
+  float: right;
+  background: #fff;
+}
+
+.NO__about-feed-item {
+  margin-top: 7rem;
 }

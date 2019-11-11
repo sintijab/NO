@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import * as imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png'
+import * as imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
 import * as logoPost from '../images/logo.jpg'
 import * as brokenWhite from '../images/broken_white.png'
 import * as brokenBlack from '../images/broken_black.png'
@@ -341,6 +342,7 @@ class Welcome extends React.Component{
     const postView = (
       <div className='NO__feed'>
         <img className='NO__dot' src={logoPost} onClick={this.viewMode} id="dot"/>
+        {!isMobile && <a href='about' target="_blank" rel="noopener noreferrer"><img className='NO__dot NO__about' src={imgAboutSrc} /></a>}
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} isMobile={isMobile}/>
       </div>
