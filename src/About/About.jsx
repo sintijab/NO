@@ -69,10 +69,10 @@ class About extends React.Component {
             <div className="NO__about-nav-title" onClick={() => this.filterSections('about')}>about</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('sculpture')}>sculpture</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('sound')}>sound</div>
-            <div className="NO__about-nav-title" onClick={() => this.filterSections('installation')}>performance</div>
+            <div className="NO__about-nav-title" onClick={() => this.filterSections('installation')}>installation</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('performance')}>performance</div>
-            <div className="NO__about-nav-title" onClick={() => this.filterSections('fashion')}>design</div>
-            <div className="NO__about-nav-title" onClick={() => this.filterSections('painting')}>design</div>
+            <div className="NO__about-nav-title" onClick={() => this.filterSections('fashion')}>fashion</div>
+            <div className="NO__about-nav-title" onClick={() => this.filterSections('painting')}>painting</div>
             <div className="NO__about-nav-title" onClick={() => this.filterSections('photography')}>photography</div>
           </div>
           <div className="NO__about-feed">
