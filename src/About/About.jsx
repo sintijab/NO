@@ -55,8 +55,9 @@ class About extends React.Component {
     let feed = <div />
     if (activeSections.length) {
       feed = activeSections.map(item => {
+        const feedItemClassName = item.metadata.navigation === 'about' ? 'NO_about-feed-item-intro' : 'NO__about-feed-item'
         return (
-          <div className="NO__about-feed-item">
+          <div className={feedItemClassName}>
             {!!item.content && <div dangerouslySetInnerHTML={{__html: item.content}} />}
           </div>
         )

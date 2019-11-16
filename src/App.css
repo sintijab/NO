@@ -704,3 +704,9 @@
 .NO__about-feed-item {
   margin-top: 7rem;
 }
+
+.NO_about-feed-item-intro {
+  margin: 7rem 5rem;
+  width: 45%;
+  float: right;
+}
