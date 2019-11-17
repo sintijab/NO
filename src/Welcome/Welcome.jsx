@@ -363,8 +363,7 @@ class Welcome extends React.Component{
     const postView = (
       <div className='NO__feed'>
         <img className='NO__dot' src={logoPost} onClick={this.viewMode} id="dot"/>
-        {!isMobile && <a href='about' target="_blank" rel="noopener noreferrer"><img className='NO__dot NO__about' src={imgAboutSrc} /></a>}
-        {isMobile && <a href='about' onClick={() => this.mobileSec}><img className='NO__dot NO__about' src={imgAboutSrc} /></a>}
+        {isMobile && <a href="about" onClick={() => this.mobileSec}><img className='NO__dot NO__about' src={imgAboutSrc} /></a>}
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} isMobile={isMobile}/>
       </div>
