@@ -273,6 +273,8 @@
 
   .NO__paragraph {
     position: fixed;
+    height: 100%;
+    overflow: auto;
   }
 }
 
@@ -303,7 +305,12 @@
 }
 
 @media only screen and (max-width: 1400px) {
+  .NO__about {
+    margin: 1.2rem 1.5rem;
+  }
+
   .NO__dot {
+    margin: 1.3rem 1.3rem;
     z-index: 30000;
   }
 
@@ -714,7 +721,7 @@
 
 @media only screen and (max-width: 1400px) {
   .NO_about-feed-item-intro {
-    margin: 2.5rem 0 0 0;
+    margin: 2.3rem 0 0 0;
     width: 38vW;
     float: none;
     text-align: justify;
