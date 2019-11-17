@@ -11,12 +11,11 @@ import SignForm from '../SignForm/SignForm'
 import PostForm from '../PostForm/PostForm'
 import { signOutAction, signStatusAction } from '../actions/signActions.js'
 import { LOGGED_IN, LOGGED_OUT } from "../actions/types"
-import { hasChromeiOS } from '../functions.js'
+import { hasChromeiOS, getCookie } from '../functions.js'
 
 const Cosmic = require('cosmicjs')({
-  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9Ac3luNG55LmNvbSIsInBhc3N3b3JkIjoiMmU5YmE4MmQ5YTMwYjZkMzkxNDNhNDRiZDJiZmYyMTQiLCJpYXQiOjE1NzE0MTE2NTJ9.bVld9Hp_sukxhdFWvhXysHA90-62JeuRUDPUVvVQJAg',
+  token: getCookie('val'), // optional
 })
-
 class Welcome extends React.Component{
 
   constructor(props) {
@@ -37,6 +36,8 @@ class Welcome extends React.Component{
       modalOpened: false,
       verticalPos: 0,
       horizontalPos: 0,
+      displayPageDetails: false,
+      displayPostHint: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
@@ -50,6 +51,7 @@ class Welcome extends React.Component{
     this.hideVideo = this.hideVideo.bind(this)
     this.toggleModalOverlay = this.toggleModalOverlay.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
+    this.mobileSec = this.mobileSec.bind(this)
 
     const _this = this
     axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
@@ -89,6 +91,13 @@ class Welcome extends React.Component{
   componentDidMount() {
     this.props.signStatusAction()
     window.addEventListener("resize", this.updateWindowDimensions)
+
+    if (window.location.href.indexOf("about") > -1) {
+      this.setState({ displayPageDetails: true })
+    }
+    if (window.location.href.indexOf("00000") > -1) {
+      this.setState({ showPreviewImg: false, postFeedOpened: true })
+    }
   }
 
   componentWillUnmount() {
@@ -162,100 +171,108 @@ class Welcome extends React.Component{
 
 
   viewMode() {
-    const { isMobile, modalOpened, cosmic } = this.state
-    if(!isMobile && !modalOpened) {
+    const { isMobile, modalOpened, cosmic, displayPostHint } = this.state
+    if((!isMobile && !modalOpened) || (isMobile && displayPostHint && !modalOpened)) {
       const postsIndexLength = cosmic.posts.length - 1
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
-      this.setState({ activeHint: cosmic.posts[randPostNr] })
-      this.setState({ showActiveHint: true })
-    } else if (!isMobile && modalOpened) {
-      this.setState({ showActiveHint: false })
+      this.setState({
+        activeHint: cosmic.posts[randPostNr],
+        showActiveHint: true,
+      })
+    } else if (!isMobile && modalOpened || (isMobile && displayPostHint && modalOpened)) {
+      this.setState({
+        showActiveHint: false,
+        displayPostHint: !displayPostHint,
+      })
       this.toggleModalOverlay(false)
     }
-    if (isMobile) {
-      localStorage.removeItem('room')
-      axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
-        params: {
-          type: 'rooms',
-          read_key: 'reQaGkJrqvDkpuyb45enU4kYd3PWhZHUihAD7CDeW7shE1rleO',
-        } })
+    if (isMobile && !displayPostHint) {
+      this.setState({ displayPostHint: !displayPostHint })
+      if (localStorage.getItem('room')) {
+        localStorage.removeItem('room')
+      }
+      let response = null
+      axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects?type=rooms&read_key=reQaGkJrqvDkpuyb45enU4kYd3PWhZHUihAD7CDeW7shE1rleO`)
       .then(function(response) {
-        if (!response.data.objects) {
-          let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1
-
-          localStorage.setItem('room', randomRoomNumber)
-          window.loadSimpleWebRTC()
-            const params = {
-              title: 'room_id',
-              type_slug: 'rooms',
-              slug: randomRoomNumber,
-              content: '',
-              status: 'published',
-              metafields: [
-                {
-                  required: true,
-                  value: randomRoomNumber,
-                  key: 'room_id',
-                  title: 'room_id',
-                  type: 'text',
-                  children: null,
-                },
-              ],
-            }
-            Cosmic.getBuckets()
-            .then(data => {
-              console.log(data)
-              const bucket = Cosmic.bucket({
-                slug: data.buckets[0].slug,
-                write_key: '',
-              })
-
-            bucket.addObject(params)
-            .then(data => {
-              console.log(data)
-              const roomNrText = document.getElementById("roomNr")
-              roomNrText.innerHTML = randomRoomNumber
-            })
-            .catch(err => {
-              console.log(err)
-            })
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        } else {
-          const objects = response.data.objects
-          const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null
-          const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null
-          if (roomNr.length) {
-            let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
-            let randomRoomNumber = roomNr[randNr]
-          localStorage.setItem('room', randomRoomNumber)
-          window.loadSimpleWebRTC()
-          Cosmic.getBuckets()
-          .then(data => {
-            const bucket = Cosmic.bucket({
-              slug: data.buckets[0].slug,
-              write_key: '',
-            })
-            bucket.deleteObject({
-              slug: roomId[randNr],
-            })
-            .then(data => {
-              console.log(data)
-              const roomNrText = document.getElementById("roomNr")
-              roomNrText.innerHTML = randomRoomNumber
-            })
-            .catch(err => {
-              console.log(err)
-            })
-          })
-        }
+        if (response.data.objects) {
+          response = true
         }
       })
       .catch(function(error) {
         console.log(error)
       })
+      if (!response) {
+        let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1
+
+        localStorage.setItem('room', randomRoomNumber)
+        window.loadSimpleWebRTC()
+          const params = {
+            title: 'room_id',
+            type_slug: 'rooms',
+            slug: randomRoomNumber,
+            content: '',
+            status: 'published',
+            metafields: [
+              {
+                required: true,
+                value: randomRoomNumber,
+                key: 'room_id',
+                title: 'room_id',
+                type: 'text',
+                children: null,
+              },
+            ],
+          }
+          Cosmic.getBuckets()
+          .then(data => {
+            console.log(data)
+            const bucket = Cosmic.bucket({
+              slug: data.buckets[0].slug,
+              write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
+            })
+
+          bucket.addObject(params)
+          .then(data => {
+            console.log(data)
+            const roomNrText = document.getElementById("roomNr")
+            roomNrText.innerHTML = randomRoomNumber
+          })
+          .catch(err => {
+            console.log(err)
+          })
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else {
+        const objects = response.data.objects
+        const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null
+        const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null
+        if (roomNr.length) {
+          let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
+          let randomRoomNumber = roomNr[randNr]
+        localStorage.setItem('room', randomRoomNumber)
+        window.loadSimpleWebRTC()
+        Cosmic.getBuckets()
+        .then(data => {
+          const bucket = Cosmic.bucket({
+            slug: data.buckets[0].slug,
+            write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
+          })
+          bucket.deleteObject({
+            slug: roomId[randNr],
+          })
+          .then(data => {
+            console.log(data)
+            const roomNrText = document.getElementById("roomNr")
+            roomNrText.innerHTML = randomRoomNumber
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        })
+      }
+      }
     }
   }
 
@@ -335,14 +352,32 @@ class Welcome extends React.Component{
     }
   }
 
+  mobileSec() {
+    const { displayPageDetails } = this.state
+    this.setState({ displayPageDetails: !displayPageDetails })
+  }
+
   render() {
-    const { postFeedOpened, showLoginOverlay, loggedIn, postOverlayVisible, isMobile, cosmic, uniquePostCategories, activeHint, showActiveHint, modalOpened } = this.state
+    const {
+      postFeedOpened,
+      showLoginOverlay,
+      loggedIn,
+      postOverlayVisible,
+      isMobile,
+      cosmic,
+      uniquePostCategories,
+      activeHint,
+      showActiveHint,
+      modalOpened,
+      displayPageDetails,
+    } = this.state
 
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`
     const postView = (
       <div className='NO__feed'>
         <img className='NO__dot' src={logoPost} onClick={this.viewMode} id="dot"/>
         {!isMobile && <a href='about' target="_blank" rel="noopener noreferrer"><img className='NO__dot NO__about' src={imgAboutSrc} /></a>}
+        {isMobile && <a href='about' onClick={() => this.mobileSec}><img className='NO__dot NO__about' src={imgAboutSrc} /></a>}
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} isMobile={isMobile}/>
       </div>
@@ -367,17 +402,17 @@ class Welcome extends React.Component{
       }
 
 
-      const noWelcomeClass = isMobile && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome'  // eslint-disable-line react/no-string-refs
+      const noWelcomeClass = isMobile && !displayPageDetails && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome'  // eslint-disable-line react/no-string-refs
       return (
         <div>
           <div className={noWelcomeClass} id="welcome">
           {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/> /* eslint-disable-line react/no-string-refs*/ }
           {postFeedOpened && postView}
-            {isMobile &&
-              <div className='NO__welcome-preview' onClick={this.hideVideo} >
+            {isMobile && !displayPageDetails &&
+              <a className='NO__welcome-preview' onClick={this.hideVideo} href="/00000" >
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
-              </div>}
-            {isMobile && <div id="remotes" className="row">
+              </a>}
+            {isMobile && !displayPageDetails && <div id="remotes" className="row">
               {<div className="col-md-6 ">
                 <div className="videoContainer" id="videoContainer">
                   <video id="selfVideo" onContextMenu={()=> {return false} } muted playsInline controls={true}></video>

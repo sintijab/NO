@@ -513,22 +513,6 @@
   font-size: 3rem;
 }
 
-.fb-video {
-  z-index: 100;
-  cursor: none;
-}
-
-@media only screen and (max-width: 768px) {
-  .fb-video {
-    position: absolute!important;
-    bottom: 0;
-    top: 22%;
-    left: 0;
-    right: 0;
-    margin: auto;
-  }
-}
-
 .NO__welcome-preview {
   z-index: 10000;
   width: 100vW;
@@ -662,12 +646,22 @@
 .NO__about-nav {
   position: fixed;
   display: block;
-  width: 20%;
   height: 100vH;
+  width: 20%;
   float: left;
   top: 9rem;
-  bottom: 0;
   margin: auto;
+  bottom: 0;
+}
+
+@media only screen and (max-width: 1400px) {
+  .NO__about-nav {
+    bottom: auto;
+    width: 100%;
+    padding-top: 3rem;
+    top: 0;
+    background: #fff;
+  }
 }
 
 .NO__about-nav-title {
@@ -701,6 +695,13 @@
   line-height: 2;
 }
 
+@media only screen and (max-width: 1400px) {
+  .NO__about-feed {
+    width: 100%;
+    float: none;
+  }
+}
+
 .NO__about-feed-item {
   margin-top: 7rem;
 }
@@ -709,4 +710,37 @@
   margin: 7rem 5rem;
   width: 45%;
   float: right;
+}
+
+@media only screen and (max-width: 1400px) {
+  .NO_about-feed-item-intro {
+    margin: 2.5rem 0 0 0;
+    width: 38vW;
+    float: none;
+    text-align: justify;
+  }
+  .NO_about-feed-item-intro > div > div > img {
+      margin-right: -1rem;
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  img.fr-fic.fr-dib,
+  img.fr-fic.fr-dii.fr-fil {
+      width: 39vW!important;
+      display: block;
+  }
+
+  span, p {
+    display: block;
+    width: 37vW;
+    text-align: justify;
+    margin: 0 .2rem .2rem;
+    line-height: 2.1;
+  }
+
+  html {
+    width: 100vW;
+    overflow-x: hidden;
+  }
 }
