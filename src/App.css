@@ -648,6 +648,7 @@
   width: 100vW;
   height: 100vH;
   z-index: 10;
+  background: #fff;
 }
 
 .NO__about-nav {
@@ -703,7 +704,7 @@
 }
 
 .NO__about-feed {
-  width: 80%;
+  width: 50vW;
   float: right;
   background: #fff;
   font-family: 'PT Mono',Tahoma,Arial,sans-serif;
