@@ -6,12 +6,14 @@ import configureStore from "./store"
 import "./index.css"
 import App from "./App"
 import About from "./About/About"
+import Welcome from "./About/About"
 import * as serviceWorker from "./serviceWorker"
 
 ReactDOM.render(
   <Provider store={configureStore()}>
     <Router>
       <Route path="/" component={App} />
+      <Route path="/00000" component={Welcome} />
       <Route path="/about" component={About} />
     </Router>
   </Provider>,

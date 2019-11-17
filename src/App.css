@@ -669,6 +669,14 @@
     top: 0;
     background: #fff;
   }
+
+  .NO__about-page {
+    position: fixed;
+    width: auto;
+    height: auto;
+    z-index: 10;
+    overflow: auto;
+  }
 }
 
 .NO__about-nav-title {
@@ -704,7 +712,7 @@
 
 @media only screen and (max-width: 1400px) {
   .NO__about-feed {
-    width: 100vW;
+    width: auto;
     float: none;
   }
 }
@@ -715,14 +723,14 @@
 
 .NO_about-feed-item-intro {
   margin: 7rem 1rem;
-  width: 50vW;
+  width: auto;
   float: right;
 }
 
 @media only screen and (max-width: 1400px) {
   .NO_about-feed-item-intro {
-    margin: 2.3rem 0 0 .1rem;
-    width: 100vW;
+    margin: 2.3rem .1rem 0 .1rem;
+    width: auto;
     float: none;
     text-align: justify;
   }
@@ -734,15 +742,21 @@
 @media only screen and (max-width: 1400px) {
   img.fr-fic.fr-dib,
   img.fr-fic.fr-dii.fr-fil {
-      width: 100vW!important;
-      display: block;
+    width: auto!important;
+    max-width: 100%;
+    display: block;
   }
 
   span, p {
     display: block;
-    width: 100vW;
+    width: auto;
     text-align: justify;
     margin: 0 .2rem .2rem;
     line-height: 2.1;
   }
+
+  body,html {
+   max-width: 100vW;
+   min-width: 100vW;
+ }
 }
