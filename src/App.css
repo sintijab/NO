@@ -764,3 +764,10 @@
    min-width: 100vW;
  }
 }
+
+@media only screen
+  and (orientation: portrait) {
+    video {
+      object-fit: contain;
+    }
+}
