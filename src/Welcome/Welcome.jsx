@@ -52,6 +52,7 @@ class Welcome extends React.Component{
     this.toggleModalOverlay = this.toggleModalOverlay.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
     this.mobileSec = this.mobileSec.bind(this)
+    this.connectRoom = this.connectRoom.bind(this)
 
     const _this = this
     axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects`, {
@@ -135,6 +136,8 @@ class Welcome extends React.Component{
     this.setState({postFeedOpened: true })
     if (window.innerWidth > 1400) {
       window.addEventListener('scroll', this.handleScroll)
+    } else {
+      this.connectRoom()
     }
   }
 
@@ -169,110 +172,115 @@ class Welcome extends React.Component{
     }
   }
 
+  connectRoom() {
+    const { displayPostHint } = this.state
+    this.setState({ displayPostHint: !displayPostHint })
+    if (localStorage.getItem('room')) {
+      localStorage.removeItem('room')
+    }
+    let response = null
+    axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects?type=rooms&read_key=reQaGkJrqvDkpuyb45enU4kYd3PWhZHUihAD7CDeW7shE1rleO`)
+    .then(function(response) {
+      if (response.data.objects) {
+        response = true
+      }
+    })
+    .catch(function(error) {
+      console.log(error)
+    })
+    if (!response) {
+      let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1
+
+      localStorage.setItem('room', randomRoomNumber)
+      window.loadSimpleWebRTC()
+        const params = {
+          title: 'room_id',
+          type_slug: 'rooms',
+          slug: randomRoomNumber,
+          content: '',
+          status: 'published',
+          metafields: [
+            {
+              required: true,
+              value: randomRoomNumber,
+              key: 'room_id',
+              title: 'room_id',
+              type: 'text',
+              children: null,
+            },
+          ],
+        }
+        Cosmic.getBuckets()
+        .then(data => {
+          console.log(data)
+          const bucket = Cosmic.bucket({
+            slug: data.buckets[0].slug,
+            write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
+          })
+
+        bucket.addObject(params)
+        .then(data => {
+          console.log(data)
+          const roomNrText = document.getElementById("roomNr")
+          roomNrText.innerHTML = randomRoomNumber
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } else {
+      const objects = response.data.objects
+      const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null
+      const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null
+      if (roomNr.length) {
+        let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
+        let randomRoomNumber = roomNr[randNr]
+      localStorage.setItem('room', randomRoomNumber)
+      window.loadSimpleWebRTC()
+      Cosmic.getBuckets()
+      .then(data => {
+        const bucket = Cosmic.bucket({
+          slug: data.buckets[0].slug,
+          write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
+        })
+        bucket.deleteObject({
+          slug: roomId[randNr],
+        })
+        .then(data => {
+          console.log(data)
+          const roomNrText = document.getElementById("roomNr")
+          roomNrText.innerHTML = randomRoomNumber
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      })
+    }
+    }
+  }
+
 
   viewMode() {
     const { isMobile, modalOpened, cosmic, displayPostHint } = this.state
-    if((!isMobile && !modalOpened) || (isMobile && displayPostHint && !modalOpened)) {
+    if(!modalOpened) {
       const postsIndexLength = cosmic.posts.length - 1
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       this.setState({
         activeHint: cosmic.posts[randPostNr],
         showActiveHint: true,
       })
-    } else if (!isMobile && modalOpened || (isMobile && displayPostHint && modalOpened)) {
+    } else if (modalOpened) {
       this.setState({
         showActiveHint: false,
         displayPostHint: !displayPostHint,
       })
       this.toggleModalOverlay(false)
     }
-    if (isMobile && !displayPostHint) {
-      this.setState({ displayPostHint: !displayPostHint })
-      if (localStorage.getItem('room')) {
-        localStorage.removeItem('room')
-      }
-      let response = null
-      axios.get(`https://api.cosmicjs.com/v1/c61d0730-8187-11e9-9862-534a432d9a60/objects?type=rooms&read_key=reQaGkJrqvDkpuyb45enU4kYd3PWhZHUihAD7CDeW7shE1rleO`)
-      .then(function(response) {
-        if (response.data.objects) {
-          response = true
-        }
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
-      if (!response) {
-        let randomRoomNumber = Math.floor(Math.random() * 400000000) + 1
-
-        localStorage.setItem('room', randomRoomNumber)
-        window.loadSimpleWebRTC()
-          const params = {
-            title: 'room_id',
-            type_slug: 'rooms',
-            slug: randomRoomNumber,
-            content: '',
-            status: 'published',
-            metafields: [
-              {
-                required: true,
-                value: randomRoomNumber,
-                key: 'room_id',
-                title: 'room_id',
-                type: 'text',
-                children: null,
-              },
-            ],
-          }
-          Cosmic.getBuckets()
-          .then(data => {
-            console.log(data)
-            const bucket = Cosmic.bucket({
-              slug: data.buckets[0].slug,
-              write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
-            })
-
-          bucket.addObject(params)
-          .then(data => {
-            console.log(data)
-            const roomNrText = document.getElementById("roomNr")
-            roomNrText.innerHTML = randomRoomNumber
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else {
-        const objects = response.data.objects
-        const roomNr = (objects.length && objects.length) ? objects.map(object => object.metadata.room_id) : null
-        const roomId = (objects.length && objects.length) ? objects.map(object => object.slug) : null
-        if (roomNr.length) {
-          let randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
-          let randomRoomNumber = roomNr[randNr]
-        localStorage.setItem('room', randomRoomNumber)
-        window.loadSimpleWebRTC()
-        Cosmic.getBuckets()
-        .then(data => {
-          const bucket = Cosmic.bucket({
-            slug: data.buckets[0].slug,
-            write_key: '6FfxFqdDutkJ6pAcx2Bg4LvrYkgAPD87E6jL6sWGVyJId3X3Ry',
-          })
-          bucket.deleteObject({
-            slug: roomId[randNr],
-          })
-          .then(data => {
-            console.log(data)
-            const roomNrText = document.getElementById("roomNr")
-            roomNrText.innerHTML = randomRoomNumber
-          })
-          .catch(err => {
-            console.log(err)
-          })
-        })
-      }
-      }
+    if (isMobile && modalOpened) {
+      this.connectRoom()
     }
   }
 
