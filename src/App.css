@@ -274,6 +274,8 @@
   .NO__paragraph {
     position: fixed;
     height: 100%;
+    margin-right: 0;
+    width: 50%;
     overflow: auto;
   }
 }
