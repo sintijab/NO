@@ -672,7 +672,8 @@
 
   .NO__about-page {
     position: fixed;
-    width: auto;
+    width: 100vW;
+    max-width: 100%;
     height: auto;
     z-index: 10;
     overflow: auto;
