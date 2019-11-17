@@ -282,21 +282,8 @@ class Welcome extends React.Component{
   }
 
   hideVideo() {
-    const { randNR, chromeiOS } = this.state
       this.setState({showPreviewImg: false, postFeedOpened: true})
-      let room = localStorage.getItem('room')
-      if(!room) {
-        room = Math.floor(Math.random() * 400000000) + 1
-      }
-      localStorage.setItem('room', room)
-      window.loadSimpleWebRTC()
-      if ((randNR === 2 || randNR === 3) && !chromeiOS) {
-        window.loadSimpleWebRTC()
-      } else if (!chromeiOS && randNR === 4){
-        this.viewMode()
-      } else {
-        this.viewMode()
-      }
+      this.viewMode()
   }
 
   handleScroll() {

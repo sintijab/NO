@@ -704,7 +704,7 @@
 
 @media only screen and (max-width: 1400px) {
   .NO__about-feed {
-    width: 100%;
+    width: 100vW;
     float: none;
   }
 }
@@ -715,14 +715,14 @@
 
 .NO_about-feed-item-intro {
   margin: 7rem 5rem;
-  width: 45%;
+  width: 100vW;
   float: right;
 }
 
 @media only screen and (max-width: 1400px) {
   .NO_about-feed-item-intro {
     margin: 2.3rem 0 0 .1rem;
-    width: 36vW;
+    width: 100vW;
     float: none;
     text-align: justify;
   }
@@ -734,20 +734,15 @@
 @media only screen and (max-width: 1400px) {
   img.fr-fic.fr-dib,
   img.fr-fic.fr-dii.fr-fil {
-      width: 39vW!important;
+      width: 100vW!important;
       display: block;
   }
 
   span, p {
     display: block;
-    width: 35vW;
+    width: 100vW;
     text-align: justify;
     margin: 0 .2rem .2rem;
     line-height: 2.1;
-  }
-
-  html {
-    width: 100vW;
-    overflow-x: hidden;
   }
 }
