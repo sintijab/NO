@@ -54,7 +54,6 @@ async function start() {
     const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
     console.log('Received local stream');
     localVideo.srcObject = stream;
-    debugger;
     localStream = stream;
     callButton.disabled = false;
   } catch (e) {
