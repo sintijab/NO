@@ -706,7 +706,7 @@
 }
 
 .NO__about-feed {
-  width: 50vW;
+  width: 70%;
   float: right;
   background: #fff;
   font-family: 'PT Mono',Tahoma,Arial,sans-serif;
@@ -727,7 +727,7 @@
 
 .NO_about-feed-item-intro {
   margin: 7rem 1rem;
-  width: auto;
+  width: 47vW;
   float: right;
 }
 

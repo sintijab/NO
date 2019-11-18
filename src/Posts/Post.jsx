@@ -1,4 +1,5 @@
 import React from 'react'
+import LazyImage from '../images/LazyImage.js'
 
 class Post extends React.Component {
   render() {
@@ -6,7 +7,7 @@ class Post extends React.Component {
     if (activePost) {
       return (
         <div key={activePost._id} onClick={showSimilarPost} className="NO__post" >
-         {activePostImg && <img src={activePostImg} className='NO__overlay-img' />}
+         {activePostImg && <LazyImage src={activePostImg} className='NO__overlay-img' />}
          {activePostVideo &&
            <iframe width="60%"
              height="100%"

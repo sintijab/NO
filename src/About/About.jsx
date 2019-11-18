@@ -44,12 +44,16 @@ class About extends React.Component {
   }
 
   filterSections(category) {
-    const { sections, toggleNavigation } = this.state
+    const { sections, toggleNavigation, isMobile } = this.state
     let activeItems = sections.filter(section => section.metadata.navigation === category)
     if (activeItems.length) {
       activeItems.reverse()
       this.setState({
         activeSections: activeItems,
+      })
+    }
+    if (isMobile) {
+      this.setState({
         toggleNavigation: !toggleNavigation,
       })
     }
