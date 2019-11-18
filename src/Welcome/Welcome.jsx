@@ -136,8 +136,6 @@ class Welcome extends React.Component{
     this.setState({postFeedOpened: true })
     if (window.innerWidth > 1400) {
       window.addEventListener('scroll', this.handleScroll)
-    } else {
-      this.connectRoom()
     }
   }
 
@@ -264,7 +262,7 @@ class Welcome extends React.Component{
 
 
   viewMode() {
-    const { isMobile, modalOpened, cosmic, displayPostHint } = this.state
+    const { modalOpened, cosmic, displayPostHint } = this.state
     if(!modalOpened) {
       const postsIndexLength = cosmic.posts.length - 1
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
@@ -278,9 +276,6 @@ class Welcome extends React.Component{
         displayPostHint: !displayPostHint,
       })
       this.toggleModalOverlay(false)
-    }
-    if (isMobile && modalOpened) {
-      this.connectRoom()
     }
   }
 
@@ -370,7 +365,7 @@ class Welcome extends React.Component{
     const imgClassName = `NO__welcome_img ${!isMobile && (!postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide')} ${isMobile && 'NO__welcome_img-show NO__welcome_img-mobile'}`
     const postView = (
       <div className='NO__feed'>
-        <img className='NO__dot' src={logoPost} onClick={this.viewMode} id="dot"/>
+        <img className='NO__dot' src={logoPost} onClick={this.viewMode} id="callButton"/>
         <a href="about" onClick={() => this.mobileSec}><img className='NO__dot NO__about' src={imgAboutSrc} /></a>
         {isMobile && <span id="roomNr" className="NO_roomId"></span>}
           <Posts activeHint={activeHint} showActiveHint={showActiveHint} cosmic={cosmic} toggleModalOverlay={this.toggleModalOverlay} modalOpened={modalOpened} isMobile={isMobile}/>
@@ -399,21 +394,15 @@ class Welcome extends React.Component{
       const noWelcomeClass = isMobile && !displayPageDetails && !postFeedOpened && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome'  // eslint-disable-line react/no-string-refs
       return (
         <div>
-          <div className={noWelcomeClass} id="welcome">
+          <div className={noWelcomeClass} id="startButton">
           {!isMobile && <video autoPlay={true} ref="video" className="NO_vid" playsInline/> /* eslint-disable-line react/no-string-refs*/ }
           {postFeedOpened && postView}
             {isMobile && !displayPageDetails &&
               <a className='NO__welcome-preview' onClick={this.hideVideo} href="/00000" >
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
               </a>}
-            {isMobile && !displayPageDetails && <div id="remotes" className="row">
-              {<div className="col-md-6 ">
-                <div className="videoContainer" id="videoContainer">
-                  <video id="selfVideo" onContextMenu={()=> {return false} } muted playsInline controls={true}></video>
-                  <meter id="localVolume" className="volume" min="-45" max="-20" high="-25" low="-40"></meter>
-                </div>
-              </div>}
-            </div>}
+            <video id="localVideo" playsinline autoPlay muted></video>
+            <video id="remoteVideo" playsinline autoPlay></video>
             {loggedIn && !isMobile &&
               <div className="NO__welcome-text NO__text">
                 <span>Welcome @admin  | </span><span onClick={this.addPostOverlay}>ADD POST</span>

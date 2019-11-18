@@ -1,16 +1,16 @@
-import React from "react";
+import React from "react"
 
 class LazyImage extends React.Component {
   componentDidMount() {
-    window.lazyLoadInstance.update();
+    window.lazyLoadInstance.update()
   }
 
   componentDidUpdate() {
-    window.lazyLoadInstance.update();
+    window.lazyLoadInstance.update()
   }
   render() {
-    const { src, className = "", alt = "NO_img" } = this.props;
-    const lazyImageClass = `lazy-image ${className}`;
+    const { src, className = "", alt = "NO_img" } = this.props
+    const lazyImageClass = `lazy-image ${className}`
     return (
       <img
         alt={alt}
@@ -19,8 +19,8 @@ class LazyImage extends React.Component {
         data-srcset={src}
         data-sizes="100w"
       />
-    );
+    )
   }
 }
 
-export default LazyImage;
+export default LazyImage
