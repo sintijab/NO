@@ -49,7 +49,7 @@
 function loadSimpleWebRTC() {
   var script = document.createElement("script");
   script.src = "./latest-v3.js";
-  document.head.appendChild(script);
+  document.body.appendChild(script);
 
   script.onload = function() {
     var webrtc = new SimpleWebRTC({

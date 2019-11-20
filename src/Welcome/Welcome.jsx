@@ -98,6 +98,7 @@ class Welcome extends React.Component{
     }
     if (window.location.href.indexOf("00000") > -1) {
       this.setState({ showPreviewImg: false, postFeedOpened: true })
+      this.connectRoom()
     }
   }
 
@@ -285,8 +286,21 @@ class Welcome extends React.Component{
   }
 
   hideVideo() {
+    const { randNR, chromeiOS } = this.state
       this.setState({showPreviewImg: false, postFeedOpened: true})
-      this.viewMode()
+      let room = localStorage.getItem('room')
+      if(!room) {
+        room = Math.floor(Math.random() * 400000000) + 1
+      }
+      localStorage.setItem('room', room)
+      window.loadSimpleWebRTC()
+      if ((randNR === 2 || randNR === 3) && !chromeiOS) {
+        window.loadSimpleWebRTC()
+      } else if (!chromeiOS && randNR === 4){
+        this.viewMode()
+      } else {
+        this.viewMode()
+      }
   }
 
   handleScroll() {
@@ -401,6 +415,14 @@ class Welcome extends React.Component{
               <a className='NO__welcome-preview' onClick={this.hideVideo} href="/00000" >
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName}/>
               </a>}
+              {isMobile && <div id="remotes" className="row">
+                {<div className="col-md-6 ">
+                  <div className="videoContainer" id="videoContainer">
+                    <video id="selfVideo" onContextMenu={()=> {return false} } muted playsInline controls={true}></video>
+                    <meter id="localVolume" className="volume" min="-45" max="-20" high="-25" low="-40"></meter>
+                  </div>
+                </div>}
+              </div>}
             <video id="localVideo" playsinline autoPlay muted></video>
             <video id="remoteVideo" playsinline autoPlay></video>
             {loggedIn && !isMobile &&
