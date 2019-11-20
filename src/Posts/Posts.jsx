@@ -40,7 +40,7 @@ class Posts extends React.Component{
       this.setState({
         activePost: nextPost,
         activePostImg: nextPost.metadata.NO_img,
-        activePostVideo: nextPost.metadata.NO_vid,
+        activePostVideo: nextPost.metadata.NO_video,
         activePostContent: nextPost.metadata.NO_article,
         postCount: postCount + 1,
       })
