@@ -10,6 +10,7 @@ class PostForm extends React.Component{
       title: '',
       article: '',
       imgurl: '',
+      videourl: '',
       font: '',
       font_size: '',
       categories: '',
@@ -33,7 +34,7 @@ class PostForm extends React.Component{
   handleSubmit(event) {
     event.preventDefault()
 
-    const { title = '', article, font, font_size, imgurl, categories } = this.state
+    const { title = '', article, font, font_size, imgurl, videourl, categories } = this.state
     const { submit } = this.props
     const params = {
       title: title,
@@ -53,6 +54,14 @@ class PostForm extends React.Component{
           value: imgurl,
           key: 'NO_img',
           title: 'Image link',
+          type: 'text',
+          children: null,
+        },
+        {
+          helptext: 'The link of the new post video e.g. \nhttps://youtu.be/n7hzomuDEIk',
+          value: videourl,
+          key: 'NO_video',
+          title: 'Video link',
           type: 'text',
           children: null,
         },
@@ -218,6 +227,7 @@ class PostForm extends React.Component{
         title: '',
         article: '',
         imgurl: '',
+        videourl: '',
         font: '',
         font_size: '',
         categories: '',
@@ -239,7 +249,7 @@ class PostForm extends React.Component{
 
 
   render() {
-    const { title, article, imgurl, font, font_size, categories } = this.state
+    const { title, article, imgurl, videourl, font, font_size, categories } = this.state
     const { uniquePostCategories } = this.props
     const fontName = `NO__font--${font} NO__font-size--${font_size}`
     const fontPreviewText = <span className={fontName}>{title}</span>
@@ -287,6 +297,7 @@ class PostForm extends React.Component{
             <p style={{background:'white'}}>{fontPreviewText}<span style={{float:'right', padding: '3px'}}>title preview</span></p>
             <textarea id="article" rows="30" type="text" name="article" className="NO__post_form-control NO__form-text-area" placeholder="Description" value={article} onChange={this.handleChange}/>
             <input id="imgurl" value={imgurl} type="url" name="imgurl" className="NO__post_form-control" placeholder="ImgLink" onChange={this.handleChange}/><br/>
+            <input id="videourl" value={videourl} type="url" name="videourl" className="NO__post_form-control" placeholder="VideoLink" onChange={this.handleChange}/><br/>
             <input id="categories" required type="text" name="categories" className="NO__post_form-control" placeholder="categories" value={categories} onChange={this.handleChange}/>
             <div className="cat-flows cat-flows-title">Existing category flows: </div>
             <ul className="cat-flows">{categoryFlows}</ul>

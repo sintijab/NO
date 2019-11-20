@@ -66,7 +66,7 @@ class Posts extends React.Component{
       activePost: item,
       activePostContent: item.metadata.NO_article,
       activePostImg: item.metadata.NO_img,
-      activePostVideo: item.metadata.NO_vid,
+      activePostVideo: item.metadata.NO_video,
       catList: catList,
     })
     toggleModalOverlay(true)
