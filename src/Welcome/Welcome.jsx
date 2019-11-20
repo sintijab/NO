@@ -266,14 +266,14 @@ class Welcome extends React.Component{
 
   viewMode() {
     const { modalOpened, cosmic, displayPostHint } = this.state
-    if(!modalOpened) {
+    if(!modalOpened && cosmic) {
       const postsIndexLength = cosmic.posts.length - 1
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       this.setState({
         activeHint: cosmic.posts[randPostNr],
         showActiveHint: true,
       })
-    } else if (modalOpened) {
+    } else if (modalOpened && cosmic) {
       this.setState({
         showActiveHint: false,
         displayPostHint: !displayPostHint,

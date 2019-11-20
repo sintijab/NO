@@ -115,6 +115,7 @@ class Posts extends React.Component{
               activePostVideo={activePostVideo}
               activePostContent={activePostContent}
               showSimilarPost={this.showSimilarPost}
+              isMobile={isMobile}
             />
           }
         </div>
