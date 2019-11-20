@@ -98,7 +98,9 @@ class Welcome extends React.Component{
     }
     if (window.location.href.indexOf("00000") > -1) {
       this.setState({ showPreviewImg: false, postFeedOpened: true })
-      this.connectRoom()
+      if (window.innerWidth < 1400) {
+        this.connectRoom()
+      }
     }
   }
 
