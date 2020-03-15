@@ -672,10 +672,11 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: 100vW;
+  width: auto;
   height: 100vH;
   z-index: 10;
   background: #fff;
+  overflow-x: hidden;
 }
 
 .NO__about-nav {
@@ -735,8 +736,10 @@
   float: right;
   background: #fff;
   font-family: 'PT Mono',Tahoma,Arial,sans-serif;
-  font-size: 10pt;
+  font-size: 12pt;
   line-height: 2;
+  margin-top: 2rem;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: 800px) {
@@ -751,9 +754,11 @@
 }
 
 .NO_about-feed-item-intro {
-  margin: 7rem 1rem;
   width: 47vW;
   float: right;
+  background: #ffffff;
+  overflow: hidden;
+  font-family: 'Special Elite', cursive;
 }
 
 @media only screen and (max-width: 800px) {
