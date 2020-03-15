@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import * as imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
 import * as logoPost from '../images/logo.jpg'
-import { aboutText } from './about'
+import { aboutText } from './description'
 
 class About extends React.Component {
 

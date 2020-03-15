@@ -101,6 +101,9 @@ class Welcome extends React.Component{
       if (window.innerWidth < 800) {
         this.connectRoom()
       }
+      if (window.innerWidth > 800) {
+        window.addEventListener('scroll', this.handleScroll)
+      }
     }
   }
 

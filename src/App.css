@@ -759,6 +759,7 @@
   background: #ffffff;
   overflow: hidden;
   font-family: 'Special Elite', cursive;
+  text-align: justify;
 }
 
 @media only screen and (max-width: 800px) {
