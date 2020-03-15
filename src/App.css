@@ -62,7 +62,7 @@
   z-index: 0;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO__welcome_img {
       position: absolute;
       width: 100%;
@@ -180,6 +180,7 @@
   font-family: 'PT Mono',Tahoma,Arial,sans-serif;
   background: #36363c;
   color: #ffffff;
+  cursor: pointer;
 }
 
 .NO__form-control:focus {
@@ -268,7 +269,7 @@
   margin-top: 0;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO__overlay-img{
     position: relative;
     max-width: 100%;
@@ -322,7 +323,7 @@
   cursor: not-allowed;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO__about {
     margin: 1.2rem 1.5rem;
   }
@@ -555,7 +556,7 @@
   height: 100%;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO__post {
     height: auto;
   }
@@ -688,7 +689,7 @@
   bottom: 0;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO__about-nav {
     bottom: auto;
     width: 100%;
@@ -738,7 +739,7 @@
   line-height: 2;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO__about-feed {
     width: auto;
     float: none;
@@ -755,7 +756,7 @@
   float: right;
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   .NO_about-feed-item-intro {
     margin: 2.3rem .1rem 0 .1rem;
     width: auto;
@@ -767,7 +768,7 @@
   }
 }
 
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   img.fr-fic.fr-dib,
   img.fr-fic.fr-dii.fr-fil {
     width: auto!important;

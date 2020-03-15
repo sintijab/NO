@@ -10,8 +10,8 @@ class About extends React.Component {
     this.state = {
       sections: [],
       activeSections: [],
-      isMobile: window.innerWidth < 1400,
-      toggleNavigation: window.innerWidth > 1400 && true,
+      isMobile: window.innerWidth < 800,
+      toggleNavigation: window.innerWidth > 800 && true,
     }
     this.filterSections = this.filterSections.bind(this)
     this.returnPrevState = this.returnPrevState.bind(this)

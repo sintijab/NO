@@ -24,7 +24,7 @@ class Welcome extends React.Component{
       postFeedOpened: false,
       showOverlay: false,
       postOverlayVisible: false,
-      isMobile: window.innerWidth < 1400,
+      isMobile: window.innerWidth < 800,
       videoSrc: null,
       showPreviewImg: true,
       chromeiOS: hasChromeiOS(),
@@ -98,21 +98,21 @@ class Welcome extends React.Component{
     }
     if (window.location.href.indexOf("00000") > -1) {
       this.setState({ showPreviewImg: false, postFeedOpened: true })
-      if (window.innerWidth < 1400) {
+      if (window.innerWidth < 800) {
         this.connectRoom()
       }
     }
   }
 
   componentWillUnmount() {
-    if (window.innerWidth > 1400) {
+    if (window.innerWidth > 800) {
       window.removeEventListener('scroll', this.handleScroll)
     }
     window.removeEventListener("resize", this.updateWindowDimensions)
   }
 
   updateWindowDimensions() {
-    const isMobile = window.innerWidth < 1400
+    const isMobile = window.innerWidth < 800
      this.setState({ isMobile: isMobile })
   }
 
@@ -137,7 +137,7 @@ class Welcome extends React.Component{
 
   openPostFeed() {
     this.setState({postFeedOpened: true })
-    if (window.innerWidth > 1400) {
+    if (window.innerWidth > 800) {
       window.addEventListener('scroll', this.handleScroll)
     }
   }
