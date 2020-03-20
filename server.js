@@ -4,8 +4,8 @@ const express = require('express')
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'build')))
-const port = process.env.PORT || 8080
+app.set('port', (process.env.PORT || 8080))
 app.get('*', ((req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 }))
-app.listen(port, () => console.log(`Listening on ${port}`))
+app.listen(app.get('port'), () => console.log(`Listening on ${app.get('port')}`))

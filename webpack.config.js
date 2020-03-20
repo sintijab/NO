@@ -91,12 +91,9 @@ module.exports = {
       { from: 'src/static' },
     ]),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        READ_KEY: JSON.stringify(process.env.READ_KEY),
-        WRITE_KEY: JSON.stringify(process.env.WRITE_KEY),
-        BUCKET_ID: JSON.stringify(process.env.BUCKET_ID),
-      },
+      'process.env.READ_KEY': JSON.stringify(process.env.READ_KEY),
+      'process.env.BUCKET_ID': JSON.stringify(process.env.BUCKET_ID),
+      'process.env.WRITE_KEY': JSON.stringify(process.env.WRITE_KEY),
     }),
   ],
 }
