@@ -9,7 +9,7 @@
     "jsx-quotes": [2, "prefer-single"],
     "no-console": 0
     },
-  "extends": ["react", "airbnb/hooks", "airbnb"],
+  "extends": ["react", "airbnb"],
   "env": {
     "browser": true,
     "node": true
