@@ -1,15 +1,10 @@
-import { combineReducers } from "redux"
-import signReducer from "./signReducer"
+import { combineReducers } from 'redux'
+import signReducer from './signReducer'
 
-const appReducer = combineReducers({
+const rootReducer = combineReducers({
   signInStatus: signReducer,
 })
 
-export default (state, action) => {
-  const initialState = appReducer({}, {})
-  switch (action.type) {
-    default:
-      state = initialState
-  }
-  return appReducer(state, action)
-}
+const initialState = rootReducer({}, {})
+
+export default (state = initialState, action) => rootReducer(state, action)

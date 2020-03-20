@@ -2,6 +2,24 @@
   cursor: not-allowed;
 }
 
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
 .App {
   text-align: center;
 }
@@ -235,16 +253,16 @@
 }
 
 .lazy-image {
-    display: block;
-    min-height: 1px;
-    position: relative;
-    opacity: 0;
-    transition: opacity 0.1s ease-in-out;
-    z-index: 1000;
+  display: block;
+  min-height: 1px;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+  z-index: 1000;
 }
 
-.lazy-image--loaded {
-    opacity: 1;
+.loaded {
+  opacity: 1;
 }
 
 .NO__paragraph {

@@ -1,22 +1,18 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import { Provider } from "react-redux"
+/* eslint-disable */
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import configureStore from "./store"
-import "./index.css"
-import App from "./App"
-import About from "./About"
-import * as serviceWorker from "./serviceWorker"
+import configureStore from './store'
+import App from './App'
+import About from './About'
 
-ReactDOM.render(
+render(
   <Provider store={configureStore()}>
     <Router>
-      <Route path="/" component={App} />
-      <Route path="/about" component={About} />
+      <Route path='/' component={App} />
+      <Route path='/about' component={About} />
     </Router>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root'),
 )
-
-
-serviceWorker.unregister()

@@ -1,4 +1,4 @@
-export const aboutText = [
+const aboutText = [
   '://N O p r o j e k t',
   'a collection of interdisciplinary computers/ bound by ties that',
   'are under NO control* This conglomerate of binary and non§binary',
@@ -94,3 +94,4 @@ export const aboutText = [
   '',
   '-Badiou “The Age of the Poets”',
 ]
+export default aboutText

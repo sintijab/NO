@@ -1,11 +1,11 @@
-import { LOGGED_IN, LOGGED_OUT } from "./types"
-import { setCookie, eraseCookie, getCookie } from "../functions.js"
+import { LOGGED_IN, LOGGED_OUT } from './types'
+import { setCookie, eraseCookie, getCookie } from '../functions'
 
-export const signInAction = (data, uEmail) => dispatch => {
-  setCookie("val", data.token, 1)
-  setCookie("uId", uEmail, 1)
+export const signInAction = (data, uEmail) => (dispatch) => {
+  setCookie('val', data.token, 1)
+  setCookie('uId', uEmail, 1)
   const userData = {
-    uEmail: uEmail,
+    uEmail,
   }
   dispatch({
     type: LOGGED_IN,
@@ -13,16 +13,16 @@ export const signInAction = (data, uEmail) => dispatch => {
   })
 }
 
-export const signOutAction = () => dispatch => {
-  eraseCookie("val")
+export const signOutAction = () => (dispatch) => {
+  eraseCookie('val')
   dispatch({
     type: LOGGED_OUT,
   })
 }
 
-export const signStatusAction = () => dispatch => {
-  const hasLoggedIn = !!getCookie("val")
-  const userId = getCookie("uId")
+export const signStatusAction = () => (dispatch) => {
+  const hasLoggedIn = !!getCookie('val')
+  const userId = getCookie('uId')
   const userData = {
     uEmail: userId,
   }
