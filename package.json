@@ -2,6 +2,9 @@
   "name": "no-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "12.16.0"
+  }
   "scripts": {
     "start": "webpack --config webpack.config.js && node server.js",
     "build": "webpack --config webpack.config.js && node server.js",
