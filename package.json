@@ -7,8 +7,8 @@
     "npm": "6.13.7"
   },
   "scripts": {
-    "start": "webpack -p --config ./webpack.config.js --progress && node --max_old_space_size=4096 server.js",
-    "build": "webpack -p --config ./webpack.config.js --progress && node --max_old_space_size=4096 server.js",
+    "start": "webpack -p --config ./webpack.config.js --progress && node --max_old_space_size=20148 server.js",
+    "build": "webpack -p --config ./webpack.config.js --progress && node --max_old_space_size=20148 server.js",
     "dev": "webpack-dev-server --config webpack.config.js"
   },
   "eslintConfig": {
