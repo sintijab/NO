@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'build')))
-const serverPort = process.env.PORT || 80
+const serverPort = process.env.PORT || 8080
 const serverHost = '0.0.0.0'
 
 app.get('*', ((req, res) => {
