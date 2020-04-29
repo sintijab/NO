@@ -780,6 +780,12 @@ code {
   text-align: justify;
 }
 
+img.fr-fic.fr-dib,
+img.fr-fic.fr-dii.fr-fil {
+  max-width: 600px;
+  width: 600px!important;
+}
+
 @media only screen and (max-width: 800px) {
   .NO_about-feed-item-intro {
     margin: 2.3rem .1rem 0 .1rem;
@@ -798,6 +804,7 @@ code {
     width: auto!important;
     max-width: 100%;
     display: block;
+    visibility: visible;
   }
 
   span, p {
@@ -812,4 +819,16 @@ code {
    max-width: 100vW;
    min-width: 100vW;
  }
+}
+
+.NO__about-feed-item img {
+  visibility: hidden;
+
+  @media only screen and (max-width: 800px) {
+    visibility: visible;
+  }
+}
+
+.NO__about-feed-item:hover img {
+  visibility: visible!important;
 }
