@@ -2,7 +2,7 @@
 import React from 'react'
 import axios from 'axios'
 import imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
-import logoPost from '../images/logo.jpg'
+import menuIcon from '../images/menu_png.png'
 import aboutText from './description'
 
 class About extends React.Component {
@@ -120,7 +120,7 @@ class About extends React.Component {
           onClick={isMobile ? this.returnPrevState : () => window.close()}
         />
           <a href='/00000'>
-            <img className='NO__dot' src={logoPost} onClick={this.viewMode} />
+            <img className='NO__dot' src={menuIcon} onClick={this.viewMode} />
           </a>
           {toggleNavigation &&
             <div className="NO__about-nav">

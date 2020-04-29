@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png'
 import imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
-import logoPost from '../images/logo.jpg'
+import noLogoImgSrc from '../images/no_logo.png'
+import menuIcon from '../images/menu_png.png'
 import brokenWhite from '../images/broken_white.png'
 import brokenBlack from '../images/broken_black.png'
 import Posts from '../Posts/Posts'
@@ -35,6 +36,7 @@ class Welcome extends React.Component {
       horizontalPos: 0,
       displayPageDetails: false,
       displayPostHint: false,
+      welcomePage: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
@@ -390,6 +392,7 @@ class Welcome extends React.Component {
       showActiveHint,
       modalOpened,
       displayPageDetails,
+      welcomePage,
     } = this.state
 
     const imgMobileClass = 'NO__welcome_img-show NO__welcome_img-mobile '
@@ -398,7 +401,7 @@ class Welcome extends React.Component {
     const postView = (
       <div className='NO__feed' ref={this.selector}>
         <div onClick={this.viewMode} id='callButton' onKeyDown={this.viewMode} role='presentation'>
-          <img className='NO__dot' alt='NO__dot' src={logoPost} />
+          <img className='NO__dot' alt='NO__dot' src={menuIcon} />
         </div>
         <a href='about' onClick={() => this.mobileSec}>
           <img className='NO__dot NO__about' alt='NO__about' src={imgAboutSrc} />
@@ -494,6 +497,16 @@ class Welcome extends React.Component {
             && (
               <div onClick={this.openPostFeed} onKeyDown={this.openPostFeed} role='presentation'>
                 <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} />
+              </div>
+            )}
+          {!isMobile && !welcomePage
+            && (
+              <div
+                onClick={() => this.setState({ welcomePage: true })}
+                onKeyDown={() => this.setState({ welcomePage: true })}
+                role='presentation'
+              >
+                <img alt='NOIMAGE' src={noLogoImgSrc} className={imgClassName} style={{ height: '100vH' }} />
               </div>
             )}
           {!loggedIn && !isMobile && !postFeedOpened
