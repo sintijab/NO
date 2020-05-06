@@ -14,7 +14,7 @@ import { signOutAction, signStatusAction } from '../actions/signActions'
 import fetchContent from '../actions/postActions'
 import { LOGGED_IN, LOGGED_OUT } from '../actions/types'
 import { hasChromeiOS } from '../functions'
-import { selectUniqueCategories } from '../selectors/posts'
+import { selectUniqueCategories, selectFieldValue } from '../selectors'
 import connectWithRoom from './connect'
 
 class Welcome extends React.Component {
@@ -34,7 +34,6 @@ class Welcome extends React.Component {
       displayPageDetails: false,
       displayPostHint: false,
       welcomePage: false,
-      displayAlert: true,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
@@ -70,6 +69,7 @@ class Welcome extends React.Component {
         window.addEventListener('scroll', this.handleScroll)
       }
     }
+    fetchContent('fields')
     fetchContent('posts')
   }
 
@@ -78,8 +78,6 @@ class Welcome extends React.Component {
       loggedIn,
       isMobile,
       activeHint,
-      displayAlert,
-      postFeedOpened,
     } = this.state
     const { posts } = this.props
     const { signType } = this.props
@@ -100,11 +98,6 @@ class Welcome extends React.Component {
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       // eslint-disable-next-line
       this.setState({ activeHint: posts[randPostNr] })
-    }
-    if (displayAlert && postFeedOpened && window.location.href.indexOf('00000') === -1) {
-      setTimeout(() => { alert('Welcome to NOprojekt') }, 100)
-      // eslint-disable-next-line
-      this.setState({ displayAlert: false })
     }
   }
 
@@ -263,7 +256,7 @@ class Welcome extends React.Component {
       displayPageDetails,
       welcomePage,
     } = this.state
-    const { posts, uniqueCategories } = this.props
+    const { posts, uniqueCategories, indexDescription } = this.props
 
     const imgMobileClass = 'NO__welcome_img-show NO__welcome_img-mobile '
     const postFeedClass = !postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'
@@ -318,6 +311,7 @@ class Welcome extends React.Component {
           {!isMobile
             && <video autoPlay ref='video' className='NO_vid' playsInline muted /> /* eslint-disable-line react/no-string-refs */ }
           {postFeedOpened && postView}
+          {postFeedOpened && (<div className='NO_descr' dangerouslySetInnerHTML={{__html: indexDescription }} />) /* eslint-disable-line */}
           {isMobile && !displayPageDetails
             && (
             <a className='NO__welcome-preview' onClick={this.hideVideo} href='/00000'>
@@ -396,6 +390,7 @@ class Welcome extends React.Component {
 const mapStateToProps = (state) => ({
   signType: state.signInStatus.type,
   posts: state.postsData.posts,
+  indexDescription: state.fieldsData.fields.length && selectFieldValue(state.fieldsData.fields, 'description'),
   uniqueCategories: selectUniqueCategories(state.postsData.posts),
 })
 const mapDispatchToProps = (dispatch) => ({

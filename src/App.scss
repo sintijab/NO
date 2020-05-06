@@ -715,6 +715,7 @@ code {
     padding-top: 3rem;
     top: 0;
     background: #fff;
+    z-index: 10000;
   }
 
   .NO__about-page {
@@ -798,12 +799,27 @@ img.fr-fic.fr-dii.fr-fil {
   }
 }
 
+.NO__about-feed-content {
+  margin-top: 2rem;
+}
+.NO__about-feed-content,
+.NO__about-feed-content img {
+    max-width: 50vW;
+}
+
 @media only screen and (max-width: 800px) {
   img.fr-fic.fr-dib,
   img.fr-fic.fr-dii.fr-fil {
     width: auto!important;
     max-width: 100%;
     display: block;
+  }
+  .NO__about-feed-content,
+  .NO__about-feed-content img {
+    max-width: 100vW;
+  }
+  .NO__about-feed-content {
+    font-size: 11pt;
   }
 
   span, p {
@@ -812,10 +828,26 @@ img.fr-fic.fr-dii.fr-fil {
     text-align: justify;
     margin: 0 .2rem .2rem;
     line-height: 2.1;
+    font-size: 10pt;
   }
 
   body,html {
    max-width: 100vW;
    min-width: 100vW;
  }
+}
+
+.NO_descr {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 70%;
+  height: 50%;
+  margin: auto;
+  font-family: 'PT Mono',Tahoma,Arial,sans-serif;
+  line-height: 2;
+  font-size: 11pt;
+  text-align: justify;
 }

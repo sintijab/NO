@@ -1,21 +1,21 @@
-import { FETCH_POSTS_SUCCESS, FETCH_POSTS_ERROR } from '../actions/types'
+import { FETCH_PAGES_SUCCESS, FETCH_PAGES_ERROR } from '../actions/types'
 
 const initialState = {
-  posts: [],
+  pages: [],
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_POSTS_SUCCESS:
+    case FETCH_PAGES_SUCCESS:
       return {
         type: action.type,
-        posts: action.payload,
+        pages: action.payload,
       }
-    case FETCH_POSTS_ERROR:
+    case FETCH_PAGES_ERROR:
       return {
         ...state,
         error: true,
-        posts: null,
+        pages: null,
       }
     default:
       return state

@@ -1,18 +1,19 @@
 /* eslint-disable */
 import React from 'react'
+import LazyImage from '../images/LazyImage'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
 import menuIcon from '../images/menu_png.png'
 import fetchContent from '../actions/postActions'
-import { selectPageObj } from '../selectors/posts'
+import { selectPageObj, selectPageContent } from '../selectors'
 
 class About extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       sections: [],
-      activeSection: null,
+      pageContent: [],
       activeTab: 'about',
       isMobile: window.innerWidth < 800,
       toggleNavigation: window.innerWidth > 800 && true,
@@ -23,30 +24,28 @@ class About extends React.Component {
 
   componentDidMount() {
     const { fetchContent } = this.props;
-    fetchContent('archives');
+    fetchContent('pages');
+  }
+
+  componentDidUpdate() {
+    const { pageContent, activeTab } = this.state
+    const { sections } = this.props;
+    if (sections && sections.length && !pageContent.length) {
+      this.setState({ pageContent: selectPageContent(sections, activeTab) })
+    }
   }
 
   setActiveTab(category) {
     const { toggleNavigation, isMobile} = this.state
     const { sections } = this.props
-    const pageObj = selectPageObj(sections, category)
     this.setState({
       activeTab: category,
-      activeSection: pageObj,
+      pageContent: [],
     })
     if (isMobile) {
       this.setState({
         toggleNavigation: !toggleNavigation,
       })
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const { activeSection, activeTab } = this.state
-    const { sections } = this.props;
-    if (sections && !activeSection) {
-      const pageObj = selectPageObj(sections, activeTab)
-      this.setState({ activeSection: pageObj })
     }
   }
 
@@ -62,16 +61,8 @@ class About extends React.Component {
       activeTab,
       toggleNavigation,
       isMobile,
-      activeSection,
+      pageContent,
     } = this.state
-    let feed = <div />
-    if (activeSection) {
-      feed = (
-          <div className='NO__about-feed-item'>
-            {!!activeSection.content && <div className="NO__about-feed-content" dangerouslySetInnerHTML={{__html: activeSection.content }} />}
-          </div>
-        )
-    }
     let navigationSection = ['about', 'sculpture', 'sound', 'installation', 'performance', 'fashion', 'painting', 'photography']
     return (
       <div className='NO__about-page' onScroll={this.handleScroll}>
@@ -92,7 +83,13 @@ class About extends React.Component {
             </div>
           }
           <div className="NO__about-feed">
-            {feed}
+            {!!pageContent.length && <div className="NO__about-feed-content">
+              {pageContent.map(item => {
+                  const contentText = !!item.text.length && item.text.map((t) => <div dangerouslySetInnerHTML={{__html: t.value }} />) || []
+                  const contentImages = !!item.img.length && item.img.map((i) => <LazyImage src={i.url} />) || []
+                  return (<div>{contentImages}{contentText}</div>)
+                })}
+            </div>}
           </div>
      </div>
    )

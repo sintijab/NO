@@ -1,12 +1,15 @@
 import { combineReducers } from 'redux'
 import signReducer from './signReducer'
 import postReducer from './postReducer'
-import archivesReducer from './archivesReducer'
+import pagesReducer from './pagesReducer'
+import fieldsReducer from './fieldsReducer'
 
 const rootReducer = combineReducers({
   signInStatus: signReducer,
   postsData: postReducer,
-  pagesData: archivesReducer,
+  pagesData: pagesReducer,
+  fieldsData: fieldsReducer,
+
 })
 
 const initialState = rootReducer({}, {})

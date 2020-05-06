@@ -4,11 +4,28 @@ import {
   FETCH_POSTS_SUCCESS,
   FETCH_PAGES_SUCCESS,
   FETCH_PAGES_ERROR,
+  FETCH_FIELDS_SUCCESS,
+  FETCH_FIELDS_ERROR,
 } from './types'
 
 const fetchContent = (params) => (dispatch) => {
-  const successType = params === 'posts' ? FETCH_POSTS_SUCCESS : FETCH_PAGES_SUCCESS
-  const errorType = params === 'posts' ? FETCH_POSTS_ERROR : FETCH_PAGES_ERROR
+  let successType
+  let errorType
+  switch (params) {
+    case 'posts':
+      successType = FETCH_POSTS_SUCCESS
+      errorType = FETCH_POSTS_ERROR
+      break
+    case 'pages':
+      successType = FETCH_PAGES_SUCCESS
+      errorType = FETCH_PAGES_ERROR
+      break
+    case 'fields':
+      successType = FETCH_FIELDS_SUCCESS
+      errorType = FETCH_FIELDS_ERROR
+      break
+    default:
+  }
 
   axios.get(`https://api.cosmicjs.com/v1/${process.env.BUCKET_ID}/objects`, {
     params: {
