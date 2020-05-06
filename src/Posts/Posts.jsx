@@ -28,9 +28,9 @@ class Posts extends React.Component {
 
   showSimilarPost() {
     const { catList, activePost, postCount } = this.state
-    const { cosmic, toggleModalOverlay } = this.props
+    const { posts, toggleModalOverlay } = this.props
     // eslint-disable-next-line
-    const newArray = catList.map((item) => cosmic.posts.filter((post) => post.metadata.NO_category.indexOf(item) !== -1))
+    const newArray = catList.map((item) => posts.filter((post) => post.metadata.NO_category.indexOf(item) !== -1))
     // eslint-disable-next-line
     let mergedArr = [].concat.apply([], newArray)
     // eslint-disable-next-line
@@ -91,8 +91,7 @@ class Posts extends React.Component {
       activePostVideo = false,
       activePostContent = '',
     } = this.state
-    const { cosmic, modalOpened, isMobile } = this.props
-    const posts = (cosmic && cosmic.posts) || []
+    const { posts = [], modalOpened, isMobile } = this.props
     let post = null
     const dynamicNum = Date.now() / 10000
     const radixPos = String(dynamicNum).indexOf('.') + 1

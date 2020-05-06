@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png'
 import imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
 import noLogoImgSrc from '../images/no_logo.png'
@@ -12,12 +11,11 @@ import Posts from '../Posts/Posts'
 import SignForm from '../SignForm/SignForm'
 import PostForm from '../PostForm/PostForm'
 import { signOutAction, signStatusAction } from '../actions/signActions'
+import fetchContent from '../actions/postActions'
 import { LOGGED_IN, LOGGED_OUT } from '../actions/types'
-import { hasChromeiOS, getCookie } from '../functions'
-
-const Cosmic = require('cosmicjs')({
-  token: getCookie('val'), // optional
-})
+import { hasChromeiOS } from '../functions'
+import { selectUniqueCategories } from '../selectors/posts'
+import connectWithRoom from './connect'
 
 class Welcome extends React.Component {
   constructor(props) {
@@ -27,7 +25,6 @@ class Welcome extends React.Component {
       postOverlayVisible: false,
       isMobile: window.innerWidth < 800,
       chromeiOS: hasChromeiOS(),
-      cosmic: null,
       randNR: Math.floor((Math.random() * 4) + 1),
       activeHint: null,
       showActiveHint: false,
@@ -37,6 +34,7 @@ class Welcome extends React.Component {
       displayPageDetails: false,
       displayPostHint: false,
       welcomePage: false,
+      displayAlert: true,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
@@ -50,73 +48,40 @@ class Welcome extends React.Component {
     this.hideVideo = this.hideVideo.bind(this)
     this.toggleModalOverlay = this.toggleModalOverlay.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
-    this.mobileSec = this.mobileSec.bind(this)
-    this.connectRoom = this.connectRoom.bind(this)
     this.selector = React.createRef()
-
-    const _this = this
-    axios.get(`https://api.cosmicjs.com/v1/${process.env.BUCKET_ID}/objects`, {
-      params: {
-        type: 'posts',
-        read_key: process.env.READ_KEY,
-      },
-    })
-      .then((response) => {
-        if (!response.data.objects) {
-          _this.setState({
-            error: true,
-            loading: false,
-          })
-        } else {
-          const postCategories = response.data.objects.map((item) => item.metadata.NO_category)
-          // eslint-disable-next-line
-          let uniqueCategories = []
-          for (let i = 0; i < postCategories.length; i += 1) {
-            if (uniqueCategories.indexOf(postCategories[i]) === -1) {
-              uniqueCategories.push(postCategories[i])
-            }
-            i += 1
-          }
-          _this.setState({
-            cosmic: {
-              posts: response.data.objects,
-              uniqueCategories,
-              loading: false,
-            },
-          })
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
   }
 
   componentDidMount() {
     // eslint-disable-next-line
-    this.props.signStatusAction()
+    const { signStatusAction, fetchContent } = this.props
+    const { displayPostHint } = this.state
+    signStatusAction()
     window.addEventListener('resize', this.updateWindowDimensions)
-
     if (window.location.href.indexOf('about') > -1) {
       this.setState({ displayPageDetails: true })
     }
     if (window.location.href.indexOf('00000') > -1) {
       this.setState({ postFeedOpened: true })
       if (window.innerWidth < 800) {
-        this.connectRoom()
+        this.setState({ displayPostHint: !displayPostHint })
+        connectWithRoom()
       }
       if (window.innerWidth > 800) {
         window.addEventListener('scroll', this.handleScroll)
       }
     }
+    fetchContent('posts')
   }
 
   componentDidUpdate() {
     const {
       loggedIn,
       isMobile,
-      cosmic,
       activeHint,
+      displayAlert,
+      postFeedOpened,
     } = this.state
+    const { posts } = this.props
     const { signType } = this.props
     if (signType === LOGGED_IN && !loggedIn) {
       // eslint-disable-next-line
@@ -130,11 +95,16 @@ class Welcome extends React.Component {
       })
     }
 
-    if (!isMobile && cosmic && !activeHint) {
-      const postsIndexLength = cosmic.posts.length - 1
+    if (!isMobile && posts && posts.length && !activeHint) {
+      const postsIndexLength = posts.length - 1
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       // eslint-disable-next-line
-      this.setState({ activeHint: cosmic.posts[randPostNr] })
+      this.setState({ activeHint: posts[randPostNr] })
+    }
+    if (displayAlert && postFeedOpened && window.location.href.indexOf('00000') === -1) {
+      setTimeout(() => { alert('Welcome to NOprojekt') }, 100)
+      // eslint-disable-next-line
+      this.setState({ displayAlert: false })
     }
   }
 
@@ -189,112 +159,17 @@ class Welcome extends React.Component {
     }
   }
 
-  connectRoom() {
-    const { displayPostHint } = this.state
-    this.setState({ displayPostHint: !displayPostHint })
-    if (localStorage.getItem('room')) {
-      localStorage.removeItem('room')
-    }
-    // eslint-disable-next-line
-    let response = null
-    axios.get(`https://api.cosmicjs.com/v1/${process.env.BUCKET_ID}/objects?type=rooms&read_key=${process.env.READ_KEY}`)
-      .then((res) => {
-        if (res.data.objects) {
-          response = true
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    if (!response) {
-      const randomRoomNumber = Math.floor(Math.random() * 400000000) + 1
-
-      localStorage.setItem('room', randomRoomNumber)
-      // eslint-disable-next-line
-      loadSimpleWebRTC()
-      const params = {
-        title: 'room_id',
-        type_slug: 'rooms',
-        slug: randomRoomNumber,
-        content: '',
-        status: 'published',
-        metafields: [
-          {
-            required: true,
-            value: randomRoomNumber,
-            key: 'room_id',
-            title: 'room_id',
-            type: 'text',
-            children: null,
-          },
-        ],
-      }
-      Cosmic.getBuckets()
-        .then((data) => {
-          console.log(data)
-          const bucket = Cosmic.bucket({
-            slug: data.buckets[0].slug,
-            write_key: process.env.WRITE_KEY,
-          })
-
-          bucket.addObject(params)
-            .then((res) => {
-              console.log(res)
-              const roomNrText = document.getElementById('roomNr')
-              roomNrText.innerHTML = randomRoomNumber
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      // eslint-disable-next-line
-      const objects = response.data.objects
-      const roomNr = (objects.length && objects.length)
-        ? objects.map((object) => object.metadata.room_id) : null
-      const roomId = (objects.length && objects.length) ? objects.map((object) => object.slug) : null
-      if (roomNr.length) {
-        const randNr = Math.floor(Math.random() * (roomNr.length - 1)) + 0
-        const randomRoomNumber = roomNr[randNr]
-        localStorage.setItem('room', randomRoomNumber)
-        // eslint-disable-next-line
-        loadSimpleWebRTC()
-        Cosmic.getBuckets()
-          .then((data) => {
-            const bucket = Cosmic.bucket({
-              slug: data.buckets[0].slug,
-              write_key: process.env.WRITE_KEY,
-            })
-            bucket.deleteObject({
-              slug: roomId[randNr],
-            })
-              .then((res) => {
-                console.log(res)
-                const roomNrText = document.getElementById('roomNr')
-                roomNrText.innerHTML = randomRoomNumber
-              })
-              .catch((err) => {
-                console.log(err)
-              })
-          })
-      }
-    }
-  }
-
-
   viewMode() {
-    const { modalOpened, cosmic, displayPostHint } = this.state
-    if (!modalOpened && cosmic) {
-      const postsIndexLength = cosmic.posts.length - 1
+    const { modalOpened, displayPostHint } = this.state
+    const { posts } = this.props
+    if (!modalOpened && posts) {
+      const postsIndexLength = posts.length - 1
       const randPostNr = Math.floor(Math.random() * (postsIndexLength - 0 + 1))
       this.setState({
-        activeHint: cosmic.posts[randPostNr],
+        activeHint: posts[randPostNr],
         showActiveHint: true,
       })
-    } else if (modalOpened && cosmic) {
+    } else if (modalOpened && posts) {
       this.setState({
         showActiveHint: false,
         displayPostHint: !displayPostHint,
@@ -375,11 +250,6 @@ class Welcome extends React.Component {
     }
   }
 
-  mobileSec() {
-    const { displayPageDetails } = this.state
-    this.setState({ displayPageDetails: !displayPageDetails })
-  }
-
   render() {
     const {
       postFeedOpened,
@@ -387,13 +257,13 @@ class Welcome extends React.Component {
       loggedIn,
       postOverlayVisible,
       isMobile,
-      cosmic,
       activeHint,
       showActiveHint,
       modalOpened,
       displayPageDetails,
       welcomePage,
     } = this.state
+    const { posts, uniqueCategories } = this.props
 
     const imgMobileClass = 'NO__welcome_img-show NO__welcome_img-mobile '
     const postFeedClass = !postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'
@@ -401,17 +271,17 @@ class Welcome extends React.Component {
     const postView = (
       <div className='NO__feed' ref={this.selector}>
         <div onClick={this.viewMode} id='callButton' onKeyDown={this.viewMode} role='presentation'>
-          <img className='NO__dot' alt='NO__dot' src={menuIcon} />
+          <img className='NO__dot' alt='NO__dot' src={imgAboutSrc} />
         </div>
-        <a href='about' onClick={() => this.mobileSec}>
-          <img className='NO__dot NO__about' alt='NO__about' src={imgAboutSrc} />
+        <a href='about' onClick={() => this.setState({ displayPageDetails: !displayPageDetails })}>
+          <img className='NO__dot NO__about' alt='NO__about' src={menuIcon} />
         </a>
         {/* eslint-disable-next-line */}
         {isMobile && <span id='roomNr' className='NO_roomId'></span>}
         <Posts
           activeHint={activeHint}
           showActiveHint={showActiveHint}
-          cosmic={cosmic}
+          posts={posts}
           toggleModalOverlay={this.toggleModalOverlay}
           modalOpened={modalOpened}
           isMobile={isMobile}
@@ -490,7 +360,7 @@ class Welcome extends React.Component {
             && (
               <PostForm
                 submit={this.noSubmit}
-                uniquePostCategories={cosmic.uniqueCategories || []}
+                uniquePostCategories={uniqueCategories || []}
               />
             )}
           {!isMobile
@@ -525,5 +395,12 @@ class Welcome extends React.Component {
 
 const mapStateToProps = (state) => ({
   signType: state.signInStatus.type,
+  posts: state.postsData.posts,
+  uniqueCategories: selectUniqueCategories(state.postsData.posts),
 })
-export default connect(mapStateToProps, { signOutAction, signStatusAction })(Welcome)
+const mapDispatchToProps = (dispatch) => ({
+  signOutAction: () => dispatch(signOutAction),
+  signStatusAction: () => dispatch(signStatusAction),
+  fetchContent: (params) => dispatch(fetchContent(params)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Welcome)

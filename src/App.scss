@@ -804,7 +804,6 @@ img.fr-fic.fr-dii.fr-fil {
     width: auto!important;
     max-width: 100%;
     display: block;
-    visibility: visible;
   }
 
   span, p {
@@ -819,16 +818,4 @@ img.fr-fic.fr-dii.fr-fil {
    max-width: 100vW;
    min-width: 100vW;
  }
-}
-
-.NO__about-feed-item img {
-  visibility: hidden;
-
-  @media only screen and (max-width: 800px) {
-    visibility: visible;
-  }
-}
-
-.NO__about-feed-item:hover img {
-  visibility: visible!important;
 }
