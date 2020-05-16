@@ -58,3 +58,12 @@ export const hasChromeiOS = () => {
   const hasiOS = navigator.userAgent.match(/iPhone|iPad|iPod/i)
   return Boolean(isChrome && hasiOS)
 }
+
+export const updateURL = (params, concat = true, newParams = '') => {
+  if (history.pushState) { //eslint-disable-line
+    let url = `${window.location.protocol}//${window.location.host}${window.location.pathname}` //eslint-disable-line
+    let newurl = concat ? `${url}${params}` : url.slice(0, url.indexOf(params))
+    newurl = newParams.length ? `${newurl}${newParams}` : newurl
+    window.history.pushState({ path: newurl }, '', newurl)
+  }
+}

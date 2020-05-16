@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
 import menuIcon from '../images/menu_png.png'
-import fetchContent from '../actions/postActions'
+import { fetchContent } from '../actions/postActions'
+import { updateURL } from '../functions'
 import { selectPageObj, selectPageContent } from '../selectors'
 
 class About extends React.Component {
@@ -23,8 +24,11 @@ class About extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchContent } = this.props;
-    fetchContent('pages');
+    const { pageContent, activeTab } = this.state
+    const { sections } = this.props;
+    if (sections && sections.length && !pageContent.length) {
+      this.setState({ pageContent: selectPageContent(sections, activeTab) })
+    }
   }
 
   componentDidUpdate() {
@@ -63,6 +67,7 @@ class About extends React.Component {
       isMobile,
       pageContent,
     } = this.state
+    const { displayPageDetails } = this.props
     let navigationSection = ['about', 'sculpture', 'sound', 'installation', 'performance', 'fashion', 'painting', 'photography']
     return (
       <div className='NO__about-page' onScroll={this.handleScroll}>
@@ -70,13 +75,14 @@ class About extends React.Component {
         <div>
           <img className='NO__dot NO__about' src={menuIcon} onClick={isMobile ? this.returnPrevState : () => window.close()} />
         </div>
-        <a href='/00000'>
+        <div>
           <img
             className='NO__dot'
             src={imgAboutSrc}
-            onClick={this.viewMode}
+            role='presentation'
+            onClick={() => { updateURL('about', false); displayPageDetails(false); }}
           />
-        </a>
+        </div>
           {toggleNavigation &&
             <div className="NO__about-nav">
               {navigationSection.map((item) => <div className="NO__about-nav-title" key={item} role='presentation' onClick={() => this.setActiveTab(item)}>{item}</div>)}
@@ -99,9 +105,4 @@ const mapStateToProps = (state) => ({
   sections: state.pagesData.pages,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchContent: (params) =>
-    dispatch(fetchContent(params)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(About)
+export default connect(mapStateToProps)(About)

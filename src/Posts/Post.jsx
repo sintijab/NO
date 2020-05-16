@@ -2,15 +2,15 @@
 import React from 'react'
 import LazyImage from '../images/LazyImage'
 
-const Post = (props) => {
-  const {
-    activePost,
-    showSimilarPost,
-    activePostImg,
-    activePostVideo,
-    activePostContent,
-    isMobile,
-  } = props
+const Post = ({
+  activePost,
+  showSimilarPost,
+  activePostImg,
+  activePostAuthor,
+  activePostVideo,
+  activePostContent,
+  isMobile,
+}) => {
   if (activePost && isMobile) {
     return (
       /* eslint-disable-next-line */
@@ -33,6 +33,14 @@ const Post = (props) => {
           <h3 className='NO__h3'>{activePost.title}</h3>
           <br />
           <p className='NO__paragraph'>{activePostContent}</p>
+          {!!activePostAuthor.length && (
+            <p className='NO__text NO__paragraph'>
+              <i>
+                {activePostAuthor}
+              </i>
+              <br />
+            </p>
+          )}
         </div>
       </div>
     )
@@ -60,7 +68,17 @@ const Post = (props) => {
           )}
         <h3 className='NO__text NO__paragraph NO__h3'>{activePost.title}</h3>
         <br />
-        <p className='NO__text NO__paragraph'>{activePostContent}</p>
+        <p className='NO__text NO__paragraph'>
+          {activePostContent}
+          {!!activePostAuthor.length && (
+          <div className='NO__text NO__text-note'>
+            <i>
+              {`~${activePostAuthor}`}
+            </i>
+            <br />
+          </div>
+          )}
+        </p>
       </div>
     )
   }

@@ -8,14 +8,12 @@ import menuIcon from '../images/menu_png.png'
 import brokenWhite from '../images/broken_white.png'
 import brokenBlack from '../images/broken_black.png'
 import Posts from '../Posts/Posts'
-import SignForm from '../SignForm/SignForm'
 import PostForm from '../PostForm/PostForm'
-import { signOutAction, signStatusAction } from '../actions/signActions'
-import fetchContent from '../actions/postActions'
 import { LOGGED_IN, LOGGED_OUT } from '../actions/types'
-import { hasChromeiOS } from '../functions'
-import { selectUniqueCategories, selectFieldValue } from '../selectors'
+import { hasChromeiOS, updateURL } from '../functions'
+import { selectUniqueCategories, selectFieldValue, mapSoundMetafields } from '../selectors'
 import connectWithRoom from './connect'
+import writeIcon from '../images/unnamed.png'
 
 class Welcome extends React.Component {
   constructor(props) {
@@ -31,16 +29,12 @@ class Welcome extends React.Component {
       modalOpened: false,
       verticalPos: 0,
       horizontalPos: 0,
-      displayPageDetails: false,
       displayPostHint: false,
       welcomePage: false,
     }
 
     this.openPostFeed = this.openPostFeed.bind(this)
     this.addPostOverlay = this.addPostOverlay.bind(this)
-    this.signForm = this.signForm.bind(this)
-    this.signOut = this.signOut.bind(this)
-    this.closeOverlay = this.closeOverlay.bind(this)
     this.viewMode = this.viewMode.bind(this)
     this.noSubmit = this.noSubmit.bind(this)
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
@@ -51,26 +45,15 @@ class Welcome extends React.Component {
   }
 
   componentDidMount() {
-    // eslint-disable-next-line
-    const { signStatusAction, fetchContent } = this.props
     const { displayPostHint } = this.state
-    signStatusAction()
     window.addEventListener('resize', this.updateWindowDimensions)
-    if (window.location.href.indexOf('about') > -1) {
-      this.setState({ displayPageDetails: true })
-    }
     if (window.location.href.indexOf('00000') > -1) {
       this.setState({ postFeedOpened: true })
       if (window.innerWidth < 800) {
         this.setState({ displayPostHint: !displayPostHint })
         connectWithRoom()
       }
-      if (window.innerWidth > 800) {
-        window.addEventListener('scroll', this.handleScroll)
-      }
     }
-    fetchContent('fields')
-    fetchContent('posts')
   }
 
   componentDidUpdate() {
@@ -78,9 +61,13 @@ class Welcome extends React.Component {
       loggedIn,
       isMobile,
       activeHint,
+      modalOpened,
+      postOverlayVisible,
     } = this.state
-    const { posts } = this.props
-    const { signType } = this.props
+    const {
+      posts,
+      signType,
+    } = this.props
     if (signType === LOGGED_IN && !loggedIn) {
       // eslint-disable-next-line
       this.setState({
@@ -99,6 +86,11 @@ class Welcome extends React.Component {
       // eslint-disable-next-line
       this.setState({ activeHint: posts[randPostNr] })
     }
+    if (modalOpened && postOverlayVisible) {
+      this.setState({ // eslint-disable-line
+        postOverlayVisible: false,
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -114,35 +106,17 @@ class Welcome extends React.Component {
   }
 
   openPostFeed() {
+    const { addSound } = this.props
     this.setState({ postFeedOpened: true })
     if (window.innerWidth > 800) {
       window.addEventListener('scroll', this.handleScroll)
     }
+    addSound()
   }
 
   addPostOverlay() {
     const { postOverlayVisible } = this.state
     this.setState({ postOverlayVisible: !postOverlayVisible })
-  }
-
-  signForm() {
-    const { showLoginOverlay } = this.state
-    this.setState({ showLoginOverlay: !showLoginOverlay })
-  }
-
-  signOut() {
-    // eslint-disable-next-line
-    this.props.signOutAction()
-    this.setState({
-      loggedIn: false,
-    })
-  }
-
-  closeOverlay() {
-    const { showLoginOverlay } = this.state
-    this.setState({
-      showLoginOverlay: !showLoginOverlay,
-    })
   }
 
   toggleModalOverlay(state = false, hideActiveHint = false) {
@@ -179,6 +153,8 @@ class Welcome extends React.Component {
   hideVideo(e) {
     e.preventDefault()
     const { randNR, chromeiOS } = this.state
+    const { addSound } = this.props
+    addSound()
     this.setState({ postFeedOpened: true })
     let room = localStorage.getItem('room')
     if (!room) {
@@ -246,29 +222,35 @@ class Welcome extends React.Component {
   render() {
     const {
       postFeedOpened,
-      showLoginOverlay,
-      loggedIn,
       postOverlayVisible,
       isMobile,
       activeHint,
       showActiveHint,
       modalOpened,
-      displayPageDetails,
       welcomePage,
     } = this.state
-    const { posts, uniqueCategories, indexDescription } = this.props
+    const {
+      posts,
+      uniqueCategories,
+      indexDescription,
+      loading,
+      displayPageDetails,
+      displayPostView,
+    } = this.props
+
+    const postViewVisible = displayPostView || postFeedOpened
 
     const imgMobileClass = 'NO__welcome_img-show NO__welcome_img-mobile '
-    const postFeedClass = !postFeedOpened ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'
+    const postFeedClass = !postViewVisible ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'
     const imgClassName = `NO__welcome_img ${!isMobile && postFeedClass} ${isMobile && imgMobileClass}`
     const postView = (
       <div className='NO__feed' ref={this.selector}>
         <div onClick={this.viewMode} id='callButton' onKeyDown={this.viewMode} role='presentation'>
           <img className='NO__dot' alt='NO__dot' src={imgAboutSrc} />
         </div>
-        <a href='about' onClick={() => this.setState({ displayPageDetails: !displayPageDetails })}>
+        <div role='presentation' onClick={() => { updateURL('about'); displayPageDetails(true) }}>
           <img className='NO__dot NO__about' alt='NO__about' src={menuIcon} />
-        </a>
+        </div>
         {/* eslint-disable-next-line */}
         {isMobile && <span id='roomNr' className='NO_roomId'></span>}
         <Posts
@@ -303,21 +285,20 @@ class Welcome extends React.Component {
     }
 
 
-    const noWelcomeClass = isMobile && !displayPageDetails && !postFeedOpened
+    const noWelcomeClass = isMobile && !postViewVisible
       && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome' // eslint-disable-line react/no-string-refs
     return (
       <div>
         <div className={noWelcomeClass} id='startButton'>
           {!isMobile
             && <video autoPlay ref='video' className='NO_vid' playsInline muted /> /* eslint-disable-line react/no-string-refs */ }
-          {postFeedOpened && postView}
-          {postFeedOpened && (<div className='NO_descr' dangerouslySetInnerHTML={{__html: indexDescription }} />) /* eslint-disable-line */}
-          {isMobile && !displayPageDetails
-            && (
-            <a className='NO__welcome-preview' onClick={this.hideVideo} href='/00000'>
+          {postViewVisible && postView}
+          {postViewVisible && !!indexDescription && !isMobile && (<div className='NO_descr' dangerouslySetInnerHTML={{__html: indexDescription }} />) /* eslint-disable-line */}
+          {isMobile && (
+            <div className='NO__welcome-preview' role='presentation' onClick={this.hideVideo}>
               <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} />
-            </a>
-            )}
+            </div>
+          )}
           {isMobile
             && (
               <div id='remotes' className='row'>
@@ -342,19 +323,12 @@ class Welcome extends React.Component {
           <video id='localVideo' playsInline autoPlay muted></video>
           {/* eslint-disable-next-line */}
           <video id='remoteVideo' playsInline autoPlay></video>
-          {loggedIn && !isMobile
-            && (
-            <div className='NO__welcome-text NO__text'>
-              <span>Welcome @admin  | </span>
-              <span onClick={this.addPostOverlay} role='presentation'>ADD POST</span>
-            </div>
-            )}
-          {showLoginOverlay && !postFeedOpened && <SignForm closeOverlay={this.closeOverlay} />}
-          {postOverlayVisible && !postFeedOpened && loggedIn
+          {postOverlayVisible && !modalOpened
             && (
               <PostForm
                 submit={this.noSubmit}
                 uniquePostCategories={uniqueCategories || []}
+                onClose={this.addPostOverlay}
               />
             )}
           {!isMobile
@@ -373,13 +347,15 @@ class Welcome extends React.Component {
                 <img alt='NOIMAGE' src={noLogoImgSrc} className={imgClassName} style={{ height: '100vH' }} />
               </div>
             )}
-          {!loggedIn && !isMobile && !postFeedOpened
+          {postViewVisible && loading
             && (
-              <div className='NO_login NO__text' onClick={this.signForm} role='presentation'>Login</div>
+              <div className='loader'>Loading...</div>
             )}
-          {loggedIn && !isMobile && !postFeedOpened
+          {postViewVisible && !loading
             && (
-              <div className='NO_login NO__text' onClick={this.signOut} role='presentation'>Logout</div>
+              <div className='NO_login NO__text' onClick={this.addPostOverlay} role='presentation'>
+                <img src={writeIcon} alt='post' />
+              </div>
             )}
         </div>
       </div>
@@ -390,12 +366,11 @@ class Welcome extends React.Component {
 const mapStateToProps = (state) => ({
   signType: state.signInStatus.type,
   posts: state.postsData.posts,
+  sounds: !!state.musicData.sounds && !!state.musicData.sounds.length && mapSoundMetafields(state.musicData.sounds[0]),
+  collection: state.musicData.collection,
+  scSounds: state.musicData.sc_sounds,
   indexDescription: state.fieldsData.fields.length && selectFieldValue(state.fieldsData.fields, 'description'),
   uniqueCategories: selectUniqueCategories(state.postsData.posts),
+  loading: state.postsData.isLoading,
 })
-const mapDispatchToProps = (dispatch) => ({
-  signOutAction: () => dispatch(signOutAction),
-  signStatusAction: () => dispatch(signStatusAction),
-  fetchContent: (params) => dispatch(fetchContent(params)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Welcome)
+export default connect(mapStateToProps)(Welcome)

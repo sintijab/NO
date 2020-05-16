@@ -1,6 +1,13 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
+import { connect } from 'react-redux'
 import { getCookie } from '../functions'
+import { signInAction } from '../actions/signActions'
+import { addContent, requestContent } from '../actions/postActions'
+import { selectFieldValue } from '../selectors'
+import getParams from './functions'
+import inputImgicon from '../images/info.png'
+import closeFormIcon from '../images/close.png'
 
 class PostForm extends React.Component {
   constructor(props) {
@@ -8,17 +15,34 @@ class PostForm extends React.Component {
     this.state = {
       title: '',
       article: '',
+      author: '',
       imgurl: '',
       videourl: '',
       font: '',
       fontSize: '',
       categories: '',
+      showCategories: false,
+      tooltip: null,
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.selected_font = React.createRef()
+  }
+
+  componentDidMount() {
+    const { signStatusAction } = this.props
+    if (!getCookie('val')) {
+      signStatusAction()
+    }
+  }
+
+  componentDidUpdate() {
+    const { loading, submit } = this.props
+    if (loading) {
+      submit(true)
+    }
   }
 
   handleChange(event) {
@@ -35,250 +59,84 @@ class PostForm extends React.Component {
     const {
       title = '',
       article,
+      author,
       font,
       fontSize,
       imgurl,
       videourl,
       categories,
     } = this.state
-    const { submit } = this.props
-    const params = {
-      title,
-      type_slug: 'posts',
-      content: '',
-      status: 'draft',
-      metafields: [
-        {
-          value: article,
-          key: 'NO_article',
-          title: 'Description',
-          type: 'textarea',
-          children: null,
-        },
-        {
-          helptext: 'The link of the new post image',
-          value: imgurl,
-          key: 'NO_img',
-          title: 'Image link',
-          type: 'text',
-          children: null,
-        },
-        {
-          helptext: 'The link of the new post video e.g. \nhttps://youtu.be/n7hzomuDEIk',
-          value: videourl,
-          key: 'NO_video',
-          title: 'Video link',
-          type: 'text',
-          children: null,
-        },
-        {
-          required: true,
-          helptext: 'one or multiple categories possible separated by commas e.g. testcategory, nocategory, newcategory, blablabla',
-          value: categories,
-          key: 'NO_category',
-          title: 'Category',
-          type: 'text',
-          children: null,
-        },
-        {
-          options: [
-            {
-              key: 'default',
-              value: 'default',
-            },
-            {
-              key: 'permanent-marker',
-              value: 'permanent-marker',
-            },
-            {
-              key: 'archivo-black',
-              value: 'archivo-black',
-            },
-            {
-              key: 'megrim',
-              value: 'megrim',
-            },
-            {
-              key: 'vidaloka',
-              value: 'vidaloka',
-            },
-            {
-              key: 'allerta-stencil',
-              value: 'allerta-stencil',
-            },
-            {
-              key: 'press-start-2p',
-              value: 'press-start-2p',
-            },
-            {
-              key: 'cutive-mono',
-              value: 'cutive-mono',
-            },
-            {
-              key: 'major-mono-display',
-              value: 'major-mono-display',
-            },
-            {
-              key: 'cormorant-sc',
-              value: 'cormorant-sc',
-            },
-            {
-              key: 'zcool-kuaiLe',
-              value: 'zcool-kuaiLe',
-            },
-            {
-              key: 'montserrat-subrayada',
-              value: 'montserrat-subrayada',
-            },
-            {
-              key: 'anton',
-              value: 'anton',
-            },
-            {
-              key: 'share-tech-mono',
-              value: 'share-tech-mono',
-            },
-            {
-              key: 'libre-barcode-39',
-              value: 'libre-barcode-39',
-            },
-            {
-              key: 'monsieur-la-doulaise',
-              value: 'monsieur-la-doulaise',
-            },
-            {
-              key: 'zilla-slab-highlight',
-              value: 'zilla-slab-highlight',
-            },
-            {
-              key: 'monofett',
-              value: 'monofett',
-            },
-            {
-              key: 'times-new-roman',
-              value: 'times-new-roman',
-            },
-          ],
-          value: font,
-          key: 'NO_font_family',
-          title: 'Font family of hidden title',
-          type: 'select-dropdown',
-          children: null,
-        },
-        {
-          options: [
-            {
-              key: '1',
-              value: '1',
-            },
-            {
-              key: '1-2',
-              value: '1-2',
-            },
-            {
-              key: '1-5',
-              value: '1-5',
-            },
-            {
-              key: '1-7',
-              value: '1-7',
-            },
-            {
-              key: '2',
-              value: '2',
-            },
-            {
-              key: '2-2',
-              value: '2-2',
-            },
-            {
-              key: '2-5',
-              value: '2-5',
-            },
-            {
-              key: '2-7',
-              value: '2-7',
-            },
-            {
-              key: '3',
-              value: '3',
-            },
-          ],
-          helptext: 'font size by em, eg. 1-2 for 1.2em, 1-7 for 1.7em etc',
-          value: fontSize,
-          key: 'NO_font_size',
-          title: 'Font size of hidden title',
-          type: 'select-dropdown',
-          children: null,
-        },
-      ],
-      options: {
-        slug_field: false,
-      },
-    }
-    if (getCookie('val')) {
-      // eslint-disable-next-line
-      const Cosmic = require('cosmicjs')({
-        token: getCookie('val'), // optional
+    const { postFormAction, requestPostForm } = this.props
+    if (getCookie('val') && title.length && categories.length) {
+      const params = getParams({
+        title,
+        article,
+        author,
+        font,
+        fontSize,
+        imgurl,
+        videourl,
+        categories,
       })
-      Cosmic.getBuckets()
-        .then((data) => {
-          const bucket = Cosmic.bucket({
-            slug: data.buckets[0].slug,
-            write_key: process.env.WRITE_KEY,
-          })
-
-          bucket.addObject(params)
-            .then(() => {
-              this.setState({
-                title: '',
-                article: '',
-                imgurl: '',
-                videourl: '',
-                font: '',
-                fontSize: '',
-                categories: '',
-              })
-              submit(true)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      console.log('please contact us in order to publish posts')
+      requestPostForm()
+      postFormAction(params)
     }
   }
-
 
   render() {
     const {
       title,
       article,
+      author,
       imgurl,
       videourl,
       font,
       fontSize,
       categories,
+      showCategories,
+      tooltip,
     } = this.state
-    const { uniquePostCategories } = this.props
+    const {
+      uniquePostCategories,
+      imgFieldInfo,
+      mediaFieldInfo,
+      catFieldInfo,
+      onClose,
+    } = this.props
     const fontName = `NO__font--${font} NO__font-size--${fontSize}`
     const fontPreviewText = <span className={fontName}>{title}</span>
-    const categoryFlows = uniquePostCategories.map((item) => (<li>{item}</li>))
+    const categoryFlows = uniquePostCategories.map((item) => (
+      <li>
+        {item.replace(/\s/g, '').split(',').map((category) => (
+          <span
+            className='cat-flows-item'
+            role='presentation'
+            onClick={() => this.setState({ categories: `${categories.replace(/\s/g, '')}${categories && ','}${category}` })}
+          >
+            {category}
+          </span>
+        ))}
+      </li>
+    ))
 
     return (
       <div>
         <form className='NO__post_form' onSubmit={this.handleSubmit}>
+          <img
+            className='NO_form-close-icon'
+            src={closeFormIcon}
+            alt='Close'
+            role='presentation'
+            onClick={() => onClose()}
+          />
           <div className='NO__post_form-group'>
             <input
               id='title'
+              required
               type='text'
               name='title'
               className='NO__post_form-control'
-              placeholder='Title'
+              placeholder='* Title'
               value={title}
               onChange={this.handleChange}
             />
@@ -319,54 +177,128 @@ class PostForm extends React.Component {
               <option value='2-7'>2.7rem</option>
               <option value='3'>3rem</option>
             </select>
-            <p style={{ background: 'white' }}>
-              {fontPreviewText}
-              <span style={{ float: 'right', padding: '3px' }}>
-                title preview
-              </span>
-            </p>
+            {!!title.length && (
+              <p style={{ background: 'white' }}>
+                {fontPreviewText}
+                <span style={{ float: 'right', padding: '3px' }}>
+                  title preview
+                </span>
+              </p>
+            )}
             <textarea
               id='article'
-              rows='30'
+              rows='10'
               type='text'
               name='article'
               className='NO__post_form-control NO__form-text-area'
-              placeholder='Description'
+              placeholder=' Description'
               value={article}
               onChange={this.handleChange}
             />
             <input
-              id='imgurl'
-              value={imgurl}
-              type='url'
-              name='imgurl'
-              className='NO__post_form-control'
-              placeholder='ImgLink'
-              onChange={this.handleChange}
-            />
-            <br />
-            <input
-              id='videourl'
-              value={videourl}
-              type='url'
-              name='videourl'
-              className='NO__post_form-control'
-              placeholder='VideoLink'
-              onChange={this.handleChange}
-            />
-            <br />
-            <input
-              id='categories'
-              required
+              id='author'
               type='text'
-              name='categories'
+              name='author'
               className='NO__post_form-control'
-              placeholder='categories'
-              value={categories}
+              placeholder=' Author'
+              value={author}
               onChange={this.handleChange}
             />
-            <div className='cat-flows cat-flows-title'>Existing category flows: </div>
-            <ul className='cat-flows'>{categoryFlows}</ul>
+            <div className='NO__post_form-input'>
+              <input
+                id='imgurl'
+                value={imgurl}
+                type='url'
+                name='imgurl'
+                className='NO__post_form-control'
+                placeholder=' Image'
+                onChange={this.handleChange}
+              />
+              <img
+                alt='img'
+                className='NO__post_form-img'
+                src={inputImgicon}
+                role='presentation'
+                onClick={() => this.setState({ tooltip: tooltip !== 'imgFieldInfo' ? 'imgFieldInfo' : null })}
+              />
+            </div>
+            {tooltip === 'imgFieldInfo' && <div className='NO_post_tooltip'>{imgFieldInfo}</div>}
+            {!!imgurl.length
+              && (
+                <div>
+                  <span className='cat-flows'>Preview: </span>
+                  <img
+                    src={imgurl}
+                    alt='Img preview'
+                    className='NO__post_form-control NO__post_form-control-preview'
+                  />
+                </div>
+              )}
+            <div className='NO__post_form-input'>
+              <input
+                id='videourl'
+                value={videourl}
+                type='url'
+                name='videourl'
+                className='NO__post_form-control'
+                placeholder=' Media'
+                onChange={this.handleChange}
+              />
+              <img
+                alt='img'
+                className='NO__post_form-img'
+                src={inputImgicon}
+                role='presentation'
+                onClick={() => this.setState({ tooltip: tooltip !== 'mediaFieldInfo' ? 'mediaFieldInfo' : null })}
+              />
+            </div>
+            {tooltip === 'mediaFieldInfo' && <div className='NO_post_tooltip'>{mediaFieldInfo}</div>}
+            {!!videourl.length && (
+              <div>
+                <span className='cat-flows'>Preview: </span>
+                <iframe
+                  width='100%'
+                  height='100%'
+                  title='vid'
+                  className='NO__overlay-vid'
+                  src={videourl}
+                  frameBorder='0'
+                  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+                  allowFullScreen
+                  allowtransparency
+                />
+              </div>
+            )}
+            <div className='NO__post_form-input'>
+              <input
+                id='categories'
+                required
+                type='text'
+                name='categories'
+                className='NO__post_form-control'
+                placeholder='* Categories'
+                value={categories}
+                onChange={this.handleChange}
+              />
+              <img
+                alt='img'
+                className='NO__post_form-img'
+                src={inputImgicon}
+                role='presentation'
+                onClick={() => this.setState({ tooltip: tooltip !== 'catFieldInfo' ? 'catFieldInfo' : null })}
+              />
+            </div>
+            {tooltip === 'catFieldInfo' && <div className='NO_post_tooltip'>{catFieldInfo}</div>}
+            <div
+              className='cat-flows cat-flows-title'
+              role='presentation'
+              onClick={() => this.setState({ showCategories: !showCategories })}
+            >
+              <span>Existing category flows: </span>
+              {!showCategories && <span>&#9661;</span>}
+              {showCategories && <span>&#9651;</span>}
+            </div>
+            {showCategories && <ul className='cat-flows'>{categoryFlows}</ul>}
             <button
               type='submit'
               className='btn btn-info NO__post_form-control--submit'
@@ -379,5 +311,18 @@ class PostForm extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => ({
+  data: state.signInStatus.uData,
+  addPostSuccess: state.postsData.post,
+  imgFieldInfo: state.fieldsData.fields.length && selectFieldValue(state.fieldsData.fields, 'imgfieldinfo'),
+  mediaFieldInfo: state.fieldsData.fields.length && selectFieldValue(state.fieldsData.fields, 'mediafieldinfo'),
+  catFieldInfo: state.fieldsData.fields.length && selectFieldValue(state.fieldsData.fields, 'catfieldinfo'),
+  loading: state.postsData.isLoading,
+})
 
-export default PostForm
+const mapDispatchToProps = (dispatch) => ({
+  signStatusAction: () => dispatch(signInAction()),
+  postFormAction: (params) => dispatch(addContent(params)),
+  requestPostForm: () => dispatch(requestContent()),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(PostForm)

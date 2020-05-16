@@ -1,11 +1,11 @@
 import React from 'react'
 import './App.scss'
 import { connect } from 'react-redux'
-import Welcome from './Welcome/Welcome'
+import Wrapper from './Wrapper/Wrapper'
 
 const App = () => (
   <div className='App'>
-    <Welcome />
+    <Wrapper />
   </div>
 )
 export default connect()(App)

@@ -11,7 +11,6 @@ render(
   <Provider store={configureStore()}>
     <Router>
       <Route path='/' component={App} />
-      <Route path='/about' component={About} />
     </Router>
   </Provider>,
   document.getElementById('root'),

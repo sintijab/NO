@@ -94,6 +94,9 @@ module.exports = {
       'process.env.READ_KEY': JSON.stringify(process.env.READ_KEY),
       'process.env.BUCKET_ID': JSON.stringify(process.env.BUCKET_ID),
       'process.env.WRITE_KEY': JSON.stringify(process.env.WRITE_KEY),
+      'process.env.UNAME': JSON.stringify(process.env.UNAME),
+      'process.env.UPW': JSON.stringify(process.env.UPW),
+      'process.env.SC_CLIENT': JSON.stringify(process.env.SC_CLIENT),
     }),
   ],
 }

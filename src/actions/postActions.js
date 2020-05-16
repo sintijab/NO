@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { getCookie } from '../functions'
+
 import {
   FETCH_POSTS_ERROR,
   FETCH_POSTS_SUCCESS,
@@ -6,9 +8,14 @@ import {
   FETCH_PAGES_ERROR,
   FETCH_FIELDS_SUCCESS,
   FETCH_FIELDS_ERROR,
+  ADD_POST_SUCCESS,
+  ADD_POST_ERROR,
+  ADD_POST_REQUEST,
+  FETCH_SOUNDS_SUCCESS,
+  FETCH_SOUNDS_ERROR,
 } from './types'
 
-const fetchContent = (params) => (dispatch) => {
+export const fetchContent = (params) => (dispatch) => {
   let successType
   let errorType
   switch (params) {
@@ -23,6 +30,10 @@ const fetchContent = (params) => (dispatch) => {
     case 'fields':
       successType = FETCH_FIELDS_SUCCESS
       errorType = FETCH_FIELDS_ERROR
+      break
+    case 'sounds':
+      successType = FETCH_SOUNDS_SUCCESS
+      errorType = FETCH_SOUNDS_ERROR
       break
     default:
   }
@@ -50,4 +61,46 @@ const fetchContent = (params) => (dispatch) => {
       console.log(error)
     })
 }
-export default fetchContent
+
+export const requestContent = () => (dispatch) => {
+  dispatch({
+    type: ADD_POST_REQUEST,
+    isLoading: true,
+  })
+}
+
+export const addContent = (params) => (dispatch) => {
+  const Cosmic = require('cosmicjs')({ //eslint-disable-line
+    token: getCookie('val'), // optional
+  })
+  Cosmic.getBuckets()
+    .then((data) => {
+      const bucket = Cosmic.bucket({
+        slug: data.buckets[0].slug,
+        write_key: process.env.WRITE_KEY,
+      })
+
+      bucket.addObject(params)
+        .then((response) => {
+          if (!response.object) {
+            dispatch({
+              type: ADD_POST_ERROR,
+              isLoading: false,
+            })
+          }
+          if (response.object) {
+            dispatch({
+              type: ADD_POST_SUCCESS,
+              payload: response.object,
+              isLoading: false,
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}

@@ -29,3 +29,11 @@ export const selectFieldValue = (fields, key) => {
   const field = fields.filter((fieldValue) => fieldValue.metadata[key])
   return !!field && field.length && field[0].metadata ? field[0].metadata[key] : ''
 }
+
+export const mapSoundMetafields = (fields) => {
+  let updatedContent = [] //eslint-disable-line
+  fields.metafields.sort((a, b) => a.key.substring('link'.length) - b.key.substring('link'.length)).forEach((item, index) => {
+    updatedContent[index] = item.value
+  })
+  return updatedContent
+}

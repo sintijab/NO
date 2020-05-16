@@ -9,6 +9,7 @@ class Posts extends React.Component {
       activePost: [],
       activePostContent: '',
       activePostImg: false,
+      activePostAuthor: '',
       activePostVideo: false,
       catList: [],
       postCount: 0,
@@ -52,6 +53,7 @@ class Posts extends React.Component {
       this.setState({
         activePost: nextPost,
         activePostImg: nextPost.metadata.NO_img,
+        activePostAuthor: nextPost.metadata.no_author,
         activePostVideo: nextPost.metadata.NO_video,
         activePostContent: nextPost.metadata.NO_article,
         postCount: postCount + 1,
@@ -61,6 +63,7 @@ class Posts extends React.Component {
         activePost: [],
         activePostContent: '',
         activePostImg: false,
+        activePostAuthor: '',
         activePostVideo: false,
         catList: [],
         postCount: 0,
@@ -78,6 +81,7 @@ class Posts extends React.Component {
       activePost: item,
       activePostContent: item.metadata.NO_article,
       activePostImg: item.metadata.NO_img,
+      activePostAuthor: item.metadata.no_author,
       activePostVideo: item.metadata.NO_video,
       catList,
     })
@@ -90,6 +94,7 @@ class Posts extends React.Component {
       activePostImg = false,
       activePostVideo = false,
       activePostContent = '',
+      activePostAuthor = '',
     } = this.state
     const { posts = [], modalOpened, isMobile } = this.props
     let post = null
@@ -126,6 +131,7 @@ class Posts extends React.Component {
             <Post
               activePost={activePost}
               activePostImg={activePostImg}
+              activePostAuthor={activePostAuthor}
               activePostVideo={activePostVideo}
               activePostContent={activePostContent}
               showSimilarPost={this.showSimilarPost}
