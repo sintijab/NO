@@ -5,6 +5,9 @@ import {
   FETCH_SC_ERROR,
   FETCH_SC_TRACKS_SUCCESS,
   FETCH_SC_TRACKS_ERROR,
+  SOUND_STARTED,
+  SOUND_FINISHED,
+  SET_SOUND_SRC,
 } from '../actions/types'
 
 const initialState = {
@@ -48,6 +51,21 @@ export default (state = initialState, action) => {
         ...state,
         error: true,
         sc_sounds: null,
+      }
+    case SOUND_STARTED:
+      return {
+        ...state,
+        is_playing: true,
+      }
+    case SOUND_FINISHED:
+      return {
+        ...state,
+        is_playing: false,
+      }
+    case SET_SOUND_SRC:
+      return {
+        ...state,
+        sc_source: action.payload,
       }
     default:
       return state

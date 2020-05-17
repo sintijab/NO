@@ -1,19 +1,15 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
 import { connect } from 'react-redux'
-import imgSrc from '../images/47571265_200436654226310_2774485183145967616_n.png'
 import imgAboutSrc from '../images/68476430_608275159696277_7376439703328784384_o.png'
-import noLogoImgSrc from '../images/no_logo.png'
 import menuIcon from '../images/menu_png.png'
-import brokenWhite from '../images/broken_white.png'
-import brokenBlack from '../images/broken_black.png'
 import Posts from '../Posts/Posts'
 import PostForm from '../PostForm/PostForm'
 import { LOGGED_IN, LOGGED_OUT } from '../actions/types'
-import { hasChromeiOS, updateURL } from '../functions'
+import { updateURL } from '../functions'
 import { selectUniqueCategories, selectFieldValue, mapSoundMetafields } from '../selectors'
-import connectWithRoom from './connect'
 import writeIcon from '../images/unnamed.png'
+import brokenWhite from '../images/broken_white.png'
 
 class Welcome extends React.Component {
   constructor(props) {
@@ -22,23 +18,21 @@ class Welcome extends React.Component {
       postFeedOpened: false,
       postOverlayVisible: false,
       isMobile: window.innerWidth < 800,
-      chromeiOS: hasChromeiOS(),
-      randNR: Math.floor((Math.random() * 4) + 1),
       activeHint: null,
       showActiveHint: false,
       modalOpened: false,
       verticalPos: 0,
       horizontalPos: 0,
       displayPostHint: false,
-      welcomePage: false,
     }
+    // chromeiOS: hasChromeiOS(),
+    // randNR: Math.floor((Math.random() * 4) + 1),
 
     this.openPostFeed = this.openPostFeed.bind(this)
     this.addPostOverlay = this.addPostOverlay.bind(this)
     this.viewMode = this.viewMode.bind(this)
     this.noSubmit = this.noSubmit.bind(this)
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
-    this.hideVideo = this.hideVideo.bind(this)
     this.toggleModalOverlay = this.toggleModalOverlay.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
     this.selector = React.createRef()
@@ -51,9 +45,9 @@ class Welcome extends React.Component {
       this.setState({ postFeedOpened: true })
       if (window.innerWidth < 800) {
         this.setState({ displayPostHint: !displayPostHint })
-        connectWithRoom()
       }
     }
+    this.openPostFeed()
   }
 
   componentDidUpdate() {
@@ -94,9 +88,7 @@ class Welcome extends React.Component {
   }
 
   componentWillUnmount() {
-    if (window.innerWidth > 800) {
-      window.removeEventListener('scroll', this.handleScroll)
-    }
+    window.removeEventListener('scroll', this.handleScroll)
     window.removeEventListener('resize', this.updateWindowDimensions)
   }
 
@@ -106,12 +98,12 @@ class Welcome extends React.Component {
   }
 
   openPostFeed() {
-    const { addSound } = this.props
+    const { playNextSound } = this.props
     this.setState({ postFeedOpened: true })
-    if (window.innerWidth > 800) {
-      window.addEventListener('scroll', this.handleScroll)
-    }
-    addSound()
+    window.addEventListener('scroll', this.handleScroll)
+    const player = document.getElementById('noAudio')
+    player.addEventListener('ended', () => playNextSound())
+    player.play()
   }
 
   addPostOverlay() {
@@ -148,29 +140,6 @@ class Welcome extends React.Component {
   noSubmit() {
     this.addPostOverlay()
     alert('post has been submitted, it will be reviewed and published soon!') // eslint-disable-line no-alert
-  }
-
-  hideVideo(e) {
-    e.preventDefault()
-    const { randNR, chromeiOS } = this.state
-    const { addSound } = this.props
-    addSound()
-    this.setState({ postFeedOpened: true })
-    let room = localStorage.getItem('room')
-    if (!room) {
-      room = Math.floor(Math.random() * 400000000) + 1
-    }
-    localStorage.setItem('room', room)
-    // eslint-disable-next-line
-    loadSimpleWebRTC()
-    if ((randNR === 2 || randNR === 3) && !chromeiOS) {
-      // eslint-disable-next-line
-      loadSimpleWebRTC()
-    } else if (!chromeiOS && randNR === 4) {
-      this.viewMode()
-    } else {
-      this.viewMode()
-    }
   }
 
   handleScroll() {
@@ -227,7 +196,6 @@ class Welcome extends React.Component {
       activeHint,
       showActiveHint,
       modalOpened,
-      welcomePage,
     } = this.state
     const {
       posts,
@@ -238,14 +206,14 @@ class Welcome extends React.Component {
       displayPostView,
     } = this.props
 
-    const postViewVisible = displayPostView || postFeedOpened
+    const postViewVisible = displayPostView || postFeedOpened || isMobile
 
     const imgMobileClass = 'NO__welcome_img-show NO__welcome_img-mobile '
     const postFeedClass = !postViewVisible ? 'NO__welcome_img-show' : 'NO__welcome_img-hide'
     const imgClassName = `NO__welcome_img ${!isMobile && postFeedClass} ${isMobile && imgMobileClass}`
     const postView = (
       <div className='NO__feed' ref={this.selector}>
-        <div onClick={this.viewMode} id='callButton' onKeyDown={this.viewMode} role='presentation'>
+        <div onClick={this.viewMode} id='callButton' role='presentation'>
           <img className='NO__dot' alt='NO__dot' src={imgAboutSrc} />
         </div>
         <div role='presentation' onClick={() => { updateURL('about'); displayPageDetails(true) }}>
@@ -275,54 +243,13 @@ class Welcome extends React.Component {
         },
       }
     }
-    let welcomeImgSrc = imgSrc
-    if (isMobile) {
-      if (this.refs.video && this.refs.video.srcObject) { // eslint-disable-line react/no-string-refs
-        welcomeImgSrc = brokenBlack
-      } else {
-        welcomeImgSrc = brokenWhite
-      }
-    }
+    const noWelcomeClass = isMobile && !postViewVisible && 'NO__welcome-black'
 
-
-    const noWelcomeClass = isMobile && !postViewVisible
-      && !(this.refs.video && this.refs.video.srcObject) ? 'NO__welcome-black' : 'NO__welcome' // eslint-disable-line react/no-string-refs
     return (
       <div>
-        <div className={noWelcomeClass} id='startButton'>
-          {!isMobile
-            && <video autoPlay ref='video' className='NO_vid' playsInline muted /> /* eslint-disable-line react/no-string-refs */ }
+        <div className={noWelcomeClass}>
           {postViewVisible && postView}
           {postViewVisible && !!indexDescription && !isMobile && (<div className='NO_descr' dangerouslySetInnerHTML={{__html: indexDescription }} />) /* eslint-disable-line */}
-          {isMobile && (
-            <div className='NO__welcome-preview' role='presentation' onClick={this.hideVideo}>
-              <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} />
-            </div>
-          )}
-          {isMobile
-            && (
-              <div id='remotes' className='row'>
-                <div className='col-md-6'>
-                  <div className='videoContainer' id='videoContainer'>
-                    {/* eslint-disable-next-line */}
-                    <video
-                      id='selfVideo'
-                      onContextMenu={() => false}
-                      muted
-                      playsInline
-                      controls
-                    >
-                    </video>
-                    {/* eslint-disable-next-line */}
-                    <meter id='localVolume' className='volume' min='-45' max='-20' high='-25' low='-40'></meter>
-                  </div>
-                </div>
-              </div>
-            )}
-          {/* eslint-disable-next-line */}
-          <video id='localVideo' playsInline autoPlay muted></video>
-          {/* eslint-disable-next-line */}
-          <video id='remoteVideo' playsInline autoPlay></video>
           {postOverlayVisible && !modalOpened
             && (
               <PostForm
@@ -330,22 +257,6 @@ class Welcome extends React.Component {
                 uniquePostCategories={uniqueCategories || []}
                 onClose={this.addPostOverlay}
               />
-            )}
-          {!isMobile
-            && (
-              <div onClick={this.openPostFeed} onKeyDown={this.openPostFeed} role='presentation'>
-                <img alt='NOIMAGE' src={welcomeImgSrc} className={imgClassName} />
-              </div>
-            )}
-          {!isMobile && !welcomePage
-            && (
-              <div
-                onClick={() => this.setState({ welcomePage: true })}
-                onKeyDown={() => this.setState({ welcomePage: true })}
-                role='presentation'
-              >
-                <img alt='NOIMAGE' src={noLogoImgSrc} className={imgClassName} style={{ height: '100vH' }} />
-              </div>
             )}
           {postViewVisible && loading
             && (
@@ -357,6 +268,11 @@ class Welcome extends React.Component {
                 <img src={writeIcon} alt='post' />
               </div>
             )}
+          {isMobile && (
+            <div className='NO__welcome-preview' role='presentation'>
+              <img alt='NOIMAGE' src={brokenWhite} className={imgClassName} />
+            </div>
+          )}
         </div>
       </div>
     )

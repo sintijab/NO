@@ -3,6 +3,9 @@ import {
   FETCH_SC_ERROR,
   FETCH_SC_TRACKS_SUCCESS,
   FETCH_SC_TRACKS_ERROR,
+  SOUND_STARTED,
+  SOUND_FINISHED,
+  SET_SOUND_SRC,
 } from './types'
 
 import SC from '../sc'
@@ -36,4 +39,23 @@ export const getSCMusic = (id) => (dispatch) => {
     type: FETCH_SC_TRACKS_ERROR,
     payload: err,
   }))
+}
+
+export const soundStartedAction = () => (dispatch) => {
+  dispatch({
+    type: SOUND_STARTED,
+  })
+}
+
+export const soundFinishedAction = () => (dispatch) => {
+  dispatch({
+    type: SOUND_FINISHED,
+  })
+}
+
+export const setAudioSource = (url) => (dispatch) => {
+  dispatch({
+    type: SET_SOUND_SRC,
+    payload: url,
+  })
 }

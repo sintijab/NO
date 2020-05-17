@@ -90,6 +90,10 @@ code {
       right: 0;
       left: 0;
       margin: auto;
+
+      &_black {
+        background: #000000;
+      }
     }
 
   .NO__text {
@@ -379,7 +383,7 @@ code {
   background: transparent;
   border: .5px solid #000000d6;
   border-radius: 20px;
-  z-index: 1000000;
+  z-index: 10000000;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -955,7 +959,8 @@ img.fr-fic.fr-dii.fr-fil {
 }
 
 // Loader
-.loader {
+.loader,
+ .static-loader {
   bottom: 0;
   right: 0;
   margin: 2rem;
@@ -971,6 +976,13 @@ img.fr-fic.fr-dii.fr-fil {
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   z-index: 100;
+}
+
+.static-loader {
+  top: 0;
+  left: 0;
+  margin: auto;
+  background: #ffffff;
 }
 @-webkit-keyframes load5 {
   0%,
@@ -1025,4 +1037,15 @@ img.fr-fic.fr-dii.fr-fil {
   87.5% {
     box-shadow: 0em -2.6em 0em 0em rgba(0,0,0, 0.2), 1.8em -1.8em 0 0em rgba(0,0,0, 0.2), 2.5em 0em 0 0em rgba(0,0,0, 0.2), 1.75em 1.75em 0 0em rgba(0,0,0, 0.2), 0em 2.5em 0 0em rgba(0,0,0, 0.2), -1.8em 1.8em 0 0em rgba(0,0,0, 0.5), -2.6em 0em 0 0em rgba(0,0,0, 0.7), -1.8em -1.8em 0 0em #000000;
   }
+}
+
+.NO__audio {
+  position: fixed;
+  z-index: 10000000;
+  bottom: 0;
+  left: 0;
+}
+
+audio::-webkit-media-controls-panel {
+  background: #ffffff;
 }

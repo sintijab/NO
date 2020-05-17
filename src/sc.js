@@ -73,7 +73,7 @@ class SC {
                 return false;
               }
             };
-            resolve(Track);
+            resolve(song.data.url);
           });
         })
         .catch((err) => reject(err));
